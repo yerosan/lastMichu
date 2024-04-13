@@ -2,19 +2,23 @@ import React from 'react'
 import BottomCard from './Colletion/BottomCard'
 import SideCard from './Colletion/SideCard'
 import Area from './Colletion/Area'
+// import { BarChart } from './Colletion/BarChart'
+import { BarChart } from './Colletion/BarChart'
 import HeadCard from './Colletion/HeadCard'
 import {useSelector, useDispatch} from "react-redux"
 import { useState, useEffect } from 'react'
 import collectionSlice from '../features/collection/collectionSlice'
 import { intervalCollection } from '../features/collection/collectionSlice'
 import Alert from "@mui/material/Alert"
+import Stack from '@mui/material/Stack';
+import LinearProgress from '@mui/material/LinearProgress';
 import axios from 'axios'
 const Collection = () => {
   const collection= useSelector(state=>state.collection)
   const dispatch=useDispatch()
   const [loops, setLoops]=useState(false)
   const currentDate =new Date()
-  const startOfPreviousMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+  const startOfPreviousMonth = new Date(currentDate.getFullYear(), currentDate.getMonth()-1, 1);
   const currentDay=new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate())
   const endOfPreviousMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
   console.log("START OF THe Previous Month", startOfPreviousMonth,endOfPreviousMonth)
@@ -110,9 +114,12 @@ const Collection = () => {
   },[])
   return (
     <div>
-      {collection.loading ? <p 
-      className='flext items-center justify-center
-       text-center text-semibold text-[#00abef] '>Loading .........</p>:
+      {collection.loading ? 
+      <div className='flex items-center justify-center h-full w-full bg-green-400 mt-40' >
+        <Stack sx={{ width: '100%', color: 'grey.500' }}>
+          <LinearProgress color="secondary" />
+        </Stack>
+      </div>:
        
        <div>
         {collection.error !=="" ?<Alert sx={{mt: 2, mb: 2}} severity="error">{collection.error}</Alert>:
@@ -121,9 +128,9 @@ const Collection = () => {
             <HeadCard/>
           </div>
           <div className="flex my-4 gap-2">
-            <div className='w-[80%] flex flex-col justify-between'>
+            <div className='w-[80%] flex flex-col justify-around'>
               <div className='h-[70%] flex justify-center'>
-                <Area/>
+                <BarChart/>
               </div>
               
               <BottomCard/>

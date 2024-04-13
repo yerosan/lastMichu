@@ -4,9 +4,14 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
+
 
 const HeadCard = () => {
+  const collection=useSelector(state=>state.collection)
   return (
+    <div>
+      {collection.data&&
         <div className='flex justify-around items-center gap-2'>
          <Card sx={{ maxWidth: 200, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#f8fafc"}}>
             <CardActionArea>
@@ -17,7 +22,7 @@ const HeadCard = () => {
                   Monthly collection
                 </Typography>
                 <Typography variant="body1" color="text.primary" fontWeight="bold" textAlign="center" fontSize="large" fontFamily="serif">
-                  3.5 M
+                  {collection.data.monthlyData.dateRangeTotal}
                 </Typography>
               </CardContent>
             </CardActionArea>
@@ -45,7 +50,7 @@ const HeadCard = () => {
                   Monthly Account
                 </Typography>
                 <Typography variant="body1" color="text.primary" fontWeight="bold" textAlign="center" fontSize="large" fontFamily="serif">
-                  2400
+                {collection.data.monthlyData.totalAccount}
                 </Typography>
               </CardContent>
             </CardActionArea>
@@ -73,7 +78,7 @@ const HeadCard = () => {
                   Average Monthly collection
                 </Typography>
                 <Typography variant="h1" color="text.primary" textAlign="center" fontWeight="bold" fontSize="large" fontFamily="serif">
-                 126 k
+                 {collection.data.monthlyData.dateRangeTotal/collection.data.monthlyData.workingDay}
                 </Typography>
               </CardContent>
             </CardActionArea>
@@ -101,7 +106,7 @@ const HeadCard = () => {
                   Average Account
                 </Typography>
                 <Typography variant="body1" color="text.primary" fontWeight="bold" textAlign="center" fontSize="large" fontFamily="serif">
-                  240
+                {collection.data.monthlyData.totalAccount/collection.data.monthlyData.workingDay}
                 </Typography>
               </CardContent>
             </CardActionArea>
@@ -121,6 +126,8 @@ const HeadCard = () => {
           </div> */}
 
         </div>
+      }
+    </div>
   )
 }
 

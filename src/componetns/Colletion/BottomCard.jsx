@@ -6,9 +6,13 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
 import ActionAreaCard from './Card'
-
+// previousColletions
+import {useSelector, useDispatch} from "react-redux"
 const BottomCard = () => {
+  const collection=useSelector(state=>state.collection)
   return (
+    <div>
+      {collection.data&&
     <div className='flex mt-3 justify-around rounded-lg p-4'>
 
             <Card sx={{ maxWidth: 200, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#00adef"}}>
@@ -20,7 +24,7 @@ const BottomCard = () => {
                         Yesterday Collection
                     </Typography>
                     <Typography variant="h1" color="text.primary" fontWeight="bold"textAlign="center" fontSize="large" fontFamily="serif">
-                        1.5 M
+                        {collection.data.previousColletions}
                     </Typography>
                     </CardContent>
                 </CardActionArea>
@@ -52,6 +56,8 @@ const BottomCard = () => {
 
             </div> */}
           </div>
+       }
+    </div>
   )
 }
 

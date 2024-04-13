@@ -7,20 +7,20 @@ let initialState={
     error:""
 }
 
-const userSlice=createSlice({
-    name:"user",
+const allUserSlice=createSlice({
+    name:"allUser",
     initialState,
     reducers:{
-        register:(state, action)=>{
-            state.loading=action.payload.loading;
-            state.error=action.payload.error;
-            state.data=action.payload.data;
-        },
-        loginUser:(state, action)=>{
-            state.loading=action.payload.loading;
-            state.error=action.payload.error,
-            state.data=action.payload.data
-        },
+        // register:(state, action)=>{
+        //     state.loading=action.payload.loading;
+        //     state.error=action.payload.error;
+        //     state.data=action.payload.data;
+        // },
+        // loginUser:(state, action)=>{
+        //     state.loading=action.payload.loading;
+        //     state.error=action.payload.error,
+        //     state.data=action.payload.data
+        // },
         getAllUsers:(state, action)=>{
             state.loading=action.payload.loading,
             state.error=action.payload.error
@@ -29,8 +29,8 @@ const userSlice=createSlice({
     }
 })
 
-export const {register, loginUser, getAllUsers}=userSlice.actions;
-export default userSlice.reducer;
+export const {getAllUsers}=allUserSlice.actions;
+export default allUserSlice.reducer;
 
 
 // export const registerUser=async(data)=>{

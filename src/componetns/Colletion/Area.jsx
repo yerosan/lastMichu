@@ -61,7 +61,8 @@ export const data = {
 
 const Area=()=> {
   let collection=useSelector(state=>state.collection)
-  console.log("THIS IS FROM AREA``````````````````````````````````", collection,collection.data.details)
+  
+  // console.log("THIS IS FROM AREA``````````````````````````````````", collection,collection.data.details)
   return <Line options={options} data={data} />;
 }
 
