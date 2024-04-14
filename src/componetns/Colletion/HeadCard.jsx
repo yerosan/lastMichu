@@ -5,6 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
+import PaidIcon from '@mui/icons-material/Paid';
 
 
 const HeadCard = () => {
@@ -13,7 +14,7 @@ const HeadCard = () => {
     <div>
       {collection.data&&
         <div className='flex justify-around items-center gap-2'>
-         <Card sx={{ maxWidth: 200, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#f8fafc"}}>
+         <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#f8fafc"}}>
             <CardActionArea>
               <CardContent>
                 <Typography gutterBottom variant="h5" 
@@ -41,7 +42,7 @@ const HeadCard = () => {
 
           </div> */}
 
-          <Card sx={{ maxWidth: 200, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#f8fafc"}}>
+          <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#f8fafc"}}>
             <CardActionArea>
               <CardContent>
                 <Typography gutterBottom variant="h5" 
@@ -69,7 +70,7 @@ const HeadCard = () => {
 
           </div> */}
 
-          <Card sx={{ maxWidth: 200, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#f8fafc"}}>
+          <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#f8fafc"}}>
             <CardActionArea>
               <CardContent>
                 <Typography gutterBottom variant="h5" 
@@ -97,7 +98,7 @@ const HeadCard = () => {
 
           </div> */}
 
-          <Card sx={{ maxWidth: 200, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#f8fafc"}}>
+          <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#f8fafc"}}>
             <CardActionArea>
               <CardContent>
                 <Typography gutterBottom variant="h5" 
