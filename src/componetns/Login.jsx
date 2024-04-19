@@ -6,10 +6,12 @@ import { useStateContext } from '../context/ContextProvider'
 import {loginUser } from '../features/userCreation/userSlice'
 import images from "./coopbuilding.jpg"
 import axios from "axios"
+import config from '../config/config'
 import Alert from "@mui/material/Alert"
 
 const LogIn = () => {
   const {login, setLogin}=useStateContext()
+  const {userRoles, setUserRoles}=useStateContext()
   const userIn=useSelector(state=>state.user)
   const [userinput,setUserinput]=useState({userName:"",password:""})
   const [styel, setStyel]=useState(["box","borderline"])
@@ -53,8 +55,16 @@ const LogIn = () => {
       dispatch(loginUser({loading:true, error:"", data:null}))
     // console.log("M>>><<<<<<<<<<<User>>>>>>>>>>>>>", userHistory)
     try{
-         const loginusers=await axios.post("http://localhost:3000/user/login", data)
+         const loginusers=await axios.post(`${config.apiUrl}/user/login`, data)
          if(loginusers.data.message=="succed"){
+          let userName=loginusers.data.data.userName
+          const roles= await axios.get(`${config.apiUrl}/role/perUser/${userName}`)
+           if(roles.data.message="succeed"){
+                setUserRoles(roles.data.data)
+            }
+            else{
+              console.log("fail to generateRole ,,,,,,,,,,", userRoles)
+            }
             dispatch(loginUser({loading:false, error:"", data:loginusers.data.data}))
          }else{
           dispatch(loginUser({loading:false, error:loginusers.data.message, data:null}))
@@ -106,10 +116,10 @@ const LogIn = () => {
         <span>Password</span>
         <i></i>
       </div>
-      {userIn.error !== '' && <Alert sx={{mt: 2, mb: 2}} severity="error">{userIn.error}</Alert>}
+      {userIn.error !== '' && <Alert sx={{mt: 2, mb: 1}} severity="error">{userIn.error}</Alert>}
       <div className="links">
         <input type="submit" value="Login"/> 
-        <a href="updatePassword">Forgot Password</a>
+        {/* <a href="updatePassword">Forgot Password</a> */}
         {/* <a href="signup">Signup</a> */}
       </div>
      

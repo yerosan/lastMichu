@@ -11,7 +11,7 @@ const Disbursement = () => {
         </div>
         <div className="flex my-4 gap-2">
           <div className='w-[80%] flex flex-col justify-between'>
-            <div className='h-[70%] flex justify-center'>
+            <div className='h-[100%] flex justify-center'>
                <Area/>
             </div>
             

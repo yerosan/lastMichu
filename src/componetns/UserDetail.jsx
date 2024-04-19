@@ -18,8 +18,9 @@ import Alert from '@mui/material/Alert';
 import axios from 'axios';
 import DateRange from './Colletion/DateRange';
 import { useStateContext } from '../context/ContextProvider';
+import UserRole from './UserRole';
+import DeleteIcon from '@mui/icons-material/Delete';
 import config from '../config/config';
-
 
 // function createData(name, contacted, payed, unpayed, totalPayed) {
 //   return { name, contacted, payed, unpayed, totalPayed };
@@ -38,15 +39,6 @@ const footerStyles={
  }
  
 
-// const StyledTableCell=styled(TableCell)(({theme})=>({
-//   [`&.${tableCellClasses.head}`]: {
-//     backgroundColor: "#07ebb9",
-//     color: theme.palette.common.white,
-//   },
-//   [`&.${tableCellClasses.body}`]: {
-//     fontSize: 14,
-//   },
-// }))
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -59,15 +51,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-// const StyledTableRow=styled(TableRow)((theme))=({
-//   // '&:nth-of-type(odd)': {
-//   //   backgroundColor: theme.palette.action.hover,
-//   // },
-//   // hide last border
-//   '&:last-child td, &:last-child th': {
-//     border: 0,
-//   },
-// })
 
 const handleRowClick = (event, rowData) => {
   console.log('Clicked row data:', rowData);
@@ -75,43 +58,16 @@ const handleRowClick = (event, rowData) => {
 }
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  // '&:nth-of-type(odd)': {
-  //   backgroundColor: theme.palette.action.hover,
-  // },
-  // "hover": {
-  //   color: "#cbd5e1",
-  //   backgroundColor:"red",
-  // },
-  // hide last border
+
   '&:last-child td, &:last-child th': {
     border: 0,
   },
 }));
 
 
-// // const useStyles = makeStyles({
-// //   hoverRow: {
-// //     '&:hover': {
-// //       backgroundColor: '#f0f0f0', // Change the background color on hover
-// //       cursor: 'pointer', // Change cursor to pointer on hover
-// //     },
-// //   },
-// // });
 
 
-// const rows = [
-//   createData('Yerosan Tadesse', 159, 6.0, 24, 4.0),
-//   createData('Shewanek Zewudu', 237, 9.0, 37, 4.3),
-//   createData('Yerosan Tadesse1', 262, 16.0, 24, 6.0),
-//   createData('Yerosan Tadesse2', 305, 3.7, 67, 4.3),
-//   createData('Shewanek Zewudu1', 356, 16.0, 49, 3.9),
-//   createData('Yerosan Tadesse3', 159, 6.0, 24, 4.0),
-//   createData('Shewanek Zewudu3', 237, 9.0, 37, 4.3),
-//   createData('Yerosan Tadesse21', 262, 16.0, 24, 6.0),
-// ];
-
-
-export default function CollectionIndividual() {
+export default function UserDetail() {
   const dispatch=useDispatch()
   const collection=useSelector(state=>state.collection)
   const [collectionloaded, setCollectionloaded]=useState(false)
@@ -123,19 +79,19 @@ export default function CollectionIndividual() {
     dispatch(collectionPerUser({loading:true, error:"", data:null}))
     console.log(",.....", collection)
     try{
-      const collections=await axios.post(`${config.apiUrl}/collection/customer`, dateRanges)
+      const collections=await axios.get(`${config.apiUrl}/user/allUser`)
       if(collections.data.message=="succeed"){
-        let perIndividualCollection=collections.data.data
-        console.log("----------------perIndividualCollection----", perIndividualCollection)
-         const sortedData = perIndividualCollection.sort((a, b) => b.totalCollectedAmount- a.totalCollectedAmount);
-         const rankedDatas = sortedData.map((row, index) => ({ ...row, rank: index + 1 }));
-         setRankedData(rankedDatas);
-          dispatch(collectionPerUser({loading:false,error:"", data:perIndividualCollection}))
-          setColl(perIndividualCollection)
+        //  const sortedData = collections.data.data.sort((a, b) => b.totalCollectedAmount- a.totalCollectedAmount);
+        //  const rankedDatas = sortedData.map((row, index) => ({ ...row, rank: index + 1 }));
+         setRankedData(collections.data.data);
+          dispatch(collectionPerUser({loading:false,error:"", data:collections.data.data}))
+          console.log("The userS===========", collections.data.data)
+          setColl(collections.data.data)
           setCollectionloaded(true)
-          setFilter(false)
+        //   setFilter(false)
       }else{
         dispatch(collectionPerUser({loading:false, error:collections.data.message, data:null}))
+        console.log("The userSError===========", collections.data.data)
       }
 
     }catch(erro){
@@ -162,21 +118,21 @@ export default function CollectionIndividual() {
         </Stack>
       </div>:
     <div className='h-full w-full'>
-      <DateRange/>
+      {/* <DateRange/> */}
     {collection.error !=='' ?<Alert sx={{mt: 2, mb: 2}} severity="error">{collection.error}</Alert>:
     <div className='h-full w-full'>
     {collection.data!==null &&
     <div>
     <TableContainer component={Paper} sx={{maxHeight:540}}>
-      <Table sx={{ minWidth: 650 }} stickyHeader aria-label="simple table">
+      <Table sx={{ minWidth: 450 }} stickyHeader aria-label="simple table">
         <TableHead>
           <TableRow style={styles} >
             <StyledTableCell style={styles} >User Name</StyledTableCell>
-            <StyledTableCell align='right' style={styles} >Total Contacted customer</StyledTableCell>
-            <StyledTableCell align="right" style={styles} >Total Payed Customer</StyledTableCell>
-            <StyledTableCell align="right" style={styles} >Total Unpayed Customer</StyledTableCell>
+            <StyledTableCell align='left' style={styles} >Full Name</StyledTableCell>
+            <StyledTableCell align="center" style={styles} >Role</StyledTableCell>
+            {/* <StyledTableCell align="right" style={styles} >Total Unpayed Customer</StyledTableCell>
             <StyledTableCell align="right" style={styles} >Total Payed Amount</StyledTableCell>
-            <StyledTableCell align="right" style={styles} >Rank</StyledTableCell>
+            <StyledTableCell align="right" style={styles} >Rank</StyledTableCell> */}
             {/* <TableCell align="right">Protein&nbsp;(g)</TableCell> */}
           </TableRow>
         </TableHead>
@@ -189,14 +145,15 @@ export default function CollectionIndividual() {
               className={{
               }}
             >
-              <StyledTableCell component="th" scope="row">
-                {row.fullName}
+            <StyledTableCell component="th" scope="row">
+                {row.userName}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.totalCustomer}</StyledTableCell>
-              <StyledTableCell align="right">{row.totalPaid}</StyledTableCell>
+              <StyledTableCell align="left">{row.fullName}</StyledTableCell>
+              <StyledTableCell align="center">< UserRole userName={row.userName}/></StyledTableCell>
+              {/* <StyledTableCell align="right">{row.totalPaid}</StyledTableCell>
               <StyledTableCell align="right">{row.totalUnpaid}</StyledTableCell>
               <StyledTableCell align="right">{row.totalCollectedAmount}</StyledTableCell>
-              <StyledTableCell align="right">{row.rank}</StyledTableCell>
+              <StyledTableCell align="right">{row.rank}</StyledTableCell> */}
             </StyledTableRow>
           ))}
         </TableBody>

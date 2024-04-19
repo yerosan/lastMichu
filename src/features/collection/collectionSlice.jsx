@@ -20,11 +20,21 @@ const collectionSlice=createSlice({
             state.loading=action.payload.loading
             state.data=action.payload.data
             state.error=action.payload.error
+        },
+        collectionPerUser:(state,action)=>{
+            state.loading=action.payload.loading,
+            state.data=action.payload.data,
+            state.error=action.payload.error
+        }, 
+        allCollection:(state, action)=>{
+            state.loading=action.payload.loading,
+            state.data=action.payload.data,
+            state.error=action.payload.error
         }
 
     }
 })
 
 
-export const {intervalCollection, addingCollection}=collectionSlice.actions
+export const {intervalCollection,allCollection, addingCollection, collectionPerUser}=collectionSlice.actions
 export default collectionSlice.reducer

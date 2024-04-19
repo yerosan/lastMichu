@@ -17,7 +17,7 @@ const CollectionPerformance = () => {
           setValue(newValue)
     } 
   return (
-    <Box>
+    <Box sx={{bgcolor:"seconday", height:100,}}>
         <TabContext value={value}>
             <Box sx={{borderBottom:1 , borderColor:"divider"}}>
                 <TabList 

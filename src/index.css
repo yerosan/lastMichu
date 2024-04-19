@@ -229,7 +229,7 @@ code {
 .box form .links
 {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: baseline;
   margin-top: 4%;
 }

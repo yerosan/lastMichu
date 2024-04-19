@@ -11,6 +11,7 @@ import {useSelector, useDispatch} from 'react-redux'
 import {Tab, Box} from "@mui/material"
 import { TabList, TabContext, TabPanel } from '@mui/lab';
 import Alert from '@mui/material/Alert';
+import config from '../config/config';
 const currencies = [
     {
       value: 'Yerosan Tadesse',
@@ -73,7 +74,7 @@ const initialVaue={
     userName:"",
     customerPhone:"",
     callResponce:"",
-    payedAmount:"",
+    payedAmount:0,
     paymentStatus:"",
     date:today
 }
@@ -106,7 +107,7 @@ const CollectionFromExist = () => {
     const fetchUsers=async()=>{
       dispatch(getAllUsers({loading:true,error:"", data:null }))
       try{
-        let users=await axios.get("http://localhost:3000/user/allUser")
+        let users=await axios.get(`${config.apiUrl}/user/allUser`)
         if(users.data.message=="succeed"){
           let userData=users.data.data
           const allUsers=userData.map((user)=>({
@@ -127,7 +128,7 @@ const CollectionFromExist = () => {
     const addColleciton=async()=>{
       // dispatch(addingCollection({loading:true, data:null, error:""}))
       try{
-        let addingCollections= await axios.post("http://localhost:3000/collection/add", collectionData)
+        let addingCollections= await axios.post(`${config.apiUrl}/collection/add`, collectionData)
         if(addingCollections.data.message=="succed"){
           // dispatch(addingCollection({loading:false, error:"" , data:addingCollections.data.data}))
           alert("Data submited")

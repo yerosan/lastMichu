@@ -5,6 +5,7 @@ import { useStateContext } from '../context/ContextProvider'
 import { FiAlignJustify } from "react-icons/fi";
 import { michu, sane, coop } from '../assets';
 import { loginUser } from '../features/userCreation/userSlice';
+import Profile from './Profile';
 
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -33,25 +34,28 @@ const  Navbar =() =>{
 
         <div className='w-3/5'>
             <div className='flex justify-end gap-4 items-center'> 
-                <img src={sane} className="w-8, h-8 rounded-full"/>  
+                {/* <img src={sane} className="w-8, h-8 rounded-full"/>   */}
+                {/* <p className="w-8, h-8 rounded-full bg-white"> Y </p>  */}
                 {/* <h3 className="text-black font-serif text-xl font-sem">Profile</h3> */}
-                <button type='button' onClick={handleSingout} 
+                <Profile/>
+                {/* <button type='button' onClick={handleSingout} 
                   className="text-black font-serif text-lg font-semibold rounded-lg p-1 
                       cursor-pointer hover:bg-[#e38524]"
                   >Logout
-                </button>
+                </button> */}
             </div>
         </div>
        </div>
       :
       <div className='flex justify-end gap-4 pl-4 items-center w-5/6 p-2'>  
-        <img src={sane} className="w-8, h-8 rounded-full"/>  
-                {/* <h3 className="text-black font-serif text-xl font-sem">Profile</h3> */}
+         <Profile/>
+        {/* <img src={sane} className="w-8, h-8 rounded-full"/>  
+                <h3 className="text-black font-serif text-xl font-sem">Profile</h3>
                 <button type='button' onClick={handleSingout} 
                   className="text-black font-serif text-lg font-semibold rounded-lg p-1 
                       cursor-pointer hover:bg-[#e38524]"
                   >Logout
-                </button>
+                </button> */}
       </div>
      }
       

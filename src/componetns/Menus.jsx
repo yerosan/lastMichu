@@ -51,7 +51,7 @@ const items = [
   {
     type:"divider"
   },
-  getItem('Setting', 'setting', <SettingOutlined/>, [getItem('Adduser', 'addUser'), getItem('Other', 'other')]),
+  getItem('Setting', 'setting', <SettingOutlined/>, [getItem('Adduser', 'addUser')]),
   {
     type:"divider"
   },
@@ -63,6 +63,7 @@ const Menus = () => {
     console.log('click ', e);
     console.log("this is key path", e.keyPath)
     console.log("this is a lock", navs)
+    // console.log("this is NavChange************", e, navs)
     setNavs(e.keyPath)
   };
   return (

@@ -17,6 +17,14 @@ import { Edit } from '@mui/icons-material';
 import Form from './Form';
 import { useStateContext } from '../context/ContextProvider';
 import {TableFooter} from '@mui/material';
+import { allCollection } from '../features/collection/collectionSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect} from 'react';
+import axios from 'axios';
+import Stack from '@mui/material/Stack';
+import LinearProgress from '@mui/material/LinearProgress';
+import Alert from '@mui/material/Alert';
+import config from '../config/config';
 
 
 function createData(name, contactedCustomer, payedCustomer, unpayedCustomer,totalPayed, date) {
@@ -121,7 +129,7 @@ const Actions=(props)=>{
           color:'secondary.main',
         }}>
           <p 
-          className='text-center font-semibold text-lg'>Are you sure to delete {props.row.name}'s data on {props.row.date} date ?
+          className='text-center font-semibold text-lg'>Are you sure to delete {props.row.fullName}'s data on {props.row.date} date ?
           </p>
         </DialogTitle>
         {/* <DialogContent>
@@ -140,7 +148,29 @@ const Actions=(props)=>{
 const totalStatus={"totalRejected":20000,"totalApproved":3000,"totalApplicant":4000}
 
 export default function CollectionDetail() {
+  const dispatch=useDispatch()
+  const [allcollection, setAllcollection]=useState(null)
+  const [load, setLoad]=useState(false)
+  const collection=useSelector(state=> state.collection)
   const [rowData, setRowData]=useState({})
+  const fetchAllCollection=async()=>{
+    dispatch(allCollection({loading:true, error:"", data:null}))
+    try{
+      let Collections=await  axios.get(`${config.apiUrl}/collection/allCollection`)
+      if(Collections.data.message=="succeed"){
+         dispatch(allCollection({loading:false, error:"",data:Collections.data.data}))
+         setAllcollection(Collections.data.data)
+         setLoad(true)
+         console.log("this is Datas---------",Collections)
+      }else{
+        dispatch(allCollection({loading:false, data:null, error:Collections.data.message}))
+        console.log("this is Datas---------",Collections)
+    }
+    }catch(error){
+      console.log("The error", error)
+      dispatch(allCollection({loading:false, error:"Some thing went wrong", data:null}))
+    }
+  }
   // const [popUp,setPopup]=useState(false)
   // const [open,setOpen]=useState(false)
   const {open, setOpen}=useStateContext()
@@ -151,26 +181,41 @@ export default function CollectionDetail() {
     console.log("this is row data", rowData)
     // Add your custom logic here
   }
+
+  useEffect(()=>{
+    console.log("This is the Data", collection)
+    fetchAllCollection()
+  }, [])
   return (
-    <Box sx={{borderBottom:1 , borderColor:"divider"}}>
-      <TableContainer component={Paper} sx={{maxHeight:440}}>
+    <div className='h-full w-full bg-green-800'>
+    {collection.loading ? 
+      <div className='flex items-center justify-center h-full w-full' >
+        <Stack sx={{ width: '100%', color: 'grey.500' }}>
+          <LinearProgress color="secondary" />
+        </Stack>
+      </div>:
+    <div className='h-full w-full bg-green-400'>
+      {collection.error !=='' ?<Alert sx={{mt: 2, mb: 2}} severity="error">{collection.error}</Alert>:
+    load &&
+    <Box sx={{borderBottom:1 , borderColor:"divider",height:100}}>
+      <TableContainer component={Paper} sx={{maxHeight:640}}>
         <Table sx={{ minWidth: 650 }} stickyHeader aria-label="simple table">
           <TableHead>
             <TableRow style={styles}>
-              <StyledTableCell style={styles} >User Name</StyledTableCell>
-              <StyledTableCell align='right' style={styles} >Total Contacted Customer</StyledTableCell>
-              <StyledTableCell align="right" style={styles} >Total Payed Customer</StyledTableCell>
-              <StyledTableCell align="right" style={styles} >Total Unpayed Custmer</StyledTableCell>
-              <StyledTableCell align="right" style={styles} >Total Payed Amount</StyledTableCell>
-              <StyledTableCell align="right" style={styles} >Collection Date</StyledTableCell>
+              <StyledTableCell style={styles} >Officer Name</StyledTableCell>
+              <StyledTableCell align='left' style={styles} >Customer Phone</StyledTableCell>
+              <StyledTableCell align="left" style={styles} >Call Responce</StyledTableCell>
+              <StyledTableCell align="left" style={styles} >Payment Status</StyledTableCell>
+              <StyledTableCell align="left" style={styles} >Paid Amount</StyledTableCell>
+              <StyledTableCell align="left" style={styles} >Contacted Date</StyledTableCell>
               <StyledTableCell align="center" style={styles} >Action</StyledTableCell>
               {/* <TableCell align="right">action&nbsp;(g)</TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {allcollection.map((row) => (
               <StyledTableRow
-                key={row.name}
+                key={row.userName}
                 sx={{ '&:last-child td, &:last-child th': { border: 0, fontFamily:"serif" } }}
                 onClick={(event) => handleRowClick(row)}
                 className={{
@@ -178,26 +223,26 @@ export default function CollectionDetail() {
                 hover
               >
                 <StyledTableCell component="th" scope="row">
-                  {row.name}
+                  {row.fullName}
                 </StyledTableCell>
-                <StyledTableCell align="right">{row.contactedCustomer}</StyledTableCell>
-                <StyledTableCell align="right">{row.payedCustomer}</StyledTableCell>
-                <StyledTableCell align="right">{row.unpayedCustomer}</StyledTableCell>
-                <StyledTableCell align="right">{row.totalPayed}</StyledTableCell>
-                <StyledTableCell align="right">{row.date}</StyledTableCell>
+                <StyledTableCell align="left">{row.customerPhone}</StyledTableCell>
+                <StyledTableCell align="left">{row.callResponce}</StyledTableCell>
+                <StyledTableCell align="left">{row.paymentStatus}</StyledTableCell>
+                <StyledTableCell align="left">{row.payedAmount}</StyledTableCell>
+                <StyledTableCell align="left">{row.date}</StyledTableCell>
                 <StyledTableCell align="center"><Actions row={row}/> </StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
-          <TableFooter style={styles} sx={{backgroundColor:"#e38524", border:2}}> 
+          {/* <TableFooter style={styles} sx={{backgroundColor:"#e38524", border:2}}> 
             <StyledTableCell style={styles}>Total</StyledTableCell>
-            <StyledTableCell align='right' style={footerStyles}>{totalStatus.totalApproved}</StyledTableCell> 
-            <StyledTableCell align='right' style={footerStyles}>{totalStatus.totalRejected}</StyledTableCell> 
-            <StyledTableCell align='right' style={footerStyles}>{totalStatus.totalApplicant}</StyledTableCell>
-            <StyledTableCell align='right' style={footerStyles}>{totalStatus.totalApplicant}</StyledTableCell>
-            <StyledTableCell align='right' style={footerStyles}>2024/02/06 - 2024/04/06</StyledTableCell>
-            <StyledTableCell align='right' style={footerStyles}></StyledTableCell>
-          </TableFooter> 
+            <StyledTableCell align='left' style={footerStyles}>{totalStatus.totalApproved}</StyledTableCell> 
+            <StyledTableCell align='left' style={footerStyles}>{totalStatus.totalRejected}</StyledTableCell> 
+            <StyledTableCell align='left' style={footerStyles}>{totalStatus.totalApplicant}</StyledTableCell>
+            <StyledTableCell align='left' style={footerStyles}>{totalStatus.totalApplicant}</StyledTableCell>
+            <StyledTableCell align='left' style={footerStyles}>2024/02/06 - 2024/04/06</StyledTableCell>
+            <StyledTableCell align='left' style={footerStyles}></StyledTableCell>
+          </TableFooter>  */}
           
         </Table>
       </TableContainer>
@@ -216,52 +261,52 @@ export default function CollectionDetail() {
                 <TextField
                     autoFocus
                     margin="dense"
-                    id="name"
-                    label="userName"
+                    id="fullname"
+                    label="Full Name"
                     type="text"
                     fullWidth
-                    value={rowData.name || ""}
-                    onChange={(e) => setRowData({ ...rowData, name: e.target.value })}
+                    value={rowData.fullName || ""}
+                    onChange={(e) => setRowData({ ...rowData, fullName: e.target.value })}
                     />
                 <TextField
                     margin="dense"
-                    id="contacted"
-                    label="Contacted customer"
+                    id="customerPhone"
+                    label="Customer Phone"
                     type="text"
-                    placeholder='Enter total contacted'
+                    placeholder='Enter customer phone'
                     fullWidth
-                    value={rowData.contactedCustomer}
-                    onChange={(e) => setRowData({ ...rowData, approved: e.target.value })}
+                    value={rowData.customerPhone}
+                    onChange={(e) => setRowData({ ...rowData, customerPhone: e.target.value })}
                 />
 
                 <TextField
                     margin="dense"
-                    id="payed"
-                    label="Payed customer"
+                    id="callResponce"
+                    label="Call responce"
                     type="text"
-                    placeholder='Total payed customer'
+                    placeholder='Enter call responce'
                     fullWidth
-                    value={rowData.payedCustomer}
-                    onChange={(e) => setRowData({ ...rowData, approved: e.target.value })}
+                    value={rowData.callResponce}
+                    onChange={(e) => setRowData({ ...rowData, callResponce: e.target.value })}
                 />
             </div>
             <div className='flex flex-col gap-2'>
                 <TextField
                     margin='dense'
-                    id="Unpayed customer"
-                    label="Total unpayed customer"
+                    id="paymentStatus"
+                    label="payment status"
                     type="text"
                     fullWidth
-                    value={rowData.unpayedCustomer}
-                    onChange={(e) => setRowData({ ...rowData, approved: e.target.value })}
+                    value={rowData.paymentStatus}
+                    onChange={(e) => setRowData({ ...rowData, paymentStatus: e.target.value })}
                 />
                 <TextField
                     margin='dense'
-                    id="Collected Amount"
-                    label="Total collected amount"
+                    id="paidAmount"
+                    label="Paid amount"
                     type="text"
                     fullWidth
-                    value={rowData.totalPayed}
+                    value={rowData.payedAmount}
                     onChange={(e) => setRowData({ ...rowData, approved: e.target.value })}
                 />
                 <TextField
@@ -282,5 +327,8 @@ export default function CollectionDetail() {
         </DialogActions>
        </Dialog>
     </Box>
+  }
+   </div>}
+  </div>
   );
 }

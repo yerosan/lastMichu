@@ -2,6 +2,8 @@ import React from 'react'
 import BottomCard from './Colletion/BottomCard'
 import SideCard from './Colletion/SideCard'
 import Area from './Colletion/Area'
+// import config from '../config'
+import config from '../config/config'
 // import { BarChart } from './Colletion/BarChart'
 import { BarChart } from './Colletion/BarChart'
 import HeadCard from './Colletion/HeadCard'
@@ -13,10 +15,18 @@ import Alert from "@mui/material/Alert"
 import Stack from '@mui/material/Stack';
 import LinearProgress from '@mui/material/LinearProgress';
 import axios from 'axios'
+import DateRange from './Colletion/DateRange'
+import { WeeklyBar } from './Colletion/WeeklyBar'
+import { useStateContext } from '../context/ContextProvider'
 const Collection = () => {
   const collection= useSelector(state=>state.collection)
   const dispatch=useDispatch()
   const [loops, setLoops]=useState(false)
+  const [load, setLoad]=useState(false)
+  const [previousAccount, setPreviousAccount]=useState(0)
+  const [liveAccount, setLiveAccount]=useState(0)
+  const {dbfilter, setDbfilter}=useStateContext()
+  const {dateVeriation, setDateVeriation}=useStateContext()
   const currentDate =new Date()
   const startOfPreviousMonth = new Date(currentDate.getFullYear(), currentDate.getMonth()-1, 1);
   const currentDay=new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate())
@@ -40,25 +50,38 @@ const Collection = () => {
     weekRange.endDate=lastWeekEnd
     console.log(formatedStartDate,formatedEndDate,"~~~~~~~~~~~~~~~This is the Weekly DateRAGNe~~~~~~~~~~~~~~~~~~~", weekRange)
   }
+  const currentMonth=currentDate.getMonth()+1
+  const currentYear=currentDate.getFullYear()
+  const toDayDate=currentDate.getDate()
+  const month = `0${currentMonth}`.slice(-2);
+  const dayDate = `0${toDayDate}`.slice(-2);
+  const today=`${currentYear}-${month}-${dayDate}`;
 
   const defaultStartDate = startOfPreviousMonth.toISOString();
   const defaultEndDate = endOfPreviousMonth.toISOString();
   const dateRange={startDate:defaultStartDate, endDate:defaultEndDate}
+  // let dateVeriation={startDate:"", endDate:today}
 
   console.log("this si DATERAnGE", dateRange)
 
   const timeIntervalCollection=async(data)=>{
     let userDetails={}
     let liveCollection=0
+    let liveAccount=0
+    let previousAccount=0
     let previousCollection=0
     dispatch(intervalCollection({loading:true, error:"", data:null}))
     try{
-      let collectionss= await axios.post("http://localhost:3000/collection/dateRange", data.monthly)
-      if(collectionss.data.message=="succed"){
-        console.log("this is succedData", collectionss)
-        let weecklyCollection=await axios.post("http://localhost:3000/collection/dateRange", data.weekly)
+      let collectionss= await axios.post(`${config.apiUrl}/collection/dateRange`, data.monthly)
+      let totalCollectionDashboard= await axios.post(`${config.apiUrl}/collection/dashboard`, dateVeriation)
+      if(collectionss.data.message=="succed" && totalCollectionDashboard.data.message=="succeed"){
+        console.log("this is succedData", collectionss,"^^^^^^^^^~~~~~~~~~~~~~`~~~~~~~`````````````^^^^^^^^^6", 
+        totalCollectionDashboard.data.data)
+        setDbfilter(false)
+        const dashboard=totalCollectionDashboard.data.data
+        let weecklyCollection=await axios.post(`${config.apiUrl}/collection/dateRange`, data.weekly)
         if(weecklyCollection.data.message=='succed'){
-          let allUser= await axios.get("http://localhost:3000/user/allUser")
+          let allUser= await axios.get(`${config.apiUrl}/user/allUser`)
           if(allUser.data.message==="succeed"){
               let allUserData=allUser.data.data
               console.log("ALL UUUUSER", allUserData)
@@ -66,13 +89,17 @@ const Collection = () => {
                 console.log("this is UUUUUUUUUUUders", user)
                 let [userName, fullName]=[user.userName, user.fullName]
                 console.log("The USers, Name,full", userName, fullName)
-                let userCollection=await axios.get(`http://localhost:3000/collection/users/${userName}`)
+                let userCollection=await axios.get(`${config.apiUrl}/collection/users/${userName}`)
                 if(userCollection.data.message=="succed"){
                   let userDetail=userCollection.data.data
                   userDetail[fullName]=fullName
                   userDetails[userName]=userDetail
                   liveCollection +=userDetail.liveCollection
                   previousCollection +=userDetail.previousColletion
+                  previousAccount =userDetail.previousAccount
+                  liveAccount =userDetail.liveAccount
+                  // setLiveAccount(userDetail.liveAccount)
+                  // setPreviousAccount(userDetails.previousAccount)
                 }else{
                   setLoops(true)
                 }
@@ -81,25 +108,36 @@ const Collection = () => {
               )
               if(!loops){
                 let AllData={monthlyData:collectionss.data.data, 
+                  dashboard:dashboard,
                   weeklyData:weecklyCollection.data.data,
                   liveCollections:liveCollection,
+                  previousAccount:previousAccount,
+                  liveAccount:liveAccount,
                   previousColletions:previousCollection,
                   details:userDetails}
                 dispatch(intervalCollection({loading:false, error:"", data:AllData}))
+                setLoad(true)
               }else{
                 dispatch(intervalCollection({loading:false, error:"Something went wrong with users detail", data:null}))
               }
           }
         }else{
-          dispatch(intervalCollection({loading:false, error:weecklyCollection.data.message}))
+          dispatch(intervalCollection({loading:false, error:weecklyCollection.data.message, data:null}))
         }
       }else{
-        dispatch(intervalCollection({loading:false, error:collectionss.data.message}))
+        dispatch(intervalCollection({loading:false, error:collectionss.data.message, data:null}))
       }
     }catch(error){
       dispatch(intervalCollection({loading:false, error:"Something went wrong", data:null}))
       console.log("An error occered",error)
     }
+  }
+
+  if(dbfilter){
+    let timeBase={monthly:dateRange, weekly:weekRange}
+    console.log('DateRange///////////////// if ',timeBase)
+    weekFunction()
+    timeIntervalCollection(timeBase)
   }
 
   useEffect(()=>{
@@ -109,35 +147,39 @@ const Collection = () => {
 
   useEffect(()=>{
     let timeBase={monthly:dateRange, weekly:weekRange}
+    console.log('DateRange///////////////// useEffect',timeBase)
     timeIntervalCollection(timeBase)
 
   },[])
   return (
-    <div>
+    <div className='w-full h-full'>
       {collection.loading ? 
-      <div className='flex items-center justify-center h-full w-full bg-green-400 mt-40' >
+      <div className='flex items-center justify-center h-full w-full' >
         <Stack sx={{ width: '100%', color: 'grey.500' }}>
           <LinearProgress color="secondary" />
         </Stack>
       </div>:
        
-       <div>
+       <div className='w-full h-full'>
         {collection.error !=="" ?<Alert sx={{mt: 2, mb: 2}} severity="error">{collection.error}</Alert>:
-        <div>
-          <div className=''>
+        load && 
+        <div className='w-full h-full flex flex-col flex-1'>
+          <p className='font-semibold text-center text-2xl pb-2 font-arial text-black border-b-2 rounded-lg'>Michu Loan Collection Dashboard</p>
+          <div className='mt-2'>
             <HeadCard/>
           </div>
-          <div className="flex my-4 gap-2">
-            <div className='w-[80%] flex flex-col justify-around'>
-              <div className='h-[70%] flex justify-center'>
+          <div className="flex py-2 flex-1 h-full">
+          
+            <div className='w-[80%] flex flex-col justify-around h-full flex-auto'>
+              <div className='h-[100%] flex justify-end items-center '>
                 <BarChart/>
               </div>
-              
               <BottomCard/>
             </div>
             <SideCard/>
           </div>
-      </div> }
+        
+        </div> }
     </div>}
     </div>
   )

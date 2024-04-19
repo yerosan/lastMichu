@@ -16,6 +16,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import axios from "axios"
 import { Counter } from '../features/counter/counter';
 import { useNavigate} from "react-router-dom"
+import config from '../config/config';
 
 
 import { register} from '../features/userCreation/userSlice';
@@ -90,46 +91,56 @@ const CreateUser = () => {
       dispatch(register({loading:true, error:"", data:null}))
       console.log("M>>><<<<<<<<<<<User>>>>>>>>>>>>>", userHistory)
       try{
-           const userRegister=await axios.post("http://localhost:3000/user/register", data)
+           const userRegister=await axios.post(`${config.apiUrl}/user/register`, data)
            if(userRegister.data.message=="succed"){
               console.log("User",userRegister.data.data)
               const roleData={userName:data.userName}
               let roles=data.role
+              console.log("this is a role________", roles)
               Object.keys(roles).map(role=>{
                 if(roles[role]){
                   roleData[role]=true
+                }else{
+                  roleData[role]=false
                 }
               })
               console.log("this is role data",roleData)
-              const createRole=await axios.post("http://localhost:3000/role/create", roleData)
+              const createRole=await axios.post(`${config.apiUrl}/role/create`, roleData)
               if(createRole.data.message=="succed"){
                   console.log('Role', createRole)
                   let userData={user:userRegister.data.data.fullName,userName:roleData.userName, userCredential:createRole.data.data}
                   console.log("user data", userData)
+                  alert("User registered")
+                  setCollectionData(initialVaue)
                   dispatch(register({loading:false, error:"succeed", data:userData}))
                   console.log("M>>><<<<<<<<<<<", userHistory)
-              }else{
+              }
+
+              else{
                   console.log("Unable to create role")
-                  dispatch(register({loading:false, error:"error", data:null}))
+                  alert("User registered without role")
+                  dispatch(register({loading:false, error:createRole.data.message, data:null}))
               }
            }else{
               console.log("Unable to create user")
-              dispatch(register({loading:false, error:"error", data:null}))
+              alert(userRegister.data.message)
+              dispatch(register({loading:false, error:userRegister.data.message, data:null}))
            }
       }catch(error){
           console.log(error)
-          dispatch(register({loading:false, error:"error", data:null}))
+          dispatch(register({loading:false, error:"Some thing went Wrong", data:null}))
       }
   
     }
-    if(userHistory.error=="succeed"){
-      setTimeout(()=>{
-        setRole(initialRoles)
-        setCollectionData(initialVaue)
-        navigate('/michu/dashboard')
-        // console.log("this is dela function", login)
-      },1000)
-    }
+    // if(userHistory.error=="succeed"){
+    //   setTimeout(()=>{
+    //     setRole(initialRoles)
+    //     setCollectionData(initialVaue)
+    //     // navigate('/michu/dashboard')
+        
+    //   },1000)
+    //   console.log("this is dela function")
+    // }
     useEffect(() => {
       console.log("Updated User History:", userHistory);
     }, [userHistory]);
@@ -227,10 +238,8 @@ const CreateUser = () => {
                            
                         </div>
                       </div>
-                      <ChipTab/>
-                      {userHistory.error=="succeed" ? <Alert severity="success">User registerd successfully</Alert>:
+                      {/* <ChipTab/> */}
                       <div><Button variant="outlined" color="primary" type="submit">Submit</Button></div>
-                      }
                     
                 </form>
                 {/* <small>Already have an account? <Link to="/login">Login Here</Link></small> */}

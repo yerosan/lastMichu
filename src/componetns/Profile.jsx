@@ -15,27 +15,51 @@ import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import { useState } from 'react';
 import { PagesTwoTone, Pageview, PageviewOutlined, PageviewRounded, PageviewTwoTone } from '@mui/icons-material';
 import ContactSupportOutlinedIcon from '@mui/icons-material/ContactSupportOutlined';
+import PasswordIcon from '@mui/icons-material/Password';
+import LockResetIcon from '@mui/icons-material/LockReset';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useSelector, useDispatch } from 'react-redux';
+import { loginUser } from '../features/userCreation/userSlice';
+import { useStateContext } from '../context/ContextProvider';
+import PersonPinIcon from '@mui/icons-material/PersonPin';
 
-export default function AccountMenu() {
+export default function Profile() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [dateRange, setDateRange]=useState('')
+  const {login, setLogin}=useStateContext()
+  const dispatch=useDispatch()
+  let userOut=useSelector(state=>state.user)
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    console.log('this is setanchor1', event.currentTarget.value)
+    console.log("this is weekly menu", anchorEl)
+    console.log("this dateRange", dateRange)
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
 
+  const handleSingout=(e)=>{
+    dispatch(loginUser({loading:false, error:"", data:null}))
+    console.log("this is userLogout", userOut)
+    setLogin(true)
+  }
+
   const handleMenuItemClick=(value)=>{
     console.log("This is the Value", value)
     setAnchorEl(value)
     setDateRange(value)
+    if(value=="logout"){
+        handleSingout()
+    }
+    // console.log("This is the Set Value", anchorEl)
+    // handleClose()
   }
   return (
     <React.Fragment >
         <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-            <Tooltip title="Filter week">
+            <Tooltip title="profile">
             <IconButton
                 onClick={handleClick}
                 size="small"
@@ -44,7 +68,7 @@ export default function AccountMenu() {
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
             >
-                <Avatar sx={{ width: 32, height: 32 }}><MoreHorizOutlinedIcon/></Avatar>
+                <Avatar sx={{ width: 32, height: 32 }}><PersonPinIcon/></Avatar>
             </IconButton>
             </Tooltip>
         </Box>
@@ -83,15 +107,15 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={()=>handleMenuItemClick("week1")} key="week1">
-          <Avatar ><ContactSupportOutlinedIcon/></Avatar> Week 1
+        <MenuItem onClick={()=>handleMenuItemClick("password")} key="password">
+          <Avatar ><LockResetIcon/></Avatar> Change password
         </MenuItem>
-        <MenuItem onClick={()=>handleMenuItemClick("week2")} key="week2">
-          <Avatar ><ContactSupportOutlinedIcon/></Avatar>Week 2
+        <MenuItem onClick={()=>handleMenuItemClick("logout")} key="logout">
+          <Avatar ><Logout/></Avatar>Logout
         </MenuItem>
-        <MenuItem onClick={()=>handleMenuItemClick("week3")} key="week3">
+        {/* <MenuItem onClick={()=>handleMenuItemClick("week3")} key="week3">
           <Avatar ><ContactSupportOutlinedIcon/></Avatar> Week 3
-        </MenuItem>
+        </MenuItem> */}
       </Menu>
     </React.Fragment>
   );
@@ -110,69 +134,3 @@ export default function AccountMenu() {
 
 
 
-
-
-
-
-
-// import React, { useState } from 'react';
-// import { Menu, MenuItem, Avatar } from '@mui/material';
-// import ContactSupportOutlinedIcon from '@mui/icons-material/ContactSupportOutlined';
-
-// const MyMenu = () => {
-//   const [anchorEl, setAnchorEl] = useState(null);
-//   const [selectedValue, setSelectedValue] = useState('');
-
-//   const handleClick = (event) => {
-//     setAnchorEl(event.currentTarget);
-//   };
-
-//   const handleClose = () => {
-//     setAnchorEl(null);
-//   };
-
-//   const handleMenuItemClick = (value) => {
-//     setSelectedValue(value);
-//     handleClose(); // Close the menu after selecting a value
-//     // You can perform any additional actions here based on the selected value
-//     console.log('Selected Value:', value);
-//   };
-
-//   return (
-//     <div>
-//       <Avatar onClick={handleClick} />
-//       <Menu
-//         anchorEl={anchorEl}
-//         open={Boolean(anchorEl)}
-//         onClose={handleClose}
-//         PaperProps={{
-//           elevation: 0,
-//           // Your PaperProps styles here
-//         }}
-//         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-//         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-//       >
-//         <MenuItem onClick={() => handleMenuItemClick('week1')} key="week1">
-//           <Avatar>
-//             <ContactSupportOutlinedIcon />
-//           </Avatar>
-//           Week 1
-//         </MenuItem>
-//         <MenuItem onClick={() => handleMenuItemClick('week2')} key="week2">
-//           <Avatar>
-//             <ContactSupportOutlinedIcon />
-//           </Avatar>
-//           Week 2
-//         </MenuItem>
-//         <MenuItem onClick={() => handleMenuItemClick('week3')} key="week3">
-//           <Avatar>
-//             <ContactSupportOutlinedIcon />
-//           </Avatar>
-//           Week 3
-//         </MenuItem>
-//       </Menu>
-//     </div>
-//   );
-// };
-
-// export default MyMenu;

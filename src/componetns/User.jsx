@@ -8,11 +8,12 @@ import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
 import RegisterForm from './Form';
 import CollectionFrom from './CollectionFrom';
 import CollectionFromExist from './ExistForm';
-// import DynamicFeedIcon from '@mui-ui/icons-material/DynamicFeed';
-import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
+import CreateUser from './CreateUser';
+import UserDetail from './UserDetail';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 // import BasicRangeShortcuts from './Colletion/DateRange';
 import "rsuite/dist/rsuite.css"; 
-const CollectionTab = () => {
+const User = () => {
     const [value, setValue]=useState("1")
     const handleTabChange=(event, newValue)=>{
         setValue(newValue)
@@ -28,22 +29,21 @@ const CollectionTab = () => {
                     indicatorColor='primary'
                     textColor='primary'
                 >
-                    <Tab label="Add Contacted Customer" value="1" icon={<DynamicFeedIcon/>} iconPosition='start'/>
-                    {/* <Tab label="New Member" value="2" icon={<PersonAddAltIcon/>} iconPosition='start'/>   */}
+                    <Tab label="Create user" value="1" icon={<PersonSearchOutlinedIcon/>} iconPosition='start'/>
+                    <Tab label="User detail" value="2" icon={<AdminPanelSettingsIcon/>} iconPosition='start'/>  
                 </TabList>
 
             </Box>
 
             <TabPanel value="1">
-                <CollectionFromExist/>
-                {/* <BasicRangeShortcuts/> */}
+                <CreateUser/>
                 
                 </TabPanel>
-            {/* <TabPanel value="2"><CollectionFrom/></TabPanel> */}
+            <TabPanel value="2"><UserDetail/></TabPanel>
             
         </TabContext>
     </div>
   )
 }
 
-export default CollectionTab
+export default User

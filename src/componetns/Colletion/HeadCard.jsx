@@ -10,8 +10,10 @@ import PaidIcon from '@mui/icons-material/Paid';
 
 const HeadCard = () => {
   const collection=useSelector(state=>state.collection)
+  console.log("Ther Head++++++++++++++---------========", collection.data.dashboard[0] )
+  let totalCollections=collection.data.dashboard[0][0]
   return (
-    <div>
+    <div >
       {collection.data&&
         <div className='flex justify-around items-center gap-2'>
          <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#f8fafc"}}>
@@ -19,12 +21,15 @@ const HeadCard = () => {
               <CardContent>
                 <Typography gutterBottom variant="h5" 
                 component="div" 
-                fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="small">
-                  Monthly collection
+                fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="medium">
+                 Total collected amount
                 </Typography>
-                <Typography variant="body1" color="text.primary" fontWeight="bold" textAlign="center" fontSize="large" fontFamily="serif">
-                  {collection.data.monthlyData.dateRangeTotal}
+                <div className='flex justify-center gap-2 items-center'>
+                <Typography variant="h4" color="text.primary" fontWeight="bold" textAlign="center" fontSize="xlarge" fontFamily="serif">
+                  {totalCollections.totalCollecteds.toLocaleString()}
                 </Typography>
+                <span className='text-black font-semibold text-center'>ETB</span>
+                </div>
               </CardContent>
             </CardActionArea>
           </Card> 
@@ -47,11 +52,11 @@ const HeadCard = () => {
               <CardContent>
                 <Typography gutterBottom variant="h5" 
                 component="div" 
-                fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="small">
-                  Monthly Account
+                fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="medium">
+                  Total account collected from
                 </Typography>
-                <Typography variant="body1" color="text.primary" fontWeight="bold" textAlign="center" fontSize="large" fontFamily="serif">
-                {collection.data.monthlyData.totalAccount}
+                <Typography variant="h4" color="text.primary" fontWeight="bold" textAlign="center" fontSize="xlarge" fontFamily="serif">
+                {totalCollections.totalAccounts.toLocaleString()}
                 </Typography>
               </CardContent>
             </CardActionArea>
@@ -75,12 +80,16 @@ const HeadCard = () => {
               <CardContent>
                 <Typography gutterBottom variant="h5" 
                 component="div" 
-                fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="small">
-                  Average Monthly collection
+                fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="medium">
+                  Average collection per day
                 </Typography>
-                <Typography variant="h1" color="text.primary" textAlign="center" fontWeight="bold" fontSize="large" fontFamily="serif">
-                 {collection.data.monthlyData.dateRangeTotal/collection.data.monthlyData.workingDay}
+                <div className='flex justify-center gap-2 items-center'>
+                <Typography variant="h4" color="text.primary" textAlign="center" fontWeight="bold" fontSize="xlarge" fontFamily="serif">
+                 {Math.round(totalCollections.totalCollecteds/totalCollections.workingDay).toLocaleString()}
                 </Typography>
+                <span className='text-black font-semibold text-center'>ETB</span>
+                </div>
+
               </CardContent>
             </CardActionArea>
           </Card>
@@ -103,11 +112,11 @@ const HeadCard = () => {
               <CardContent>
                 <Typography gutterBottom variant="h5" 
                 component="div" 
-                fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="small">
-                  Average Account
+                fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="medium">
+                 Average account per day
                 </Typography>
-                <Typography variant="body1" color="text.primary" fontWeight="bold" textAlign="center" fontSize="large" fontFamily="serif">
-                {collection.data.monthlyData.totalAccount/collection.data.monthlyData.workingDay}
+                <Typography variant="h4" color="text.primary" fontWeight="bold" textAlign="center" fontSize="xlarge" fontFamily="serif">
+                {Math.round(Number(totalCollections.totalAccounts ) / Number(totalCollections.workingDay)).toLocaleString()}
                 </Typography>
               </CardContent>
             </CardActionArea>

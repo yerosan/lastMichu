@@ -13,22 +13,38 @@ const BottomCard = () => {
   return (
     <div>
       {collection.data&&
-    <div className='flex mt-3 justify-around rounded-lg p-4'>
+    <div className='flex mt-3 justify-around rounded-lg px-4 pt-4 pb-2'>
 
             <Card sx={{ maxWidth: 200, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#00adef"}}>
                 <CardActionArea>
                     <CardContent>
                     <Typography gutterBottom variant="h5" 
                     component="div" 
-                    fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="small">
+                    fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="medium">
                         Yesterday Collection
                     </Typography>
-                    <Typography variant="h1" color="text.primary" fontWeight="bold"textAlign="center" fontSize="large" fontFamily="serif">
-                        {collection.data.previousColletions}
+                    <Typography variant="h4" color="text.primary" fontWeight="bold"textAlign="center" fontSize="xlarge" fontFamily="serif">
+                        {collection.data.previousColletions.toLocaleString()}
                     </Typography>
                     </CardContent>
                 </CardActionArea>
             </Card>
+
+            <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#00adef"}}>
+              <CardActionArea>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" 
+                  component="div" 
+                  fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="medium">
+                    Yesterday Account
+                  </Typography>
+                  <Typography variant="h4" color="text.primary" fontWeight="bold" textAlign="center" fontSize="xlarge" fontFamily="serif">
+                    {collection.data.previousAccount.toLocaleString()}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+
             {/* <div className='bg-slate-50 rounded-lg shadow-md outline outline-2 outline-offset-1 outline-[#00adef]
                 flex flex-col items-center gap-3 p-4 '>
               <p className='text-slate-600 text-center text-lg font-serif font-semibold '>
@@ -42,7 +58,37 @@ const BottomCard = () => {
 
             </div> */}
 
-            <ActionAreaCard/>
+            {/* <ActionAreaCard/> */}
+
+            <Card sx={{ maxWidth: 200, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#00adef"}}>
+                <CardActionArea>
+                    <CardContent>
+                    <Typography gutterBottom variant="h5" 
+                    component="div" 
+                    fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="medium">
+                       Live Collection
+                    </Typography>
+                    <Typography variant="h4" color="text.primary" fontWeight="bold"textAlign="center" fontSize="xlarge" fontFamily="serif">
+                        {collection.data.liveCollections.toLocaleString()}
+                    </Typography>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
+
+            <Card sx={{ maxWidth: 200, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#00adef"}}>
+                <CardActionArea>
+                    <CardContent>
+                    <Typography gutterBottom variant="h5" 
+                    component="div" 
+                    fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="medium">
+                       Live Account
+                    </Typography>
+                    <Typography variant="h4" color="text.primary" fontWeight="bold"textAlign="center" fontSize="xlarge" fontFamily="serif">
+                        {collection.data.liveAccount.toLocaleString()}
+                    </Typography>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
 
             {/* <div className='bg-slate-50 rounded-lg shadow-md border-spacing-2 border-[#00adef]
                 flex flex-col items-center gap-3 p-4 outline outline-2 outline-offset-1 outline-[#00adef]'>

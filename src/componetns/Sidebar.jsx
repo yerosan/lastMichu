@@ -17,7 +17,7 @@ const Sidebar = () => {
          <>
          <nav><NavLink to="michu"></NavLink></nav>
          
-            <div className='flex bg-slate-400 fixed z-10  justify-between items-start w-52 p-1'>
+            <div className='flex bg-slate-400 fixed z-10  justify-between items-start w-52 p-2'>
                <img src={michu} className='w-18 h-12'/>
                {/* <h3 className='text-2xl font-semibold font-mono'>Logo</h3> */}
                <button 
