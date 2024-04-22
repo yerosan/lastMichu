@@ -1,6 +1,4 @@
 import React, { useState } from "react"; 
-import { DateRangePicker } from "rsuite"; 
-import "rsuite/dist/rsuite.css"; 
 import { useStateContext } from "../context/ContextProvider";
 import config from "../config/config";
   

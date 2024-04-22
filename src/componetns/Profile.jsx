@@ -22,19 +22,19 @@ import { useSelector, useDispatch } from 'react-redux';
 import { loginUser } from '../features/userCreation/userSlice';
 import { useStateContext } from '../context/ContextProvider';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
-
+import { useNavigate } from 'react-router-dom';
 export default function Profile() {
   const [anchorEl, setAnchorEl] = useState(null);
+  const {navs, setNavs}=useStateContext()
   const [dateRange, setDateRange]=useState('')
   const {login, setLogin}=useStateContext()
+  const {password, setPassword}=useStateContext()
+  const navigate=useNavigate()
   const dispatch=useDispatch()
   let userOut=useSelector(state=>state.user)
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-    console.log('this is setanchor1', event.currentTarget.value)
-    console.log("this is weekly menu", anchorEl)
-    console.log("this dateRange", dateRange)
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -42,19 +42,21 @@ export default function Profile() {
 
   const handleSingout=(e)=>{
     dispatch(loginUser({loading:false, error:"", data:null}))
-    console.log("this is userLogout", userOut)
     setLogin(true)
   }
 
   const handleMenuItemClick=(value)=>{
-    console.log("This is the Value", value)
     setAnchorEl(value)
     setDateRange(value)
     if(value=="logout"){
         handleSingout()
     }
-    // console.log("This is the Set Value", anchorEl)
-    // handleClose()
+
+    if (value=="password"){
+      setPassword(true)
+      setNavs(["changePassword","user"])
+
+    }
   }
   return (
     <React.Fragment >
@@ -113,9 +115,6 @@ export default function Profile() {
         <MenuItem onClick={()=>handleMenuItemClick("logout")} key="logout">
           <Avatar ><Logout/></Avatar>Logout
         </MenuItem>
-        {/* <MenuItem onClick={()=>handleMenuItemClick("week3")} key="week3">
-          <Avatar ><ContactSupportOutlinedIcon/></Avatar> Week 3
-        </MenuItem> */}
       </Menu>
     </React.Fragment>
   );

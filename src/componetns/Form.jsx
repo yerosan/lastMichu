@@ -95,7 +95,6 @@ const RegisterForm = () => {
                     </div>
                     <Button variant="outlined" color="primary" type="submit">Submit</Button>
                 </form>
-                {/* <small>Already have an account? <Link to="/login">Login Here</Link></small> */}
                 
             </div>
             </Paper>

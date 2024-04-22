@@ -96,7 +96,6 @@ const CreateUser = () => {
               console.log("User",userRegister.data.data)
               const roleData={userName:data.userName}
               let roles=data.role
-              console.log("this is a role________", roles)
               Object.keys(roles).map(role=>{
                 if(roles[role]){
                   roleData[role]=true
@@ -115,7 +114,6 @@ const CreateUser = () => {
                   dispatch(register({loading:false, error:"succeed", data:userData}))
                   console.log("M>>><<<<<<<<<<<", userHistory)
               }
-
               else{
                   console.log("Unable to create role")
                   alert("User registered without role")
@@ -150,6 +148,7 @@ const CreateUser = () => {
         collectionData.role=role
         console.log("this is a userDATA", collectionData)
         registerUser(collectionData)
+        setRole(initialRoles)
         // console.log(userName, contacted, payed, date, unpayed) 
     }
  

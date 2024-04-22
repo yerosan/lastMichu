@@ -34,6 +34,7 @@ import axios from 'axios'
 import { useState } from 'react'
 import { michu } from './assets'
 import LoginPage from './componetns/LoginPage'
+import ChangePassword from './componetns/ChangePassword'
 // import DateRange from './componetns/Colletion/DateRange'
 const theme = createTheme({
   palette: {
@@ -54,8 +55,6 @@ const App = () => {
   const {login, setLogin}=useStateContext()
   const {userRoles,setUserRoles}=useStateContext()
   const user=useSelector(state=>state.user)
-  console.log("the menu app is here", menu,navs)
-  console.log("************App%%%%%%%%", userRoles)
   const userRole=async()=>{
     
   }
@@ -102,17 +101,18 @@ const App = () => {
             <div className='mt-16 px-4 w-full max-h-screen '>
               <Routes>
                 <Route path='/michu/login' element={<LoginPage/>}/>
-                <Route path='michu/dashboard/disbursement' element={<Disbursement/>}/>
-                <Route path='michu/dashboard' element={<Disbursement/>}/>
-                <Route path='michu/dashboard/sales' element={<Disbursement/>}/>
+                <Route path='michu/dashboard/disbursement' element={<Collection/>}/>
+                <Route path='michu/dashboard' element={<Collection/>}/>
+                <Route path='michu/dashboard/sales' element={<Collection/>}/>
                 <Route path='michu/dashboard/collection' element={<Collection/>}/>
-                <Route path='/michu/performance/operationalPerformance' element={<CoreData/>}/>
+                <Route path='/michu/performance/operationalPerformance' element={<CollectionPerformance/>}/>
                 <Route path="/michu/performance/collectionPerformance" element={<CollectionPerformance/>}/>
-                <Route path="/michu/performance/salesPerformance" element={<DateRange/>}/>
-                <Route path='/michu/form/operationalForm' element={<OperationalTab/>}/>
+                <Route path="/michu/performance/salesPerformance" element={<CollectionPerformance/>}/>
+                <Route path='/michu/form/operationalForm' element={<CollectionTab/>}/>
                 <Route path='/michu/form/collectionForm' element={<CollectionTab/>}/>
                 <Route path='/michu/form/salesForm' element={<CollectionTab/>}/>
                 <Route path="michu/setting/addUser" element={<User/>}></Route>
+                <Route path='michu/user/changePassword' element={<ChangePassword/>}/>
               </Routes>
             </div>
           </div>

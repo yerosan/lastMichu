@@ -9,9 +9,7 @@ import RegisterForm from './Form';
 import CollectionFrom from './CollectionFrom';
 import CollectionFromExist from './ExistForm';
 // import DynamicFeedIcon from '@mui-ui/icons-material/DynamicFeed';
-import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
-// import BasicRangeShortcuts from './Colletion/DateRange';
-import "rsuite/dist/rsuite.css"; 
+import DynamicFeedIcon from '@mui/icons-material/DynamicFeed'; 
 const CollectionTab = () => {
     const [value, setValue]=useState("1")
     const handleTabChange=(event, newValue)=>{

@@ -22,9 +22,6 @@ import UserRole from './UserRole';
 import DeleteIcon from '@mui/icons-material/Delete';
 import config from '../config/config';
 
-// function createData(name, contacted, payed, unpayed, totalPayed) {
-//   return { name, contacted, payed, unpayed, totalPayed };
-// }
 const styles={
   fontFamily:"serif",
   fontWeight:"bold",
@@ -77,21 +74,15 @@ export default function UserDetail() {
   const [rankedData, setRankedData] = useState([]);
   const fetchCollectionPerUser=async()=>{
     dispatch(collectionPerUser({loading:true, error:"", data:null}))
-    console.log(",.....", collection)
     try{
       const collections=await axios.get(`${config.apiUrl}/user/allUser`)
       if(collections.data.message=="succeed"){
-        //  const sortedData = collections.data.data.sort((a, b) => b.totalCollectedAmount- a.totalCollectedAmount);
-        //  const rankedDatas = sortedData.map((row, index) => ({ ...row, rank: index + 1 }));
          setRankedData(collections.data.data);
           dispatch(collectionPerUser({loading:false,error:"", data:collections.data.data}))
-          console.log("The userS===========", collections.data.data)
           setColl(collections.data.data)
           setCollectionloaded(true)
-        //   setFilter(false)
       }else{
         dispatch(collectionPerUser({loading:false, error:collections.data.message, data:null}))
-        console.log("The userSError===========", collections.data.data)
       }
 
     }catch(erro){
@@ -102,9 +93,6 @@ export default function UserDetail() {
   if(filter){
     fetchCollectionPerUser()
   }
-  // useEffect(()=>{
-  //   console.log("this isCollect-----------", collection, coll)
-  // },[collection])
 
   useEffect(()=>{
     fetchCollectionPerUser()
@@ -130,10 +118,6 @@ export default function UserDetail() {
             <StyledTableCell style={styles} >User Name</StyledTableCell>
             <StyledTableCell align='left' style={styles} >Full Name</StyledTableCell>
             <StyledTableCell align="center" style={styles} >Role</StyledTableCell>
-            {/* <StyledTableCell align="right" style={styles} >Total Unpayed Customer</StyledTableCell>
-            <StyledTableCell align="right" style={styles} >Total Payed Amount</StyledTableCell>
-            <StyledTableCell align="right" style={styles} >Rank</StyledTableCell> */}
-            {/* <TableCell align="right">Protein&nbsp;(g)</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -150,21 +134,9 @@ export default function UserDetail() {
               </StyledTableCell>
               <StyledTableCell align="left">{row.fullName}</StyledTableCell>
               <StyledTableCell align="center">< UserRole userName={row.userName}/></StyledTableCell>
-              {/* <StyledTableCell align="right">{row.totalPaid}</StyledTableCell>
-              <StyledTableCell align="right">{row.totalUnpaid}</StyledTableCell>
-              <StyledTableCell align="right">{row.totalCollectedAmount}</StyledTableCell>
-              <StyledTableCell align="right">{row.rank}</StyledTableCell> */}
             </StyledTableRow>
           ))}
         </TableBody>
-        {/* <TableFooter style={styles} sx={{backgroundColor:"#e38524", border:2}}> 
-            <StyledTableCell style={styles}>Total</StyledTableCell>
-            <StyledTableCell align='right' style={footerStyles}>{totalStatus.totalApproved}</StyledTableCell> 
-            <StyledTableCell align='right' style={footerStyles}>{totalStatus.totalRejected}</StyledTableCell> 
-            <StyledTableCell align='right' style={footerStyles}>{totalStatus.totalApplicant}</StyledTableCell>
-            <StyledTableCell align='right' style={footerStyles}>50000</StyledTableCell>
-            <StyledTableCell align='right' style={footerStyles}></StyledTableCell>
-          </TableFooter>  */}
       </Table>
     </TableContainer>
     </div>

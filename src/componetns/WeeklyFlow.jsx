@@ -28,7 +28,6 @@ export default function AccountMenu() {
   };
 
   const handleMenuItemClick=(value)=>{
-    console.log("This is the Value", value)
     setAnchorEl(value)
     setDateRange(value)
   }

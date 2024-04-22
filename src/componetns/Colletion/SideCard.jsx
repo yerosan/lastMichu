@@ -30,7 +30,7 @@ const SideCard = () => {
                 <CardContent>
                 <div className='flex justify-center gap-2 items-center'>
                   <Typography variant="h4" color="text.primary" textAlign="center" fontWeight="bold" fontSize="xlarge" fontFamily="serif">
-                  {collection.data.weeklyData.dateRangeTotal.toLocaleString()}     
+                  {collection.data.weeklyData.GivenDateAmount.toLocaleString()}     
                   </Typography>
                    <span className='text-black font-semibold text-center'>ETB</span>
                   </div>
@@ -105,14 +105,14 @@ const SideCard = () => {
                 <CardContent>
                 <div className='flex justify-center gap-2 items-center'>
                   <Typography variant="h4" color="text.primary" textAlign="center" fontWeight="bold" fontSize="xlarge" fontFamily="serif">
-                  {(collection.data.weeklyData.dateRangeTotal/collection.data.weeklyData.workingDay).toLocaleString()}    
+                  {Math.round(collection.data.weeklyData.dateRangeTotal/collection.data.weeklyData.workingDay).toLocaleString()}    
                   </Typography>
                    <span className='text-black font-semibold text-center'>ETB/ day</span>
                   </div>
                   <Typography gutterBottom variant="h5" 
                   component="div" 
                   fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="medium">
-                    Average Collected Amount
+                    Collected Amount
                   </Typography>
                   {/* <Typography variant="h1" color="text.primary" textAlign="center" fontWeight="bold" fontSize="large" fontFamily="serif">
                   {collection.data.weeklyData.dateRangeTotal/collection.data.weeklyData.workingDay} 
@@ -139,7 +139,7 @@ const SideCard = () => {
               <CardActionArea>
                 <CardContent>
                   <Typography variant="h4" color="text.primary" textAlign="center" fontWeight="bold" fontSize="xlarge" fontFamily="serif">
-                  {collection.data.weeklyData.totalAccount/collection.data.weeklyData.workingDay}  
+                  {Math.round(collection.data.weeklyData.totalAccount/collection.data.weeklyData.workingDay).toLocaleString()}  
                   </Typography>
                    {/* <Typography variant="h4" color="text.primary" textAlign="center" fontWeight="bold" fontSize="large" fontFamily="serif">
                      {collection.data.weeklyData.totalAccount/collection.data.weeklyData.workingDay}

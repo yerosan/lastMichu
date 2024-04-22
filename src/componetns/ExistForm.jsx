@@ -12,24 +12,7 @@ import {Tab, Box} from "@mui/material"
 import { TabList, TabContext, TabPanel } from '@mui/lab';
 import Alert from '@mui/material/Alert';
 import config from '../config/config';
-const currencies = [
-    {
-      value: 'Yerosan Tadesse',
-      label: 'Yerosan',
-    },
-    {
-      value: 'Shewanek Zewudu',
-      label: 'Shewank',
-    },
-    {
-      value: 'Jems Jems',
-      label: 'jems',
-    },
-    {
-      value: 'Sane Yero',
-      label: 'sane',
-    },
-  ];
+import FormHelperText from '@mui/material/FormHelperText';
 
   const callResponce = [
     {
@@ -49,8 +32,32 @@ const currencies = [
       label: 'Refused to pay',
     },
     {
-      value:"unreachable",
-      label:"Not reached"
+      value:"outOfService",
+      label:"Out of service"
+    },
+    {
+      value:"hangUP",
+      label:"Hung up"
+    },
+    {
+      value:"lineBusy",
+      label:"Line busy"
+    },
+    {
+      value:"incorrectNumber",
+      label:"Incorrect number"
+    },
+    {
+      value:"switchOff",
+      label:"Switch off"
+    },
+    {
+      value:"callForWarding",
+      label:"Call forwarding"
+    },
+    {
+      value:"notWorking",
+      label:"Not working"
     }
   ];
 
@@ -89,10 +96,14 @@ const CollectionFromExist = () => {
     const alluserss=useSelector(state=>state.allUser)
     const addCollection=useSelector(state=>state.collection)
     const [dataAdding, setDataAdding]=useState(false)
+    const [error, setError]=useState(false)
     const dispatch=useDispatch()
 
+    const validatePhoneNumber = (phoneNumber) => {
+      return phoneNumber.length === 12 && /^\d+$/.test(phoneNumber); // Checks if the phone number is exactly 12 digits and contains only numeric characters
+    };
+
     const handleForm=(e)=>{
-        console.log("this is e data of user", e.target.value, e.target.name)
         const values=e.target.value
         const namess=e.target.name
         if(namess=="callResponce" && values=="paid"){
@@ -101,8 +112,14 @@ const CollectionFromExist = () => {
         if(namess=="callResponce" && values !="paid"){
           setFormActivater(false)
         }
-        setCollectionData({ ...collectionData, [namess]:values})
-        console.log("the data sets", collectionData)
+
+        setCollectionData((prevState) => ({
+          ...prevState,
+          [namess]: values,
+        }));
+        if (namess === 'customerPhone') {
+          setError(!validatePhoneNumber(values)); // Set error to true if the phone number is invalid
+        }
     }
     const fetchUsers=async()=>{
       dispatch(getAllUsers({loading:true,error:"", data:null }))
@@ -114,51 +131,43 @@ const CollectionFromExist = () => {
             "userName":user.userName,
              "fullName":user.fullName
           }))
-          console.log("==============alluser", allUsers)
           dispatch(getAllUsers({loading:false, error:'',data:allUsers}))
         }else{
           dispatch(getAllUsers({loading:false, error:users.data.message}))
         }
       }catch(error){
         dispatch(getAllUsers({loading:false, error:"Something went wrong"}))
-        console.log("The error", error)
       }
     }
 
     const addColleciton=async()=>{
-      // dispatch(addingCollection({loading:true, data:null, error:""}))
       try{
         let addingCollections= await axios.post(`${config.apiUrl}/collection/add`, collectionData)
         if(addingCollections.data.message=="succed"){
-          // dispatch(addingCollection({loading:false, error:"" , data:addingCollections.data.data}))
           alert("Data submited")
         }
         else{
          alert(addingCollections.data.message)
         }
+      
       }catch(error){
         alert ("Something went wrong")
-        console.log("An error", error)
       }
     }
     useEffect(()=>{
-      console.log("Loading All users%%%%%%%%%%%%%",alluserss)
       fetchUsers()
-      console.log("this is the users`````````````````", alluserss.data)
     },[])
 
-    // useEffect(()=>{
-    //   console.log("Loading All users%%%%%%%%%%%%%",alluserss)
-    //   fetchUsers()
-    //   console.log("this is the users`````````````````", alluserss.data)
-    // },[alluserss])
  
     function handleSubmit(event) {
         event.preventDefault();
-        addColleciton()
-        setCollectionData(initialVaue)
-        // console.log(userName, contacted, payed, date, unpayed) 
-        console.log("This is the collection DATA", collectionData,addCollection)
+        if(error){
+          alert("Incorrect phone number")
+        }else{
+           addColleciton()
+           setCollectionData(initialVaue)
+        }
+        
     }
  
     return (
@@ -197,7 +206,6 @@ const CollectionFromExist = () => {
                                   value={collectionData.userName}
                                   placeholder='Please select user'
                                   onChange={handleForm}
-                                  // helperText="Please select user"
                                 >
                                   {alluserss.data.map((option) => (
                                     
@@ -223,11 +231,9 @@ const CollectionFromExist = () => {
                                     select
                                     label="Call responce"
                                     name='callResponce'
-                                    values={collectionData.callResponce}
-                                    // defaultValue="EUR"
+                                    value={collectionData.callResponce}
                                     placeholder='Select call response'
                                     onChange={handleForm}
-                                    // helperText="Please select user"
                                   >
                                     {callResponce.map((option) => (
                                       <MenuItem key={option.value} value={option.value}>
@@ -279,8 +285,10 @@ const CollectionFromExist = () => {
                                     placeholder='Enter customer phone'
                                     fullWidth
                                     required
+                                    error={error}
                                     sx={{my:1 }}
-                              />
+                              >
+                              </TextField> 
                               {formActivater &&
                                 <TextField
                                     type="number"
@@ -329,5 +337,4 @@ const CollectionFromExist = () => {
         </React.Fragment>
     )
 }
-//  #00b0ff
 export default CollectionFromExist;

@@ -52,6 +52,7 @@ export const ContextProvider = ({children}) => {
        const [userRoles,setUserRoles]=useState(null)
        const [dbfilter, setDbfilter]=useState(false)
        const [dateVeriation, setDateVeriation]=useState(initialVeriation)
+       const [password, setPassword]=useState(false)
   return (<ContextState.Provider
     value={
        {
@@ -69,8 +70,8 @@ export const ContextProvider = ({children}) => {
         filter, setFilter,
         userRoles, setUserRoles,
         dbfilter, setDbfilter,
-        dateVeriation, setDateVeriation
-
+        dateVeriation, setDateVeriation,
+        password, setPassword,
        }
     }
     >

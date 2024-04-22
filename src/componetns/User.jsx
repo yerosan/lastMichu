@@ -10,14 +10,11 @@ import CollectionFrom from './CollectionFrom';
 import CollectionFromExist from './ExistForm';
 import CreateUser from './CreateUser';
 import UserDetail from './UserDetail';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-// import BasicRangeShortcuts from './Colletion/DateRange';
-import "rsuite/dist/rsuite.css"; 
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';; 
 const User = () => {
     const [value, setValue]=useState("1")
     const handleTabChange=(event, newValue)=>{
         setValue(newValue)
-        console.log("this is newvalue", newValue, event)
     }
   return (
     <div>
