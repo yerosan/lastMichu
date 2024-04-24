@@ -2,6 +2,9 @@ import React from 'react'
 
 import { createContext, useContext, useState } from 'react'
 import { useEffect } from 'react'
+import { collectionPerUser } from '../features/collection/individualSlice';
+import { intervalCollection } from '../features/collection/dashboardSlisce'
+import { useDispatch, useSelector } from 'react-redux';
 
 const ContextState=createContext()
 
@@ -56,6 +59,15 @@ export const ContextProvider = ({children}) => {
        const [password, setPassword]=useState(false)
        const [dashboard, setDashboard]=useState(false)
        const [lognum, setLognum]=useState(1)
+       const dispatch=useDispatch()
+
+       useEffect(()=>{
+        const intervalId= setInterval(()=>{
+             dispatch(collectionPerUser({loading:true, error:"", data:null}))
+             dispatch(intervalCollection({loading:true, error:"", data:null}))
+          },30000)
+          return () => clearInterval(intervalId);
+      },[])
 
   return (<ContextState.Provider
     value={

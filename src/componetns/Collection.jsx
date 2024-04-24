@@ -9,8 +9,9 @@ import { BarChart } from './Colletion/BarChart'
 import HeadCard from './Colletion/HeadCard'
 import {useSelector, useDispatch} from "react-redux"
 import { useState, useEffect } from 'react'
-import collectionSlice from '../features/collection/collectionSlice'
-import { intervalCollection } from '../features/collection/collectionSlice'
+// import collectionSlice from '../features/collection/collectionSlice'
+// import { intervalCollection } from '../features/collection/collectionSlice'
+import { intervalCollection } from '../features/collection/dashboardSlisce'
 import Alert from "@mui/material/Alert"
 import Stack from '@mui/material/Stack';
 import LinearProgress from '@mui/material/LinearProgress';
@@ -20,7 +21,8 @@ import { WeeklyBar } from './Colletion/WeeklyBar'
 import { useStateContext } from '../context/ContextProvider'
 import Profile from "./Profile"
 const Collection = () => {
-  const collection= useSelector(state=>state.collection)
+  const collection= useSelector(state=>state.dashboard)
+  // console.log("For loadding dashboard---------===========-", collection)
   const dispatch=useDispatch()
   const [loops, setLoops]=useState(false)
   const [load, setLoad]=useState(false)
@@ -67,7 +69,7 @@ const Collection = () => {
     let liveAccount=0
     let previousAccount=0
     let previousCollection=0
-    dispatch(intervalCollection({loading:true, error:"", data:null}))
+    // dispatch(intervalCollection({loading:true, error:"", data:null}))
     try{
       let collectionss= await axios.post(`${config.apiUrl}/collection/dateRange`, data.monthly)
       let totalCollectionDashboard= await axios.post(`${config.apiUrl}/collection/dashboard`, dateVeriation)
@@ -79,24 +81,25 @@ const Collection = () => {
           let allUser= await axios.get(`${config.apiUrl}/user/allUser`)
           if(allUser.data.message==="succeed"){
               let allUserData=allUser.data.data
-              await Promise.all( allUserData.map(async (user,index) =>{
-                let [userName, fullName]=[user.userName, user.fullName]
-                let userCollection=await axios.get(`${config.apiUrl}/collection/users/${userName}`)
-                if(userCollection.data.message=="succed"){
-                  let userDetail=userCollection.data.data
-                  userDetail[fullName]=fullName
-                  userDetails[userName]=userDetail
-                  liveCollection +=userDetail.liveCollection
-                  previousCollection +=userDetail.previousColletion
-                  previousAccount =userDetail.previousAccount
-                  liveAccount =userDetail.liveAccount
-                }else{
-                  setLoops(true)
-                }
-               }),
+              // await Promise.all( allUserData.map(async (user,index) =>{
+              //   let [userName, fullName]=[user.userName, user.fullName]
+              //   let userCollection=await axios.get(`${config.apiUrl}/collection/users/${userName}`)
+              //   console.log("the userDetails---++++============", userCollection)
+              //   if(userCollection.data.message=="succed"){
+              //     let userDetail=userCollection.data.data
+              //     userDetail[fullName]=fullName
+              //     userDetails[userName]=userDetail
+              //     liveCollection +=userDetail.liveCollection
+              //     previousCollection +=userDetail.previousColletion
+              //     previousAccount =userDetail.previousAccount
+              //     liveAccount =userDetail.liveAccount
+              //   }else{
+              //     setLoops(true)
+              //   }
+              //  }),
                
-              )
-              if(!loops){
+              // )
+              // if(!loops){
                 let AllData={monthlyData:collectionss.data.data, 
                   dashboard:dashboard,
                   weeklyData:weecklyCollection.data.data,
@@ -107,9 +110,9 @@ const Collection = () => {
                   details:userDetails}
                 dispatch(intervalCollection({loading:false, error:"", data:AllData}))
                 setLoad(true)
-              }else{
-                dispatch(intervalCollection({loading:false, error:"Something went wrong with users detail", data:null}))
-              }
+              // }else{
+              //   dispatch(intervalCollection({loading:false, error:"Something went wrong with users detail", data:null}))
+              // }
           }
         }else{
           dispatch(intervalCollection({loading:false, error:weecklyCollection.data.message, data:null}))

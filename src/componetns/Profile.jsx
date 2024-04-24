@@ -63,7 +63,7 @@ export default function Profile() {
   }
   return (
     <div >
-        <Box sx={{ display: 'flex', alignItems: 'center', bgcolor:"#ffff",textAlign: 'center' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center',textAlign: 'center' }}>
             <Tooltip title="profile">
             <IconButton
                 onClick={handleClick}

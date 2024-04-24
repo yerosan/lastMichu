@@ -9,7 +9,7 @@ import PaidIcon from '@mui/icons-material/Paid';
 
 
 const HeadCard = () => {
-  const collection=useSelector(state=>state.collection)
+  const collection=useSelector(state=>state.dashboard)
   let totalCollections=collection.data.dashboard[0][0]
   return (
     <div >

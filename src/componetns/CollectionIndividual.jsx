@@ -8,7 +8,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import { TableFooter } from '@mui/material';
-import { collectionPerUser } from '../features/collection/collectionSlice';
+// import { collectionPerUser } from '../features/collection/collectionSlice';
+import { collectionPerUser } from '../features/collection/individualSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import Stack from '@mui/material/Stack';
@@ -18,6 +19,7 @@ import axios from 'axios';
 import DateRange from './Colletion/DateRange';
 import { useStateContext } from '../context/ContextProvider';
 import config from '../config/config';
+import Profile from './Profile';
 
 const styles={
   fontFamily:"serif",
@@ -62,7 +64,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function CollectionIndividual() {
   const dispatch=useDispatch()
-  const collection=useSelector(state=>state.collection)
+  const collection=useSelector(state=>state.individualCollection)
   const [collectionloaded, setCollectionloaded]=useState(false)
   const [coll, setColl]=useState(null)
   const {dateRanges, setDateRanges}=useStateContext()
@@ -70,7 +72,7 @@ export default function CollectionIndividual() {
   const [rankedData, setRankedData] = useState([]);
   const {dashboard, setDashboard}=useStateContext()
   const fetchCollectionPerUser=async()=>{
-    dispatch(collectionPerUser({loading:true, error:"", data:null}))
+    // dispatch(collectionPerUser({loading:true, error:"", data:null}))
     try{
       const collections=await axios.post(`${config.apiUrl}/collection/customer`, dateRanges)
       if(collections.data.message=="succeed"){
@@ -107,21 +109,23 @@ export default function CollectionIndividual() {
           <LinearProgress color="secondary" />
         </Stack>
       </div>:
-    <div className='bg-green-400 h-full w-full'>
-      <div className='bg-yellow-400'>
-        {dashboard &&
+    <div className='h-full w-full'>
+      <div className=''>
+        {dashboard ?
          <div className='flex flex-auto'>
              {dashboard && <Profile/>}
              <p className='font-semibold w-full text-center text-2xl pb-2 font-arial text-black border-b-2 rounded-lg'>Collection Performance</p>
-         </div>
+             <DateRange/>
+         </div>:
+         <DateRange/>
         }
       </div>
-      <DateRange/>
+      
     {collection.error !=='' ?<Alert sx={{mt: 2, mb: 2}} severity="error">{collection.error}</Alert>:
     <div className='h-full w-full'>
     {collection.data!==null &&
     <div>
-    <TableContainer component={Paper} sx={{maxHeight:540}}>
+    <TableContainer component={Paper} sx={{maxHeight:740}}>
       <Table sx={{ minWidth: 650 }} stickyHeader aria-label="simple table">
         <TableHead>
           <TableRow style={styles} >

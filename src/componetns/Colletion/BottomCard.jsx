@@ -9,7 +9,8 @@ import ActionAreaCard from './Card'
 // previousColletions
 import {useSelector, useDispatch} from "react-redux"
 const BottomCard = () => {
-  const collection=useSelector(state=>state.collection)
+  const collection=useSelector(state=>state.dashboard)
+  let totalCollections=collection.data.dashboard[0][0]
   return (
     <div>
       {collection.data&&
@@ -24,7 +25,7 @@ const BottomCard = () => {
                         Yesterday Collection
                     </Typography>
                     <Typography variant="h4" color="text.primary" fontWeight="bold"textAlign="center" fontSize="xlarge" fontFamily="serif">
-                        {Math.round(collection.data.previousColletions).toLocaleString()}
+                        {Math.round(totalCollections.previousColletion).toLocaleString()}
                     </Typography>
                     </CardContent>
                 </CardActionArea>
@@ -39,7 +40,7 @@ const BottomCard = () => {
                     Yesterday Account
                   </Typography>
                   <Typography variant="h4" color="text.primary" fontWeight="bold" textAlign="center" fontSize="xlarge" fontFamily="serif">
-                    {Math.round(collection.data.previousAccount).toLocaleString()}
+                    {Math.round(totalCollections.previousAccount).toLocaleString()}
                   </Typography>
                 </CardContent>
               </CardActionArea>
@@ -55,7 +56,7 @@ const BottomCard = () => {
                        Live Collection
                     </Typography>
                     <Typography variant="h4" color="text.primary" fontWeight="bold"textAlign="center" fontSize="xlarge" fontFamily="serif">
-                        {Math.round(collection.data.liveCollections).toLocaleString()}
+                        {Math.round(totalCollections.liveCollection).toLocaleString()}
                     </Typography>
                     </CardContent>
                 </CardActionArea>
@@ -70,7 +71,7 @@ const BottomCard = () => {
                        Live Account
                     </Typography>
                     <Typography variant="h4" color="text.primary" fontWeight="bold"textAlign="center" fontSize="xlarge" fontFamily="serif">
-                        {Math.round(collection.data.liveAccount).toLocaleString()}
+                        {Math.round(totalCollections.liveAccount).toLocaleString()}
                     </Typography>
                     </CardContent>
                 </CardActionArea>

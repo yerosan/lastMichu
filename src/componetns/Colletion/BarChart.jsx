@@ -39,7 +39,7 @@ const labels=['yero', 'shewa', 'sane', 'dateRangeTotal']
 
 
 export function BarChart() {
-  const collection=useSelector(state=>state.collection)
+  const collection=useSelector(state=>state.dashboard)
   const collecte=collection.data
   const [label, setLabel]=useState(null)
   const [data, setData]=useState(null)

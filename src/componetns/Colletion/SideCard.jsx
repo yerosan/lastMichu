@@ -14,7 +14,7 @@ import DateRange from './DateRange';
 import DashboardFilter from './DashboardFilter';
 
 const SideCard = () => {
-  const collection=useSelector(state=>state.collection)
+  const collection=useSelector(state=>state.dashboard)
   return (
     <div className='w-[20%] '>
       {collection.data &&
