@@ -29,18 +29,15 @@ const DateRange = () => {
   const {filter, setFilter}=useStateContext()
 
   const filterHandler=(event)=>{
-    console.log("the delete event", event)
     setDelets(true)
   }
 
   const submitClick=()=>{
     setDelets(false)
     setFilter(true)
-    console.log("This is the DateRange of submit", dateRanges,filter)
   }
 
   const cancelClick=()=>{
-    console.log("This is cancleClick", dateRanges, filter)
     setDelets(false)
   }
 

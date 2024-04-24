@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { createContext, useContext, useState } from 'react'
+import { useEffect } from 'react'
 
 const ContextState=createContext()
 
@@ -53,6 +54,9 @@ export const ContextProvider = ({children}) => {
        const [dbfilter, setDbfilter]=useState(false)
        const [dateVeriation, setDateVeriation]=useState(initialVeriation)
        const [password, setPassword]=useState(false)
+       const [dashboard, setDashboard]=useState(false)
+       const [lognum, setLognum]=useState(1)
+
   return (<ContextState.Provider
     value={
        {
@@ -72,6 +76,8 @@ export const ContextProvider = ({children}) => {
         dbfilter, setDbfilter,
         dateVeriation, setDateVeriation,
         password, setPassword,
+        dashboard,setDashboard,
+        lognum, setLognum
        }
     }
     >
@@ -79,6 +85,38 @@ export const ContextProvider = ({children}) => {
   </ContextState.Provider>
   )
 }
+
+
+
+// import { createContext,useContext,useEffect, useState } from "react";
+// import {motion, useCycle} from "framer-motion"
+// const StateContext=createContext()
+// export const ContextProvider=({children})=>{
+//     const [toggling,setToggling]=useState(false)
+//     const [switcher, setSwitcher]=useState(false)
+//     const [lognum, setLognum]=useState(1)
+    // useEffect(()=>{
+    //     console.log("this is log from log context", lognum)
+    //     setInterval(()=>{
+    //        setLognum((prevlognum)=>(prevlognum%4)+1)
+    //     },20000)
+    // },[])
+//     return(
+//         <StateContext.Provider
+//             value={{toggling, setToggling,
+//                     switcher, setSwitcher,
+//                     lognum, setLognum,
+//                 }}
+//         >
+//             {children}
+//         </StateContext.Provider>
+//     )
+// }
+
+// export const useStateContext=()=>useContext(StateContext)
+
+
+
 
 
 export const useStateContext=()=>useContext(ContextState)

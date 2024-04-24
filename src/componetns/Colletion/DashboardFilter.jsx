@@ -29,18 +29,15 @@ const DashboardFilter = () => {
   const {dbfilter, setDbfilter}=useStateContext()
 
   const filterHandler=(event)=>{
-    console.log("the delete event", event)
     setDelets(true)
   }
 
   const submitClick=()=>{
     setDelets(false)
     setDbfilter(true)
-    console.log("This is the DateVeriation of submit", dateVeriation,dbfilter)
   }
 
   const cancelClick=()=>{
-    console.log("This is cancleClick", dateVeriation, dbfilter)
     setDelets(false)
   }
 

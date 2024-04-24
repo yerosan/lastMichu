@@ -24,6 +24,7 @@ function getItem(label, key, icon, children, type) {
 //  null, [getItem('collection', 'collection'), getItem('collection', '4collection')]
 const items = [
   getItem('Dashboard', 'dashboard', <DashboardOutlinedIcon/>, [
+    getItem('dashboard', 'dashboard', null),
     getItem('disbursement', 'disbursement', null), 
     getItem('collection', 'collection'),
     getItem('sales', 'sales')
@@ -58,12 +59,16 @@ const items = [
 ];
 const Menus = () => {
   const {navs, setNavs}=useStateContext()
+  const {dashboard, setDashboard}=useStateContext()
+  const {menu, setMenu}=useStateContext()
   const navigate=useNavigate()
   const onClick = (e) => {
-    console.log('click ', e);
-    console.log("this is key path", e.keyPath)
-    console.log("this is a lock", navs)
-    // console.log("this is NavChange************", e, navs)
+    if(e.keyPath[0]=="dashboard" && e.keyPath[1]=="dashboard"){
+      setMenu(false)
+      setDashboard(true)
+      
+
+    }
     setNavs(e.keyPath)
   };
   return (

@@ -56,9 +56,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  // '&:nth-of-type(odd)': {
-  //   backgroundColor: theme.palette.action.hover,
-  // },
   "hover": {
     color: "#cbd5e1",
     backgroundColor:"red",
@@ -70,38 +67,34 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 
-const Datas = [
-  createData('Yerosan Tadesse', 159, 6.0, 24, 4.0,"2024/04/06"),
-  createData('Shewanek Zewudu', 237, 9.0, 37, 4.3,"2024/04/06"),
-  createData('Yerosan Tadesse1', 262, 16.0, 24, 6.0,"2024/04/06"),
-  createData('Yerosan Tadesse2', 305, 3.7, 67, 4.3,"2024/04/06"),
-  createData('Shewanek Zewudu1', 356, 16.0, 49, 3.9,"2024/04/06"),
-  createData('Yerosan Tadesse3', 159, 6.0, 24, 4.0,"2024/04/06"),
-  createData('Shewanek Zewudu3', 237, 9.0, 37, 4.3,"2024/04/06"),
-  createData('Yerosan Tadesse12', 262, 16.0, 24, 6.0,"2024/04/06"),
-  createData('Yerosan Tadesse23', 305, 3.7, 67, 4.3,"2024/04/06"),
-  createData('Shewanek Zewudu13', 356, 16.0, 49, 3.9,"2024/04/06"),
-];
-const rows=Datas
+// const Datas = [
+//   createData('Yerosan Tadesse', 159, 6.0, 24, 4.0,"2024/04/06"),
+//   createData('Shewanek Zewudu', 237, 9.0, 37, 4.3,"2024/04/06"),
+//   createData('Yerosan Tadesse1', 262, 16.0, 24, 6.0,"2024/04/06"),
+//   createData('Yerosan Tadesse2', 305, 3.7, 67, 4.3,"2024/04/06"),
+//   createData('Shewanek Zewudu1', 356, 16.0, 49, 3.9,"2024/04/06"),
+//   createData('Yerosan Tadesse3', 159, 6.0, 24, 4.0,"2024/04/06"),
+//   createData('Shewanek Zewudu3', 237, 9.0, 37, 4.3,"2024/04/06"),
+//   createData('Yerosan Tadesse12', 262, 16.0, 24, 6.0,"2024/04/06"),
+//   createData('Yerosan Tadesse23', 305, 3.7, 67, 4.3,"2024/04/06"),
+//   createData('Shewanek Zewudu13', 356, 16.0, 49, 3.9,"2024/04/06"),
+// ];
+// const rows=Datas
 const Actions=(props)=>{
-  const [rowsss, setRowsss]=useState(rows)
+  // const [rowsss, setRowsss]=useState(rows)
   const {open, setOpen}=useStateContext()
   const [delets,setDelets]=useState(false)
   const [deleteRow, setDeleteRow]=useState({})
   const DeleteHandler=(event, row)=>{
-    console.log("the delete event", row)
     setDelets(true)
     setDeleteRow(row)
-    setRowsss(rowsss=>rowsss.filter(roow=>roow.name!==row.name))
-    console.log("the deleted row", rowsss)
-    // rows=Datas
+    // setRowsss(rowsss=>rowsss.filter(roow=>roow.name!==row.name))
   }
 
   const EditDas=()=>{
     setOpen(true)
   }
 
-  // rows=rowsss
   return(
     <div>
       <Tooltip title="Edit" placement="bottom-end" arrow>
@@ -132,9 +125,6 @@ const Actions=(props)=>{
           className='text-center font-semibold text-lg'>Are you sure to delete {props.row.fullName}'s data on {props.row.date} date ?
           </p>
         </DialogTitle>
-        {/* <DialogContent>
-          Data can not be recovered
-        </DialogContent> */}
           <DialogActions>
             <Button sx={{textTransform: 'capitalize'}}  onClick={()=>setDelets(false)}>Yes</Button>
             <Button sx={{textTransform: 'capitalize'}}  autoFocus onClick={()=>setDelets(false)}>No</Button>
@@ -161,29 +151,21 @@ export default function CollectionDetail() {
          dispatch(allCollection({loading:false, error:"",data:Collections.data.data}))
          setAllcollection(Collections.data.data)
          setLoad(true)
-         console.log("this is Datas---------",Collections)
       }else{
         dispatch(allCollection({loading:false, data:null, error:Collections.data.message}))
-        console.log("this is Datas---------",Collections)
     }
     }catch(error){
       console.log("The error", error)
       dispatch(allCollection({loading:false, error:"Some thing went wrong", data:null}))
     }
   }
-  // const [popUp,setPopup]=useState(false)
-  // const [open,setOpen]=useState(false)
   const {open, setOpen}=useStateContext()
   const handleRowClick = (rowData) => {
-    console.log('Clicked row data:', rowData);
     setRowData(rowData)
-    // setOpen(true)
-    console.log("this is row data", rowData)
-    // Add your custom logic here
+  
   }
 
   useEffect(()=>{
-    console.log("This is the Data", collection)
     fetchAllCollection()
   }, [])
   return (
@@ -213,9 +195,9 @@ export default function CollectionDetail() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {allcollection.map((row) => (
+            {allcollection.map((row,id) => (
               <StyledTableRow
-                key={row.userName}
+                key={id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0, fontFamily:"serif" } }}
                 onClick={(event) => handleRowClick(row)}
                 className={{
@@ -234,15 +216,6 @@ export default function CollectionDetail() {
               </StyledTableRow>
             ))}
           </TableBody>
-          {/* <TableFooter style={styles} sx={{backgroundColor:"#e38524", border:2}}> 
-            <StyledTableCell style={styles}>Total</StyledTableCell>
-            <StyledTableCell align='left' style={footerStyles}>{totalStatus.totalApproved}</StyledTableCell> 
-            <StyledTableCell align='left' style={footerStyles}>{totalStatus.totalRejected}</StyledTableCell> 
-            <StyledTableCell align='left' style={footerStyles}>{totalStatus.totalApplicant}</StyledTableCell>
-            <StyledTableCell align='left' style={footerStyles}>{totalStatus.totalApplicant}</StyledTableCell>
-            <StyledTableCell align='left' style={footerStyles}>2024/02/06 - 2024/04/06</StyledTableCell>
-            <StyledTableCell align='left' style={footerStyles}></StyledTableCell>
-          </TableFooter>  */}
           
         </Table>
       </TableContainer>

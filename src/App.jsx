@@ -17,7 +17,7 @@ import RegisterForm from './componetns/Form'
 import FormTab from './componetns/FormTab'
 import LogIn from './componetns/Login'
 import CollectionFrom from './componetns/CollectionFrom'
-
+import Profile from './componetns/Profile'
 import { createTheme,ThemeProvider } from '@mui/material';
 import { cyan, purple } from '@mui/material/colors';
 import CollectionFromExist from './componetns/ExistForm'
@@ -35,6 +35,7 @@ import { useState } from 'react'
 import { michu } from './assets'
 import LoginPage from './componetns/LoginPage'
 import ChangePassword from './componetns/ChangePassword'
+import Display from './Display'
 // import DateRange from './componetns/Colletion/DateRange'
 const theme = createTheme({
   palette: {
@@ -55,6 +56,7 @@ const App = () => {
   const {login, setLogin}=useStateContext()
   const {userRoles,setUserRoles}=useStateContext()
   const user=useSelector(state=>state.user)
+  const {dashboard, setDashboard}=useStateContext()
   const userRole=async()=>{
     
   }
@@ -89,18 +91,19 @@ const App = () => {
           }
           {menu ?
             <div className='w-52 h-screen'>
-              <Sidebar/> 
+             {!dashboard && <Sidebar/> }
             </div>
             : 
             <div className='w-0'>
-              <Sidebar/>
+              {!dashboard &&<Sidebar/>}
             </div>
           } 
           <div className={`${menu?"w-5/6 bg-slate-50 min-h-screen" :"min-h-screen w-full bg-slate-50" }`}>
-            <Navbar/>
-            <div className='mt-16 px-4 w-full max-h-screen '>
+            {!dashboard && <Navbar/>}
+            <div className={`${menu ? "mt-16 px-4 w-full max-h-screen":"px-4 w-full max-h-screen"}`}>
               <Routes>
                 <Route path='/michu/login' element={<LoginPage/>}/>
+                <Route path='/michu/dashboard/dashboard' element={<Display/>}/>
                 <Route path='michu/dashboard/disbursement' element={<Collection/>}/>
                 <Route path='michu/dashboard' element={<Collection/>}/>
                 <Route path='michu/dashboard/sales' element={<Collection/>}/>
@@ -120,7 +123,7 @@ const App = () => {
         </div> :
         <div className='relative flex justify-center items-center w-full h-screen bg-slate-50'>
            <Navigate to="/michu/login" ></Navigate>
-           <LogIn/>
+           <LoginPage/>
         </div>
         }
         </div>}

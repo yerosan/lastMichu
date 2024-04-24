@@ -36,7 +36,7 @@ const ChangePassword = () => {
   const [delets,setDelets]=useState(false)
   const {dateRanges, setDateRanges}=useStateContext()
   const {filter, setFilter}=useStateContext()
-  const userInfo=useSelector(state=>state.user)
+  const userInfo=useSelector(state=>state.logins)
   const [change, setChange]=useState(false)
   const {password, setPassword}=useStateContext()
   const {navs, setNavs}=useStateContext()
@@ -93,7 +93,7 @@ const ChangePassword = () => {
                   <h2 className=
                       'font-serif font-semibold text-xl p-2'
                     //   action={<Link to="/michu/dashboard" />}
-                  >Dear {passwordData.userName} would you like to edit password ?</h2>
+                  >Dear {passwordData.userName} would you like to change password ?</h2>
                   <form onSubmit={handleSubmit}>
                       <div className='flex  gap-4 pb-2'>
                           <div className="flex flex-col gap-2 w-full">

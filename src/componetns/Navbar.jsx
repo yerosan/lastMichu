@@ -19,7 +19,7 @@ const  Navbar =() =>{
       setLogin(true)
     }
   return (
-    <div className="fixed  z-10 bg-slate-400 w-full">
+    <div className="fixed  z-10 bg-slate-200 w-full">
      {!menu ?
        <div className='flex justify-between items-center p-1'>
         <div className='flex w-2/5 gap-4 items-start'>
@@ -28,26 +28,17 @@ const  Navbar =() =>{
                 className='cursor-pointer text-2xl'><FiAlignJustify/> 
             </button>
             <img src={michu} className='w-18 h-12' />
-            {/* <h3 className="text-black font-mono text-2xl font-sem">Logo</h3> */}
         </div>
 
         <div className='w-3/5'>
             <div className='flex justify-end gap-4 items-center'> 
                 <Profile/>
-                {/* <ChangePassword/> */}
             </div>
         </div>
        </div>
       :
       <div className='flex justify-end gap-4 pl-4 items-center w-5/6 p-2'>  
          <Profile/>
-        {/* <img src={sane} className="w-8, h-8 rounded-full"/>  
-                <h3 className="text-black font-serif text-xl font-sem">Profile</h3>
-                <button type='button' onClick={handleSingout} 
-                  className="text-black font-serif text-lg font-semibold rounded-lg p-1 
-                      cursor-pointer hover:bg-[#e38524]"
-                  >Logout
-                </button> */}
       </div>
      }
       

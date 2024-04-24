@@ -19,12 +19,13 @@ import PasswordIcon from '@mui/icons-material/Password';
 import LockResetIcon from '@mui/icons-material/LockReset';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useSelector, useDispatch } from 'react-redux';
-import { loginUser } from '../features/userCreation/userSlice';
+import { loginUser } from '../features/userCreation/loginSlice';
 import { useStateContext } from '../context/ContextProvider';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
 import { useNavigate } from 'react-router-dom';
 export default function Profile() {
   const [anchorEl, setAnchorEl] = useState(null);
+  const {dashboard, setDashboard}=useStateContext()
   const {navs, setNavs}=useStateContext()
   const [dateRange, setDateRange]=useState('')
   const {login, setLogin}=useStateContext()
@@ -50,6 +51,8 @@ export default function Profile() {
     setDateRange(value)
     if(value=="logout"){
         handleSingout()
+        setDashboard(false)
+
     }
 
     if (value=="password"){
@@ -59,8 +62,8 @@ export default function Profile() {
     }
   }
   return (
-    <React.Fragment >
-        <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+    <div >
+        <Box sx={{ display: 'flex', alignItems: 'center', bgcolor:"#ffff",textAlign: 'center' }}>
             <Tooltip title="profile">
             <IconButton
                 onClick={handleClick}
@@ -108,15 +111,17 @@ export default function Profile() {
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-      >
+      > 
+      {!dashboard &&
         <MenuItem onClick={()=>handleMenuItemClick("password")} key="password">
           <Avatar ><LockResetIcon/></Avatar> Change password
         </MenuItem>
+      }
         <MenuItem onClick={()=>handleMenuItemClick("logout")} key="logout">
           <Avatar ><Logout/></Avatar>Logout
         </MenuItem>
       </Menu>
-    </React.Fragment>
+    </div>
   );
 }
 

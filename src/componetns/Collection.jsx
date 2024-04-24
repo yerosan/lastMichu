@@ -18,6 +18,7 @@ import axios from 'axios'
 import DateRange from './Colletion/DateRange'
 import { WeeklyBar } from './Colletion/WeeklyBar'
 import { useStateContext } from '../context/ContextProvider'
+import Profile from "./Profile"
 const Collection = () => {
   const collection= useSelector(state=>state.collection)
   const dispatch=useDispatch()
@@ -27,6 +28,7 @@ const Collection = () => {
   const [liveAccount, setLiveAccount]=useState(0)
   const {dbfilter, setDbfilter}=useStateContext()
   const {dateVeriation, setDateVeriation}=useStateContext()
+  const {dashboard, setDashboard}=useStateContext()
   const currentDate =new Date()
   const startOfPreviousMonth = new Date(currentDate.getFullYear(), currentDate.getMonth()-1, 1);
   const currentDay=new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate())
@@ -149,7 +151,11 @@ const Collection = () => {
         {collection.error !=="" ?<Alert sx={{mt: 2, mb: 2}} severity="error">{collection.error}</Alert>:
         load && 
         <div className='w-full h-full flex flex-col flex-1'>
-          <p className='font-semibold text-center text-2xl pb-2 font-arial text-black border-b-2 rounded-lg'>Michu Loan Collection Dashboard</p>
+          <div className='flex flex-auto'>
+             {dashboard && <Profile/>}
+             <p className='font-semibold w-full text-center text-2xl pb-2 font-arial text-black border-b-2 rounded-lg'>Michu Loan Collection Dashboard</p>
+          </div>
+          
           <div className='mt-2'>
             <HeadCard/>
           </div>

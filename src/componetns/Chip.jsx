@@ -23,9 +23,7 @@ const initialValues={
 export default function Chips() {
     const {role, setRole}=useStateContext()
     const handleClick = (label) => { 
-        console.log("this is selected Values",!(role[label]))
         setRole({...role, [label]:!role[label]})
-        console.log("role list", label,role)
       };
   return (
     <Stack spacing={1} alignItems="center">

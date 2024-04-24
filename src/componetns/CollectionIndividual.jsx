@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-// import TableCell from '@mui/material/TableCell';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
@@ -20,10 +19,6 @@ import DateRange from './Colletion/DateRange';
 import { useStateContext } from '../context/ContextProvider';
 import config from '../config/config';
 
-
-// function createData(name, contacted, payed, unpayed, totalPayed) {
-//   return { name, contacted, payed, unpayed, totalPayed };
-// }
 const styles={
   fontFamily:"serif",
   fontWeight:"bold",
@@ -38,15 +33,6 @@ const footerStyles={
  }
  
 
-// const StyledTableCell=styled(TableCell)(({theme})=>({
-//   [`&.${tableCellClasses.head}`]: {
-//     backgroundColor: "#07ebb9",
-//     color: theme.palette.common.white,
-//   },
-//   [`&.${tableCellClasses.body}`]: {
-//     fontSize: 14,
-//   },
-// }))
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -59,56 +45,19 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-// const StyledTableRow=styled(TableRow)((theme))=({
-//   // '&:nth-of-type(odd)': {
-//   //   backgroundColor: theme.palette.action.hover,
-//   // },
-//   // hide last border
-//   '&:last-child td, &:last-child th': {
-//     border: 0,
-//   },
-// })
 
 const handleRowClick = (event, rowData) => {
-  console.log('Clicked row data:', rowData);
   // Add your custom logic here
 }
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  // '&:nth-of-type(odd)': {
-  //   backgroundColor: theme.palette.action.hover,
-  // },
-  // "hover": {
-  //   color: "#cbd5e1",
-  //   backgroundColor:"red",
-  // },
-  // hide last border
+
   '&:last-child td, &:last-child th': {
     border: 0,
   },
 }));
 
 
-// // const useStyles = makeStyles({
-// //   hoverRow: {
-// //     '&:hover': {
-// //       backgroundColor: '#f0f0f0', // Change the background color on hover
-// //       cursor: 'pointer', // Change cursor to pointer on hover
-// //     },
-// //   },
-// // });
-
-
-// const rows = [
-//   createData('Yerosan Tadesse', 159, 6.0, 24, 4.0),
-//   createData('Shewanek Zewudu', 237, 9.0, 37, 4.3),
-//   createData('Yerosan Tadesse1', 262, 16.0, 24, 6.0),
-//   createData('Yerosan Tadesse2', 305, 3.7, 67, 4.3),
-//   createData('Shewanek Zewudu1', 356, 16.0, 49, 3.9),
-//   createData('Yerosan Tadesse3', 159, 6.0, 24, 4.0),
-//   createData('Shewanek Zewudu3', 237, 9.0, 37, 4.3),
-//   createData('Yerosan Tadesse21', 262, 16.0, 24, 6.0),
-// ];
 
 
 export default function CollectionIndividual() {
@@ -119,14 +68,13 @@ export default function CollectionIndividual() {
   const {dateRanges, setDateRanges}=useStateContext()
   const {filter, setFilter}=useStateContext()
   const [rankedData, setRankedData] = useState([]);
+  const {dashboard, setDashboard}=useStateContext()
   const fetchCollectionPerUser=async()=>{
     dispatch(collectionPerUser({loading:true, error:"", data:null}))
-    console.log(",.....", collection)
     try{
       const collections=await axios.post(`${config.apiUrl}/collection/customer`, dateRanges)
       if(collections.data.message=="succeed"){
         let perIndividualCollection=collections.data.data
-        console.log("----------------perIndividualCollection----", perIndividualCollection)
          const sortedData = perIndividualCollection.sort((a, b) => b.totalCollectedAmount- a.totalCollectedAmount);
          const rankedDatas = sortedData.map((row, index) => ({ ...row, rank: index + 1 }));
          setRankedData(rankedDatas);
@@ -146,9 +94,7 @@ export default function CollectionIndividual() {
   if(filter){
     fetchCollectionPerUser()
   }
-  // useEffect(()=>{
-  //   console.log("this isCollect-----------", collection, coll)
-  // },[collection])
+
 
   useEffect(()=>{
     fetchCollectionPerUser()
@@ -161,7 +107,15 @@ export default function CollectionIndividual() {
           <LinearProgress color="secondary" />
         </Stack>
       </div>:
-    <div className='h-full w-full'>
+    <div className='bg-green-400 h-full w-full'>
+      <div className='bg-yellow-400'>
+        {dashboard &&
+         <div className='flex flex-auto'>
+             {dashboard && <Profile/>}
+             <p className='font-semibold w-full text-center text-2xl pb-2 font-arial text-black border-b-2 rounded-lg'>Collection Performance</p>
+         </div>
+        }
+      </div>
       <DateRange/>
     {collection.error !=='' ?<Alert sx={{mt: 2, mb: 2}} severity="error">{collection.error}</Alert>:
     <div className='h-full w-full'>
@@ -181,9 +135,9 @@ export default function CollectionIndividual() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rankedData.map((row) => (
+          {rankedData.map((row, id) => (
             <StyledTableRow
-              key={row.userName}
+              key={id}
               sx={{ '&:last-child td, &:last-child th': { border: 0, fontFamily:"serif" } }}
               onClick={(event) => handleRowClick(event, row)}
               className={{
@@ -195,19 +149,11 @@ export default function CollectionIndividual() {
               <StyledTableCell align="right">{row.totalCustomer}</StyledTableCell>
               <StyledTableCell align="right">{row.totalPaid}</StyledTableCell>
               <StyledTableCell align="right">{row.totalUnpaid}</StyledTableCell>
-              <StyledTableCell align="right">{row.totalCollectedAmount}</StyledTableCell>
+              <StyledTableCell align="right">{Math.round(row.totalCollectedAmount).toLocaleString()}</StyledTableCell>
               <StyledTableCell align="right">{row.rank}</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
-        {/* <TableFooter style={styles} sx={{backgroundColor:"#e38524", border:2}}> 
-            <StyledTableCell style={styles}>Total</StyledTableCell>
-            <StyledTableCell align='right' style={footerStyles}>{totalStatus.totalApproved}</StyledTableCell> 
-            <StyledTableCell align='right' style={footerStyles}>{totalStatus.totalRejected}</StyledTableCell> 
-            <StyledTableCell align='right' style={footerStyles}>{totalStatus.totalApplicant}</StyledTableCell>
-            <StyledTableCell align='right' style={footerStyles}>50000</StyledTableCell>
-            <StyledTableCell align='right' style={footerStyles}></StyledTableCell>
-          </TableFooter>  */}
       </Table>
     </TableContainer>
     </div>

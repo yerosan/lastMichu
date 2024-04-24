@@ -10,7 +10,6 @@ import PaidIcon from '@mui/icons-material/Paid';
 
 const HeadCard = () => {
   const collection=useSelector(state=>state.collection)
-  console.log("Ther Head++++++++++++++---------========", collection.data.dashboard[0] )
   let totalCollections=collection.data.dashboard[0][0]
   return (
     <div >
@@ -26,7 +25,7 @@ const HeadCard = () => {
                 </Typography>
                 <div className='flex justify-center gap-2 items-center'>
                 <Typography variant="h4" color="text.primary" fontWeight="bold" textAlign="center" fontSize="xlarge" fontFamily="serif">
-                  {totalCollections.totalCollecteds.toLocaleString()}
+                  {Math.round(totalCollections.totalCollecteds).toLocaleString()}
                 </Typography>
                 <span className='text-black font-semibold text-center'>ETB</span>
                 </div>
@@ -34,18 +33,6 @@ const HeadCard = () => {
             </CardActionArea>
           </Card> 
 
-          {/* <div className='bg-slate-50 rounded-lg shadow-md border-r-4 border-b-4 border-double border-[#00abef] 
-              flex flex-col items-center gap-2 p-2'>
-            <p className='text-slate-600 text-center text-lg font-arial font-semibold '>
-                  Monthly Disbursed
-            </p>
-
-            <span className='text-slate-800 text-center text-2xl font-bold font-arial '>
-              3.5 <span>M</span>
-
-            </span>
-
-          </div> */}
 
           <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#f8fafc"}}>
             <CardActionArea>
@@ -62,18 +49,6 @@ const HeadCard = () => {
             </CardActionArea>
           </Card>
 
-          {/* <div className='bg-slate-50 rounded-lg shadow-s border-r-4 border-b-4 border-double border-[#00adef] 
-              flex flex-col items-center gap-2 p-2'>
-            <p className='text-slate-600 text-center text-lg font-arial font-semibold '>
-                Customer Account
-            </p>
-
-            <span className='text-slate-800 text-center text-2xl font-bold font-arial '>
-              240
-            </span>
-
-
-          </div> */}
 
           <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#f8fafc"}}>
             <CardActionArea>
@@ -94,18 +69,6 @@ const HeadCard = () => {
             </CardActionArea>
           </Card>
 
-          {/* <div className='bg-slate-50 rounded-lg shadow-md border-r-4 border-b-4 border-double border-[#00adef] 
-              flex flex-col items-center gap-2 p-2'>
-            <p className='text-slate-600 text-center text-lg font-arial font-semibold '>
-                  Monthly Average Amount
-            </p>
-
-            <span className='text-slate-800 text-center text-2xl font-bold font-arial '>
-              126<span>K</span>
-
-            </span>
-
-          </div> */}
 
           <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#f8fafc"}}>
             <CardActionArea>
@@ -122,18 +85,6 @@ const HeadCard = () => {
             </CardActionArea>
           </Card>
 
-
-          {/* <div className='bg-slate-50 rounded-lg shadow-s border-r-4 border-b-4 border-double border-[#00adef] 
-              flex flex-col items-center gap-2 p-2'>
-            <p className='text-slate-600 text-center text-lg font-arial font-semibold '>
-                Average Customer Account 
-            </p>
-
-            <span className='text-slate-800 text-center text-2xl font-bold font-arial '>
-              260
-            </span>
-
-          </div> */}
 
         </div>
       }
