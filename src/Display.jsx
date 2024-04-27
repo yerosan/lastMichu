@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import Collection from './componetns/Collection'
 import CollectionIndividual from './componetns/CollectionIndividual'
 import { useStateContext } from './context/ContextProvider'
-const array=["Sacco","Michu","Furtu"]
 const Display = () => {
     const [lognum, setLognum]=useState(true)
 

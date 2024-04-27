@@ -24,7 +24,6 @@ const LogIn = () => {
   }
 
   useEffect(()=>{
-    console.log("this is loginUsersss", userIn)
     if(userIn.loading){
       setStyel(["boxs","borderLine"])
     }

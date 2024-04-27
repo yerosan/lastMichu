@@ -13,7 +13,7 @@ import { TabList, TabContext, TabPanel } from '@mui/lab';
 import Alert from '@mui/material/Alert';
 import config from '../config/config';
 import FormHelperText from '@mui/material/FormHelperText';
-
+import LinearProgress from '@mui/material/LinearProgress';
   const callResponce = [
     {
       value: 'promise',
@@ -77,19 +77,18 @@ const currentDate=new Date()
 const month = `0${currentDate.getMonth()+1}`.slice(-2);
 const day = `0${currentDate.getDate()}`.slice(-2);
 let today=currentDate.getFullYear()+"-"+month+"-"+day
-const initialVaue={
-    userName:"",
-    customerPhone:"",
-    callResponce:"",
-    payedAmount:0,
-    paymentStatus:"",
-    date:today
-}
 
-
- 
  
 const CollectionFromExist = () => {
+  const userIn=useSelector(state=>state.logins)
+  const initialVaue={
+              userName:userIn.data.userName,
+              customerPhone:"",
+              callResponce:"",
+              payedAmount:0,
+              paymentStatus:"",
+              date:today
+          }
     const [collectionData,setCollectionData]=useState(initialVaue)
     const [formActivater, setFormActivater]=useState(false)
     const [username,setUsername]=useState(initialVaue)
@@ -121,24 +120,6 @@ const CollectionFromExist = () => {
           setError(!validatePhoneNumber(values)); // Set error to true if the phone number is invalid
         }
     }
-    const fetchUsers=async()=>{
-      dispatch(getAllUsers({loading:true,error:"", data:null }))
-      try{
-        let users=await axios.get(`${config.apiUrl}/user/allUser`)
-        if(users.data.message=="succeed"){
-          let userData=users.data.data
-          const allUsers=userData.map((user)=>({
-            "userName":user.userName,
-             "fullName":user.fullName
-          }))
-          dispatch(getAllUsers({loading:false, error:'',data:allUsers}))
-        }else{
-          dispatch(getAllUsers({loading:false, error:users.data.message}))
-        }
-      }catch(error){
-        dispatch(getAllUsers({loading:false, error:"Something went wrong"}))
-      }
-    }
 
     const addColleciton=async()=>{
       try{
@@ -154,9 +135,9 @@ const CollectionFromExist = () => {
         alert ("Something went wrong")
       }
     }
-    useEffect(()=>{
-      fetchUsers()
-    },[])
+    // useEffect(()=>{
+    //   fetchUsers()
+    // },[])
 
  
     function handleSubmit(event) {
@@ -172,13 +153,16 @@ const CollectionFromExist = () => {
  
     return (
         <React.Fragment>
-          {alluserss.loading ?  <p 
-      className='flext items-center justify-center
-       text-center text-semibold text-[#00abef] '>Loading .........</p>:
+          {userIn.loading ?  
+          <div className='flex items-center justify-center h-full w-full' >
+          <Stack sx={{ width: '100%', color: 'grey.500' }}>
+            <LinearProgress color="secondary" />
+          </Stack>
+        </div>:
        <div>
-       {alluserss.error !=="" ? <Alert sx={{mt: 2, mb: 2}} severity="error">{alluserss.error}</Alert>:
+       {userIn.error !==""? <Alert sx={{mt: 2, mb: 2}} severity="error">{userIn.error}</Alert>:
        <div>
-        {alluserss.data &&
+        {userIn.data &&
               <Paper >
               <div className='p-6'>
               
@@ -198,21 +182,12 @@ const CollectionFromExist = () => {
                             >
                               <div>
                                 <TextField
-                                  id="userName"
-                                  select
-                                  label="Select user"
-                                  name='userName'
-                                  // defaultValue="EUR"
-                                  value={collectionData.userName}
-                                  placeholder='Please select user'
-                                  onChange={handleForm}
+                                  id="fullName"
+                                  // select
+                                  label="Full Name"
+                                  name='fullName'
+                                  value={userIn.data.fullName}
                                 >
-                                  {alluserss.data.map((option) => (
-                                    
-                                    <MenuItem key={option.userName} value={option.userName}>
-                                      {option.fullName}
-                                    </MenuItem>
-                                  ))}
                                 </TextField>
                               </div>
                               </Box>

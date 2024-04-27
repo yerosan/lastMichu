@@ -27,7 +27,6 @@ import config from '../config/config';
 import DetailFilter from "./Colletion/DetailFilter"
 
 import MenuItem from '@mui/material/MenuItem';
-import { data } from 'autoprefixer';
 
 
 function createData(name, contactedCustomer, payedCustomer, unpayedCustomer,totalPayed, date) {
@@ -127,9 +126,35 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+
+const Actions=(props)=>{
+  const {open, setOpen}=useStateContext()
+  const EditDas=()=>{
+    setOpen(true)
+  }
+
+  return(
+    <div>
+      <Tooltip title="Edit" placement="bottom-end" arrow>
+        <IconButton onClick={(event)=>EditDas(event, props.row)}>
+          <Edit/>
+        </IconButton>
+      </Tooltip>
+
+    </div>
+  )
+}
+
 const totalStatus={"totalRejected":20000,"totalApproved":3000,"totalApplicant":4000}
 
-export default function CollectionDetail() {
+export default function Individualcollection() {
+  const currentDate= new Date()
+  const currentMonth=currentDate.getMonth()+1
+  const currentYear=currentDate.getFullYear()
+  const toDayDate=currentDate.getDate()
+  const month = `0${currentMonth}`.slice(-2);
+  const dayDate = `0${toDayDate}`.slice(-2);
+  const today=`${currentYear}-${month}-${dayDate}`;
   const userIn=useSelector(state=>state.logins)
   const dispatch=useDispatch()
   const [allcollection, setAllcollection]=useState(null)
@@ -138,14 +163,11 @@ export default function CollectionDetail() {
   const [rowData, setRowData]=useState({})
   const {detailfilter, setDetailfilter}=useStateContext()
   const {detail , setDetail}=useStateContext()
-  const [delets,setDelets]=useState(false)
-  const [deleteRow, setDeleteRow]=useState({})
-  const detailData=detailfilter
-  detailData.userId=userIn.data.userId
+  const detailData={userId:userIn.data.userId, date:today}
   const fetchAllCollection=async()=>{
     dispatch(allCollection({loading:true, error:"", data:null}))
     try{
-      let Collections=await  axios.post(`${config.apiUrl}/collection/allCollection`, detailData)
+      let Collections=await  axios.post(`${config.apiUrl}/collection/userCollection`, detailData)
       if(Collections.data.message=="succeed"){
          dispatch(allCollection({loading:false, error:"",data:Collections.data.data}))
          setAllcollection(Collections.data.data)
@@ -156,6 +178,7 @@ export default function CollectionDetail() {
         setDetail(false)
     }
     }catch(error){
+      console.log("The error", error)
       dispatch(allCollection({loading:false, error:"Something went wrong", data:null}))
       setDetail(false)
     }
@@ -163,10 +186,6 @@ export default function CollectionDetail() {
   const {open, setOpen}=useStateContext()
   const handleRowClick = (rowData) => {
     setRowData(rowData)
-  }
-
-  if(detail){
-    fetchAllCollection()
   }
 
   const updateData= async(data)=>{
@@ -188,58 +207,6 @@ export default function CollectionDetail() {
     setOpen(false)
   }
 
-
-  const handleDelete=async()=>{
-    let data={collectionId:rowData.collectionId, userId:rowData.userId}
-    try{
-      let deleteData= await  axios.delete(`${config.apiUrl}/collection/delete`, {data})
-      if(deleteData.data.message=="succeed"){
-        fetchAllCollection()
-        setDelets(false)
-      }else{
-        alert("Unable to delete data")
-        setDelets(false)
-      }
-  }catch(error){
-    setDelets(false)
-    alert('An internal error')
-  }
-  }
-
-
-
-
-  const Actions=(props)=>{
-
-    const EditDas=()=>{
-      setOpen(true)
-    }
-
-    const DeleteHandler=()=>{
-      setDelets(true)
-    }
-  
-    return(
-      <div>
-        <Tooltip title="Edit" placement="bottom-end" arrow>
-          <IconButton onClick={(event)=>EditDas(event, props.row)}>
-            <Edit/>
-          </IconButton>
-        </Tooltip>
-  
-        <Tooltip title="Delete" placement="bottom-end" arrow>
-          <IconButton onClick={(event)=>DeleteHandler(event, props.row)}>
-            <DeleteIcon/>
-          </IconButton>
-        </Tooltip>
-  
-      </div>
-    )
-  }
-
-
-
-
   useEffect(()=>{
     fetchAllCollection()
   }, [])
@@ -252,7 +219,6 @@ export default function CollectionDetail() {
         </Stack>
       </div>:
     <div className='h-full w-full'>
-      <DetailFilter/>
       {collection.error !=='' ?<Alert sx={{mt: 2, mb: 2}} severity="error">{collection.error}</Alert>:
     load &&
     <div className=''>
@@ -268,6 +234,7 @@ export default function CollectionDetail() {
               <StyledTableCell align="left" style={styles} >Paid Amount</StyledTableCell>
               <StyledTableCell align="left" style={styles} >Contacted Date</StyledTableCell>
               <StyledTableCell align="center" style={styles} >Action</StyledTableCell>
+              {/* <TableCell align="right">action&nbsp;(g)</TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -315,7 +282,6 @@ export default function CollectionDetail() {
                     type="text"
                     fullWidth
                     value={rowData.fullName || ""}
-                    // onChange={(e) => setRowData({ ...rowData, fullName: e.target.value })}
                     />
                 <TextField
                     margin="dense"
@@ -343,7 +309,6 @@ export default function CollectionDetail() {
                       name='callResponce'
                       value={rowData.callResponce}
                       placeholder='Select call response'
-                      // onChange={handleForm}
                       onChange={(e) => setRowData({ ...rowData, callResponce: e.target.value })}
                     >
                       {callResponce.map((option) => (
@@ -370,7 +335,6 @@ export default function CollectionDetail() {
                     <TextField
                       id="paymentStatus"
                       select
-                      // name='paymentStatus'
                       label="Payment type"
                       value={rowData.paymentStatus}
                       placeholder='select payment status'
@@ -410,32 +374,6 @@ export default function CollectionDetail() {
           <Button autoFocus onClick={()=>setOpen(false)}>Cancel</Button>
         </DialogActions>
        </Dialog>
-
-
-
-       <Dialog 
-          open={delets}
-          onClose={()=>{setDelets(false)}}
-          aria-label='dialog-title' 
-          aria-describedby='dialog-descriptio'
-  
-        >
-          <DialogTitle
-            sx={{fontFamily:"arial", 
-            fontWeight:"semibold",
-            color:'secondary.main',
-          }}>
-            <p 
-            className='text-center font-semibold text-lg'>Are you sure to delete {rowData.fullName}'s data on {rowData.date} date ?
-            </p>
-          </DialogTitle>
-            <DialogActions>
-              <Button sx={{textTransform: 'capitalize'}}  onClick={handleDelete}>Yes</Button>
-              <Button sx={{textTransform: 'capitalize'}}  autoFocus onClick={()=>setDelets(false)}>No</Button>
-            </DialogActions>
-        </Dialog>
-
-
     </Box>
     </div>
   }

@@ -13,7 +13,6 @@ import CollectionIndividual from './CollectionIndividual'
 const CollectionPerformance = () => {
     const [value, setValue]=useState("1")
     const handleChange=(event, newValue)=>{
-          console.log("this is an event",newValue)
           setValue(newValue)
     } 
   return (

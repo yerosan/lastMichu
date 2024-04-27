@@ -44,6 +44,7 @@ export default function Profile() {
   const handleSingout=(e)=>{
     dispatch(loginUser({loading:false, error:"", data:null}))
     setLogin(true)
+    navigate("/michu/login")
   }
 
   const handleMenuItemClick=(value)=>{

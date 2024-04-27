@@ -24,7 +24,7 @@ function getItem(label, key, icon, children, type) {
 //  null, [getItem('collection', 'collection'), getItem('collection', '4collection')]
 const items = [
   getItem('Dashboard', 'dashboard', <DashboardOutlinedIcon/>, [
-    getItem('dashboard', 'dashboard', null),
+    getItem('screen', 'screen', null),
     getItem('disbursement', 'disbursement', null), 
     getItem('collection', 'collection'),
     getItem('sales', 'sales')
@@ -63,7 +63,7 @@ const Menus = () => {
   const {menu, setMenu}=useStateContext()
   const navigate=useNavigate()
   const onClick = (e) => {
-    if(e.keyPath[0]=="dashboard" && e.keyPath[1]=="dashboard"){
+    if(e.keyPath[0]=="screen" && e.keyPath[1]=="dashboard"){
       setMenu(false)
       setDashboard(true)
       

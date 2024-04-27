@@ -95,7 +95,6 @@ const SideCard = () => {
                 </CardContent>
               </CardActionArea>
             </Card>
-              {/* <OutlinedCard/> */}
       </div>
     </div>
   }

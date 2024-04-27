@@ -1,4 +1,4 @@
-import React, { useState } from "react"; 
+import React, { useEffect, useState } from "react"; 
 import { useStateContext } from "../../context/ContextProvider";
   
 import { TextField, Button, Container, Stack, Paper } from '@mui/material';
@@ -20,10 +20,12 @@ const initialDate={
   startDate:today,
   endDate:today
 }
-const DashboardFilter = () => {
+const DetailFilter = () => {
   const [delets,setDelets]=useState(false)
   const {dateVeriation, setDateVeriation}=useStateContext()
   const {dbfilter, setDbfilter}=useStateContext()
+  const {detailfilter, setDetailfilter}=useStateContext()
+  const {detail,setDetail}=useStateContext()
 
   const filterHandler=(event)=>{
     setDelets(true)
@@ -31,15 +33,19 @@ const DashboardFilter = () => {
 
   const submitClick=()=>{
     setDelets(false)
-    setDbfilter(true)
+    setDetail(true)
   }
+
   const cancelClick=()=>{
     setDelets(false)
   }
 
+  useEffect(()=>{
+  }, [detailfilter])
 
   return (
     <div className="flex items-center justify-end my-1 pl-30">
+
       <Tooltip title="Filter by date " placement="bottom-end" arrow>
         <IconButton onClick={(event)=>filterHandler()}>
           <FilterListIcon/>
@@ -71,8 +77,8 @@ const DashboardFilter = () => {
               label="Start date"
               type="date"
               fullWidth
-              value={dateVeriation.startDate}
-              onChange={(e) => setDateVeriation({ ...dateVeriation, startDate: e.target.value })}
+              value={detailfilter.startDate}
+              onChange={(e) => setDetailfilter({ ...detailfilter, startDate: e.target.value })}
           />
           <TextField
               margin="dense"
@@ -80,8 +86,8 @@ const DashboardFilter = () => {
               label="End date"
               type="date"
               fullWidth
-              value={dateVeriation.endDate}
-              onChange={(e) => setDateVeriation({ ...dateVeriation, endDate: e.target.value })}
+              value={detailfilter.endDate}
+              onChange={(e) => setDetailfilter({ ...detailfilter, endDate: e.target.value })}
           />
         </div>
         </DialogContent>
@@ -95,4 +101,4 @@ const DashboardFilter = () => {
   );
 }
 
-export default DashboardFilter;
+export default DetailFilter;

@@ -72,7 +72,10 @@ const App = () => {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         {/* <Router> */}
-        {login ? <LoginPage/>:
+        {login ? <div>
+          <Navigate to= "/michu/login"></Navigate>
+          <LoginPage/>
+           </div>:
         <div>
         {userRoles ? 
         <div className="flex relative h-full w-full bg-slate-200">
@@ -103,7 +106,8 @@ const App = () => {
             <div className={`${menu ? "mt-16 px-4 w-full max-h-screen":"px-4 w-full max-h-screen"}`}>
               <Routes>
                 <Route path='/michu/login' element={<LoginPage/>}/>
-                <Route path='/michu/dashboard/dashboard' element={<Display/>}/>
+                <Route path='/michu/dashboard' element={<Collection/>}/>
+                <Route path='/michu/dashboard/screen' element={<Display/>}/>
                 <Route path='michu/dashboard/disbursement' element={<Collection/>}/>
                 <Route path='michu/dashboard' element={<Collection/>}/>
                 <Route path='michu/dashboard/sales' element={<Collection/>}/>

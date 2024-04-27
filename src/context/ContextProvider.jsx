@@ -8,10 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const ContextState=createContext()
 
-// initialValue={
-
-// }
-
 const initialRoles={
   collectionAdmin:false,
   operationalAdmin:false,
@@ -44,6 +40,15 @@ const initialVeriation={
   startDate:"",
   endDate:today
 }
+let lastDay=new Date(currentDate.getTime() - 2*(24 * 60 * 60 * 1000))
+const lastWeek=lastDay.getDate()
+const months=lastDay.getMonth()+1
+const years= lastDay.getFullYear()
+const weekAgo=`${years}-${`0${months}`.slice(-2)}-${`0${lastWeek}`.slice(-2)}`;
+const sevenDay={
+   startDate:weekAgo,
+   endDate:today
+}
 
 export const ContextProvider = ({children}) => {
        const [dateRanges, setDateRanges]=useState(initialDate)
@@ -59,13 +64,15 @@ export const ContextProvider = ({children}) => {
        const [password, setPassword]=useState(false)
        const [dashboard, setDashboard]=useState(false)
        const [lognum, setLognum]=useState(1)
+       const [detailfilter, setDetailfilter]=useState(sevenDay)
+       const [detail, setDetail]=useState(false)
        const dispatch=useDispatch()
 
        useEffect(()=>{
         const intervalId= setInterval(()=>{
              dispatch(collectionPerUser({loading:true, error:"", data:null}))
              dispatch(intervalCollection({loading:true, error:"", data:null}))
-          },30000)
+          },600000)
           return () => clearInterval(intervalId);
       },[])
 
@@ -89,7 +96,9 @@ export const ContextProvider = ({children}) => {
         dateVeriation, setDateVeriation,
         password, setPassword,
         dashboard,setDashboard,
-        lognum, setLognum
+        lognum, setLognum,
+        detailfilter, setDetailfilter,
+        detail, setDetail
        }
     }
     >
@@ -99,33 +108,6 @@ export const ContextProvider = ({children}) => {
 }
 
 
-
-// import { createContext,useContext,useEffect, useState } from "react";
-// import {motion, useCycle} from "framer-motion"
-// const StateContext=createContext()
-// export const ContextProvider=({children})=>{
-//     const [toggling,setToggling]=useState(false)
-//     const [switcher, setSwitcher]=useState(false)
-//     const [lognum, setLognum]=useState(1)
-    // useEffect(()=>{
-    //     console.log("this is log from log context", lognum)
-    //     setInterval(()=>{
-    //        setLognum((prevlognum)=>(prevlognum%4)+1)
-    //     },20000)
-    // },[])
-//     return(
-//         <StateContext.Provider
-//             value={{toggling, setToggling,
-//                     switcher, setSwitcher,
-//                     lognum, setLognum,
-//                 }}
-//         >
-//             {children}
-//         </StateContext.Provider>
-//     )
-// }
-
-// export const useStateContext=()=>useContext(StateContext)
 
 
 

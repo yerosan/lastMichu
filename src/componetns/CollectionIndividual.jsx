@@ -8,7 +8,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import { TableFooter } from '@mui/material';
-// import { collectionPerUser } from '../features/collection/collectionSlice';
 import { collectionPerUser } from '../features/collection/individualSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
@@ -72,7 +71,6 @@ export default function CollectionIndividual() {
   const [rankedData, setRankedData] = useState([]);
   const {dashboard, setDashboard}=useStateContext()
   const fetchCollectionPerUser=async()=>{
-    // dispatch(collectionPerUser({loading:true, error:"", data:null}))
     try{
       const collections=await axios.post(`${config.apiUrl}/collection/customer`, dateRanges)
       if(collections.data.message=="succeed"){
