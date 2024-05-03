@@ -16,21 +16,6 @@ const dashboardSlice=createSlice({
             state.data=action.payload.data;
             state.error=action.payload.error;
         },
-        // addingCollection:(state, action)=>{
-        //     state.loading=action.payload.loading
-        //     state.data=action.payload.data
-        //     state.error=action.payload.error
-        // },
-        // collectionPerUser:(state,action)=>{
-        //     state.loading=action.payload.loading,
-        //     state.data=action.payload.data,
-        //     state.error=action.payload.error
-        // }, 
-        // allCollection:(state, action)=>{
-        //     state.loading=action.payload.loading,
-        //     state.data=action.payload.data,
-        //     state.error=action.payload.error
-        // }
 
     }
 })

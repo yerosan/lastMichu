@@ -66,6 +66,7 @@ export const ContextProvider = ({children}) => {
        const [lognum, setLognum]=useState(1)
        const [detailfilter, setDetailfilter]=useState(sevenDay)
        const [detail, setDetail]=useState(false)
+       const [salseFilter, setSalseFilter]=useState(sevenDay)
        const dispatch=useDispatch()
 
        useEffect(()=>{
@@ -98,7 +99,8 @@ export const ContextProvider = ({children}) => {
         dashboard,setDashboard,
         lognum, setLognum,
         detailfilter, setDetailfilter,
-        detail, setDetail
+        detail, setDetail,
+        salseFilter, setSalseFilter,
        }
     }
     >

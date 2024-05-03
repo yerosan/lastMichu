@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
-
-import counterReducer from '../features/counter/counterSlice'
 import userReducer from "../features/userCreation/userSlice"
 import collectionReducer from "../features/collection/collectionSlice"
 import allUserReducer from "../features/userCreation/allUserSlice"
 import loginReducer from '../features/userCreation/loginSlice'
 import individualReducer from "../features/collection/individualSlice"
 import dashboardReducer from '../features/collection/dashboardSlisce'
+import salseReducer from "../features/salse/salseSlice"
+import individualSalseReducer from "../features/salse/individualSalseSlice"
 export  const store = configureStore({
   reducer: {
     logins:loginReducer,
@@ -14,6 +14,8 @@ export  const store = configureStore({
     collection:collectionReducer,
     allUser:allUserReducer,
     individualCollection:individualReducer,
-    dashboard:dashboardReducer
+    dashboard:dashboardReducer,
+    salse:salseReducer,
+    individualSalse:individualSalseReducer
 },
 })

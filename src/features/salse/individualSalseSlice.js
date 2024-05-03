@@ -8,10 +8,10 @@ const initialState={
 
 
 const individualSlice=createSlice({
-    name:"individualCollection",
+    name:"individualSalse",
     initialState,
     reducers:{
-        collectionPerUser:(state,action)=>{
+        salsePerUser:(state,action)=>{
             state.loading=action.payload.loading,
             state.data=action.payload.data,
             state.error=action.payload.error
@@ -21,5 +21,5 @@ const individualSlice=createSlice({
 })
 
 
-export const {collectionPerUser}=individualSlice.actions
+export const {salsePerUser}=individualSlice.actions
 export default individualSlice.reducer

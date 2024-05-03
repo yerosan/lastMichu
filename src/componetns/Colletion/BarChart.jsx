@@ -12,7 +12,7 @@ import { Bar } from 'react-chartjs-2';
 import { faker } from '@faker-js/faker';
 import {useSelector, useDispatch} from "react-redux"
 import { useState, useEffect } from 'react';
-
+import { Line} from 'react-chartjs-2';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -63,9 +63,12 @@ export function BarChart() {
           // },
           {
             label: 'Officer vs collection amount',
+            borderColor:"#00abef1f",
+            backgroundColor: '#00abef7a',
+            // fill:true,
           //   data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
           data:Object.values(collection.data.dashboard[1][0]),
-            backgroundColor: '#00abef7a',
+            // backgroundColor: '#00abef7a',
           },
         ],
       }

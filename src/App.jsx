@@ -30,13 +30,14 @@ import Collection from './componetns/Collection'
 import DateRange from './componetns/Colletion/DateRange'
 import User from './componetns/User'
 import { useSelector } from 'react-redux'
-import axios from 'axios'
-import { useState } from 'react'
-import { michu } from './assets'
+import SalsePerformance from './componetns/Salse/SalsePerformance'
 import LoginPage from './componetns/LoginPage'
 import ChangePassword from './componetns/ChangePassword'
 import Display from './Display'
-// import DateRange from './componetns/Colletion/DateRange'
+import Salseform from './componetns/Salse/SalseForm'
+import SalseDashboard from './componetns/Salse/Salse'
+import SalseTab from './componetns/Salse/SalseTab'
+import SalesDisplay from './SalesDisplay'
 const theme = createTheme({
   palette: {
     primary: {
@@ -79,14 +80,14 @@ const App = () => {
         <div>
         {userRoles ? 
         <div className="flex relative h-full w-full bg-slate-200">
-          {userRoles.collectionUser ? 
+          {/* {(userRoles.collectionUser)? 
           <div className="flex h-screen w-full bg-slate-200">
             <Navigate to= "/michu/form/collectionForm"></Navigate>
             <Navbar/>
             <div className='mt-14 w-full items-center px-6'>
                <CollectionTab/>
             </div>
-          </div>: 
+          </div>:  */}
         <div className=' flex relative h-full w-full bg-slate-200' >
           {navs.length==0 ? 
           <Navigate to= "michu/dashboard"></Navigate>
@@ -103,27 +104,29 @@ const App = () => {
           } 
           <div className={`${menu?"w-5/6 bg-slate-50 min-h-screen" :"min-h-screen w-full bg-slate-50" }`}>
             {!dashboard && <Navbar/>}
-            <div className={`${menu ? "mt-16 px-4 w-full max-h-screen":"px-4 w-full max-h-screen"}`}>
+            <div className={`${menu ? "mt-14 px-4 w-full max-h-screen":"mt-14 px-4 w-full max-h-screen"}`}>
               <Routes>
                 <Route path='/michu/login' element={<LoginPage/>}/>
                 <Route path='/michu/dashboard' element={<Collection/>}/>
                 <Route path='/michu/dashboard/screen' element={<Display/>}/>
                 <Route path='michu/dashboard/disbursement' element={<Collection/>}/>
                 <Route path='michu/dashboard' element={<Collection/>}/>
-                <Route path='michu/dashboard/sales' element={<Collection/>}/>
+                <Route path='michu/dashboard/sales' element={<SalseDashboard/>}/>
                 <Route path='michu/dashboard/collection' element={<Collection/>}/>
+                <Route path ='/michu/screen/salesScreen' element={<SalesDisplay/>}/>
+                <Route path ="/michu/screen/collectionScreen" element={<Display/>}/>
                 <Route path='/michu/performance/operationalPerformance' element={<CollectionPerformance/>}/>
                 <Route path="/michu/performance/collectionPerformance" element={<CollectionPerformance/>}/>
-                <Route path="/michu/performance/salesPerformance" element={<CollectionPerformance/>}/>
+                <Route path="/michu/performance/salesPerformance" element={<SalsePerformance/>}/>
                 <Route path='/michu/form/operationalForm' element={<CollectionTab/>}/>
                 <Route path='/michu/form/collectionForm' element={<CollectionTab/>}/>
-                <Route path='/michu/form/salesForm' element={<CollectionTab/>}/>
+                <Route path='/michu/form/salesForm' element={<SalseTab/>}/>
                 <Route path="michu/setting/addUser" element={<User/>}></Route>
                 <Route path='michu/user/changePassword' element={<ChangePassword/>}/>
               </Routes>
             </div>
           </div>
-          </div>}
+          </div>
         </div> :
         <div className='relative flex justify-center items-center w-full h-screen bg-slate-50'>
            <Navigate to="/michu/login" ></Navigate>

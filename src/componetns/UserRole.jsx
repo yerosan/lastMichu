@@ -11,7 +11,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Tab} from '@mui/material'
 import { TabList, TabContext, TabPanel } from '@mui/lab'
 import Alert from "@mui/material/Alert";
-
+import { useSelector } from "react-redux";
 
 const currentDate=new Date()
 const currentMonth=currentDate.getMonth()+1
@@ -50,6 +50,9 @@ const initialValues={
 const Chips=(props)=> {
     const {role, setRole}=useStateContext()
     const [updating, setUpdating]=useState(props.initialValue)
+    const userIn=useSelector(state=>state.logins)
+    const {userRoles, setUserRoles}=useStateContext()
+    console.log("this si the Role__________--------__________", userRoles)
     const handleClick = (label) => { 
         setRole({...updating, [label]:!role[label]})
         setUpdating({...updating, [label]:!updating[label]})
@@ -58,6 +61,20 @@ const Chips=(props)=> {
     <div>
     {props.roleDiag ? 
     <Stack spacing={1} alignItems="center">
+      {(userRoles.admin || userRoles.operationalAdmin )&&
+      <Stack direction="row" spacing={1}>
+        <Chip label="Operational admin"
+        onDelete={() => handleClick("operationalAdmin")}
+        color={updating.operationalAdmin ? "primary" : "default"}
+        deleteIcon={updating.operationalAdmin ? <CancelIcon/>:<CheckCircleIcon/>}
+        />   
+        <Chip label="Operational user"
+        onDelete={() => handleClick("operationalUser")}
+        color={updating.operationalUser ? "primary" : "default"}
+        deleteIcon={updating.operationalUser ? <CancelIcon/>:<CheckCircleIcon/>}/>
+      </Stack>
+      }
+      {(userRoles.admin || userRoles.collectionAdmin) && 
       <Stack direction="row" spacing={1}>
       <Chip
           label="Collection admin"
@@ -65,36 +82,35 @@ const Chips=(props)=> {
           color={updating.collectionAdmin ? "primary" : "default"}
           deleteIcon={updating.collectionAdmin ? <CancelIcon/>:<CheckCircleIcon/>}
         />
-        <Chip label="Operational admin"
-        onDelete={() => handleClick("operationalAdmin")}
-        color={updating.operationalAdmin ? "primary" : "default"}
-        deleteIcon={updating.operationalAdmin ? <CancelIcon/>:<CheckCircleIcon/>}/>
+        <Chip label="Collection user" 
+        onDelete={() => handleClick("collectionUser")}
+        color={updating.collectionUser ? "primary" : "default"}
+        deleteIcon={updating.collectionUser ? <CancelIcon/>:<CheckCircleIcon/>}
+        />
+      </Stack>
+      }
+      {(userRoles.admin || userRoles.salesAdmin) &&
+      <Stack direction="row" spacing={1} alignItems="center">
         <Chip label="Sales admin"
         onDelete={() => handleClick("salesAdmin")}
         color={updating.salesAdmin ? "primary" : "default"}
         deleteIcon={updating.salesAdmin ? <CancelIcon/>:<CheckCircleIcon/>}
         />
-      </Stack>
-      <Stack direction="row" spacing={1}>
-        <Chip label="Collection user" 
-        onDelete={() => handleClick("collectionUser")}
-        color={updating.collectionUser ? "primary" : "default"}
-        deleteIcon={updating.collectionUser ? <CancelIcon/>:<CheckCircleIcon/>}/>
-        <Chip label="Operational user"
-        onDelete={() => handleClick("operationalUser")}
-        color={updating.operationalUser ? "primary" : "default"}
-        deleteIcon={updating.operationalUser ? <CancelIcon/>:<CheckCircleIcon/>}/>
         <Chip label="Sales user" 
         onDelete={() => handleClick("salesUser")}
         color={updating.salesUser ? "primary" : "default"}
         deleteIcon={updating.salesUser ? <CancelIcon/>:<CheckCircleIcon/>}/>
       </Stack>
+      }
+
+      {userRoles.admin &&
       <Stack direction="row" spacing={1} alignItems="center">
         <Chip label="Admin" 
         onDelete={() => handleClick("admin")}
         color={updating.admin ? "primary" : "default"}
         deleteIcon={updating.admin ? <CancelIcon/>:<CheckCircleIcon/>}/>
       </Stack>
+     }
     </Stack>:
 
     <Alert sx={{mt: 2, mb: 2}} severity="error">{updating}</Alert>

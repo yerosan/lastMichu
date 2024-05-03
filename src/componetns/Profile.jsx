@@ -44,6 +44,7 @@ export default function Profile() {
   const handleSingout=(e)=>{
     dispatch(loginUser({loading:false, error:"", data:null}))
     setLogin(true)
+    setNavs(["dashboard","michu"])
     navigate("/michu/login")
   }
 
