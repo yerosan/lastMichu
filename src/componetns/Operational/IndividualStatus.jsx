@@ -7,31 +7,28 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
-import { TableFooter } from '@mui/material';
-import {Button, Dialog, DialogTitle, DialogContent} from "@mui/material"
-// import { salsePerUser } from '../../features/salse/salseSlice';
-// import {individualSalse} from "../../features/salse/individualSalseSlice"
-import { salsePerUser } from '../../features/salse/individualSalseSlice';
-import { useSelector, useDispatch } from 'react-redux';
+import { TableFooter } from '@mui/material'
+import { operationalPerUser } from '../../features/operational/IndividualStatus';
+import {useSelector, useDispatch} from "react-redux"
 import { useEffect, useState } from 'react';
 import Stack from '@mui/material/Stack';
 import LinearProgress from '@mui/material/LinearProgress';
 import Alert from '@mui/material/Alert';
 import axios from 'axios';
-import DateRange from './DateRange';
+import DateRange from '../Colletion/DateRange';
 import { useStateContext } from '../../context/ContextProvider';
 import config from '../../config/config';
 import Profile from '../Profile';
-// import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
+
+import {Button, Dialog, DialogTitle, DialogContent} from "@mui/material"
 import DownloadForOfflineOutlinedIcon from '@mui/icons-material/DownloadForOfflineOutlined';
-import * as XLSX from "xlsx"
+import * as XLSX from 'xlsx';
 
 const styles={
   fontFamily:"serif",
   fontWeight:"bold",
   color:"black"
 }
-const totalStatus={"totalRejected":20000,"totalApproved":3000,"totalApplicant":4000}
 
 const footerStyles={
     fontFamily:"arial",
@@ -64,40 +61,44 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function IndividualSalse() {
+
+
+
+const IndividualStatus = () => {
   const dispatch=useDispatch()
-  const salse=useSelector(state=>state.individualSalse)
-  const [salseloaded, setSalseloaded]=useState(false)
-  const [sale, setSale]=useState(null)
+  const operational= useSelector(state=>state.individualOperation)
+  // const operational= useSelector(state=>state.operationalDashboard)
+  const [operationalload, setOperationalload]=useState(false)
+  const [coll, setColl]=useState(null)
   const {dateRanges, setDateRanges}=useStateContext()
   const {filter, setFilter}=useStateContext()
-  const [rankedData, setRankedData] = useState([]);
+  const [rankedData, setRankedData] = useState([])
   const {dashboard, setDashboard}=useStateContext()
-  const fetchSalsePerUser=async()=>{
+  const [maxTableHeight, setMaxTableHeight] = useState(600);
+  const fetchOperationalPerUser=async()=>{
     try{
-      const salsess=await axios.post(`${config.apiUrl}/salse/salsePerformance`, dateRanges)
-      if(salsess.data.message=="succeed"){
-        let perIndividualSalse=salsess.data.data
-         const sortedData = perIndividualSalse.sort((a, b) => b.uniqueCustomer- a.uniqueCustomer);
+      const operationals=await axios.post(`${config.apiUrl}/operational/userStatus`, dateRanges)
+      if(operationals.data.message=="succeed"){
+        let perIndividualOperational=operationals.data.data
+         const sortedData = perIndividualOperational.sort((a, b) => b.approvedAmount- a.approvedAmount);
          const rankedDatas = sortedData.map((row, index) => ({ ...row, rank: index + 1 }));
          setRankedData(rankedDatas);
-          dispatch(salsePerUser({loading:false,error:"", data:perIndividualSalse}))
-          setSale(perIndividualSalse)
-          setSalseloaded(true)
+          dispatch(operationalPerUser({loading:false,error:"", data:perIndividualOperational}))
+          setColl(perIndividualOperational)
+          setOperationalload(true)
           setFilter(false)
       }else{
-        dispatch(salsePerUser({loading:false, error:salsess.data.message, data:null}))
+        dispatch(operationalPerUser({loading:false, error:operationals.data.message, data:null}))
       }
 
     }catch(erro){
-      console.log("the error", erro, salse,)
-      dispatch(salsePerUser({loading:false, error:"Something went wrong", data:null}))
+      console.log("the error", erro, collection,)
+      dispatch(operationalPerUser({loading:false, error:"Something went wrong", data:null}))
     }
   }
   if(filter){
-    fetchSalsePerUser()
+    fetchOperationalPerUser()
   }
-  const [maxTableHeight, setMaxTableHeight] = useState(600);
   useEffect(() => {
     const handleResize = () => {
       if(Window.innerHeight>1200){
@@ -115,20 +116,22 @@ export default function IndividualSalse() {
   }, [window.innerHeight]);
 
   const handleXlsxDownload = () => {
+    // const data= salse.map((row, id))
     const worksheet = XLSX.utils.json_to_sheet(rankedData);
+    console.log("The rankedData", rankedData)
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'My Data');
     XLSX.writeFile(workbook, 'my_data.xlsx');
   };
-  
+
 
 
   useEffect(()=>{
-    fetchSalsePerUser()
+    fetchOperationalPerUser()
   },[])
   return (
     <div className='h-full w-full'>
-      {salse.loading ? 
+      {operational.loading ? 
       <div className='flex items-center justify-center h-full w-full' >
         <Stack sx={{ width: '100%', color: 'grey.500' }}>
           <LinearProgress color="secondary" />
@@ -139,32 +142,27 @@ export default function IndividualSalse() {
         {dashboard ?
          <div className='flex flex-auto'>
              {dashboard && <Profile/>}
-             <p className='font-semibold w-full text-center text-2xl pb-2 font-arial text-black border-b-2 rounded-lg'> Unique Customer Base Sales Performance</p>
-             
+             <p className='font-semibold w-full text-center text-2xl pb-2 font-arial text-black border-b-2 rounded-lg'>Operational Performance</p>
              <DateRange/>
          </div>:
-         <div className='flex flex-auto'>
-            <p className='font-semibold w-full text-center text-2xl pb-2 font-arial text-black border-b-2 rounded-lg'> Unique Customer Base Sales Performance</p>
-            <DateRange/>
-         </div>
+         <DateRange/>
         }
       </div>
       
-    {salse.error !=='' ?<Alert sx={{mt: 2, mb: 2}} severity="error">{salse.error}</Alert>:
+    {operational.error !=='' ?<Alert sx={{mt: 2, mb: 2}} severity="error">{operational.error}</Alert>:
     <div className='h-full w-full'>
-    {salse.data!==null &&
+    {operational.data!==null &&
     <div className='h-full w-full'>
     <TableContainer component={Paper} sx={{maxHeight:maxTableHeight}}>
       <Table sx={{ minWidth: 650 }} stickyHeader aria-label="simple table">
         <TableHead>
           <TableRow style={styles} >
-            <StyledTableCell style={styles} >User Name</StyledTableCell>
-            <StyledTableCell align='right' style={styles} >Unique Customer</StyledTableCell>
-            <StyledTableCell align="right" style={styles} >Total Number Of Account</StyledTableCell>
-            <StyledTableCell align="right" style={styles} >Total Disbursed Amount</StyledTableCell>
-            {/* <StyledTableCell align="right" style={styles} >Total Income</StyledTableCell> */}
+            <StyledTableCell style={styles} >Officer Name</StyledTableCell>
+            <StyledTableCell align='right' style={styles} >Total Applicant</StyledTableCell>
+            <StyledTableCell align="right" style={styles} >Number Of Approved</StyledTableCell>
+            <StyledTableCell align="right" style={styles} >Number Of Rejected</StyledTableCell>
+            <StyledTableCell align="right" style={styles} >Total Approved Amount</StyledTableCell>
             <StyledTableCell align="right" style={styles} >Rank</StyledTableCell>
-            {/* <TableCell align="right">Protein&nbsp;(g)</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -177,22 +175,22 @@ export default function IndividualSalse() {
               }}
             >
               <StyledTableCell component="th" scope="row">
-                {row.fullName}
+                {row.officerName}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.uniqueCustomer}</StyledTableCell>
-              <StyledTableCell align="right">{row.numberOfAccount}</StyledTableCell>
-              <StyledTableCell align="right">{Math.round(row.totalDisbursed)}</StyledTableCell>
-              {/* <StyledTableCell align="right">{Math.round(row.income).toLocaleString()}</StyledTableCell> */}
+              <StyledTableCell align="right">{row.totalApplicant}</StyledTableCell>
+              <StyledTableCell align="right">{row.approvedCustomer}</StyledTableCell>
+              <StyledTableCell align="right">{row.totalApplicant - row.approvedCustomer}</StyledTableCell>
+              <StyledTableCell align="right">{Math.round(row.approvedAmount).toLocaleString()}</StyledTableCell>
               <StyledTableCell align="right">{row.rank}</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
       </Table>
     </TableContainer>
-    {rankedData.length >0 &&
-      <div className='mt-2 flex justify-end ml-4'>
-      <Button variant="contained" onClick={handleXlsxDownload}><DownloadForOfflineOutlinedIcon/></Button>
-      </div>
+    { ! dashboard &&
+    <div className='mt-2 flex justify-end ml-4'>
+         <Button variant="contained" onClick={handleXlsxDownload}><DownloadForOfflineOutlinedIcon/></Button>
+    </div>
     }
     </div>
 }
@@ -202,3 +200,5 @@ export default function IndividualSalse() {
   </div>
   );
 }
+
+export default IndividualStatus

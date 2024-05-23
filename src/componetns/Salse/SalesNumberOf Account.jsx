@@ -12,7 +12,7 @@ Chart.register(ChartDataLabels);
 
 Chart.register(...registerables);
 
-const Salsechart = () => {
+const NumberOfAccountChart = () => {
 
   const salses=useSelector(state=>state.salse)
   const collecte=salses.data
@@ -28,17 +28,16 @@ const Salsechart = () => {
     if(salses.data.salesTargets[districtName[index]].dataStatus==0){
     }else{
       combinedDistrictName.push(districtName[index])
-      achivedData.push(district.disbursedAmount),
-      targetData.push(salses.data.salesTargets[districtName[index]].dataStatus[0].totalDisbursed)
+      achivedData.push(district.numberOfAccount),
+      targetData.push(salses.data.salesTargets[districtName[index]].dataStatus[0].numberOfAccount)
     }
 })
-
 
   const chartData = {
     labels: combinedDistrictName,
     datasets: [
       {
-        label: 'Targeted disbursement',
+        label: 'Targeted number of account',
         borderWidth: 1,
         fill:true,
         borderColor:"#e38524",
@@ -49,7 +48,7 @@ const Salsechart = () => {
         },
       },
       {
-        label: 'Actual disbursement',
+        label: 'Actual number of account',
         fill:true,
         borderColor:"#00adef",
         backgroundColor: '#00adef',
@@ -76,29 +75,21 @@ const Salsechart = () => {
   const options = {
     plugins: {
       legend: {
-              position: 'top',
-              font:"bold",
-              labels:{
-                font:{
-                  size:16
-                }
-              }
-            },
+        position: 'top',
+        font:"bold",
+        labels:{
+          font:{
+            size:16
+          }
+        }
+      },
 
       datalabels: {
         display: function(context) {
           // Only display data labels for the actual bars
-          return context.dataset.label === 'Actual disbursement';
+          return context.dataset.label === 'Actual number of account';
         },
       },
-
-      title: {
-              display: true,
-              text: 'Disbursed Amount per District',
-              font: {
-                size: 20
-            }
-            },
       tooltip: {
         callbacks: {
           label: function (context) {
@@ -109,6 +100,15 @@ const Salsechart = () => {
             return `Target: ${target}, Actual: ${actual}, Ratio: ${ratio}%`;
           },
         },
+      },
+
+      title: {
+        display: true,
+        text: 'Number Of Account per District',
+        // font:"bold",
+        font: {
+          size: 20
+      }
       },
     },
     scales: {
@@ -121,4 +121,5 @@ const Salsechart = () => {
   return (salses.data && <Bar data={chartData} options={options} />);
 };
 
-export default Salsechart;
+export default NumberOfAccountChart;
+

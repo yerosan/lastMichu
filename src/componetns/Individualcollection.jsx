@@ -28,6 +28,9 @@ import DetailFilter from "./Colletion/DetailFilter"
 
 import MenuItem from '@mui/material/MenuItem';
 
+import DownloadForOfflineOutlinedIcon from '@mui/icons-material/DownloadForOfflineOutlined';
+import * as XLSX from 'xlsx';
+
 
 function createData(name, contactedCustomer, payedCustomer, unpayedCustomer,totalPayed, date) {
   return { name, contactedCustomer, payedCustomer, unpayedCustomer,totalPayed, date };
@@ -202,6 +205,15 @@ export default function Individualcollection() {
 
   }
 
+  const handleXlsxDownload = () => {
+    // const data= salse.map((row, id))
+    console.log("This is all Collection_----------________", allCollection)
+    const worksheet = XLSX.utils.json_to_sheet(allcollection);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'My Data');
+    XLSX.writeFile(workbook, 'my_data.xlsx');
+  };
+
   const handleUpdate=()=>{
     updateData(rowData)
     setOpen(false)
@@ -262,6 +274,10 @@ export default function Individualcollection() {
           
         </Table>
       </TableContainer>
+      
+      <div className='mt-2 flex justify-end ml-4'>
+         <Button variant="contained" onClick={handleXlsxDownload}><DownloadForOfflineOutlinedIcon/></Button>
+      </div>
 
       <Dialog 
         open={open}

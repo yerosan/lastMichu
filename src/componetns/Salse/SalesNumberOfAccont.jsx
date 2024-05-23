@@ -9,8 +9,6 @@ import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import { TableFooter } from '@mui/material';
 import {Button, Dialog, DialogTitle, DialogContent} from "@mui/material"
-// import { salsePerUser } from '../../features/salse/salseSlice';
-// import {individualSalse} from "../../features/salse/individualSalseSlice"
 import { salsePerUser } from '../../features/salse/individualSalseSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
@@ -22,7 +20,6 @@ import DateRange from './DateRange';
 import { useStateContext } from '../../context/ContextProvider';
 import config from '../../config/config';
 import Profile from '../Profile';
-// import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 import DownloadForOfflineOutlinedIcon from '@mui/icons-material/DownloadForOfflineOutlined';
 import * as XLSX from "xlsx"
 
@@ -64,7 +61,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function IndividualSalse() {
+export default function SalesNumberOfAccountperformance() {
   const dispatch=useDispatch()
   const salse=useSelector(state=>state.individualSalse)
   const [salseloaded, setSalseloaded]=useState(false)
@@ -78,7 +75,7 @@ export default function IndividualSalse() {
       const salsess=await axios.post(`${config.apiUrl}/salse/salsePerformance`, dateRanges)
       if(salsess.data.message=="succeed"){
         let perIndividualSalse=salsess.data.data
-         const sortedData = perIndividualSalse.sort((a, b) => b.uniqueCustomer- a.uniqueCustomer);
+         const sortedData = perIndividualSalse.sort((a, b) => b.numberOfAccount - a.numberOfAccount );
          const rankedDatas = sortedData.map((row, index) => ({ ...row, rank: index + 1 }));
          setRankedData(rankedDatas);
           dispatch(salsePerUser({loading:false,error:"", data:perIndividualSalse}))
@@ -139,12 +136,12 @@ export default function IndividualSalse() {
         {dashboard ?
          <div className='flex flex-auto'>
              {dashboard && <Profile/>}
-             <p className='font-semibold w-full text-center text-2xl pb-2 font-arial text-black border-b-2 rounded-lg'> Unique Customer Base Sales Performance</p>
+             <p className='font-semibold w-full text-center text-2xl pb-2 font-arial text-black border-b-2 rounded-lg'> Number Of Accont Base Sales Performance</p>
              
              <DateRange/>
          </div>:
          <div className='flex flex-auto'>
-            <p className='font-semibold w-full text-center text-2xl pb-2 font-arial text-black border-b-2 rounded-lg'> Unique Customer Base Sales Performance</p>
+            <p className='font-semibold w-full text-center text-2xl pb-2 font-arial text-black border-b-2 rounded-lg'> Number Of Accont Base Sales Performance</p>
             <DateRange/>
          </div>
         }

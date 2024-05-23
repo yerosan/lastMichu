@@ -36,7 +36,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: 'Michu lon monthly collection per Individula',
+      text: 'Michu Loan Approval Status',
       font: {
         size: 20
     }
@@ -48,28 +48,27 @@ const labels=['yero', 'shewa', 'sane', 'dateRangeTotal']
 
 
 export function BarChart() {
-  const collection=useSelector(state=>state.dashboard)
-  const collecte=collection.data
+  const operational=useSelector(state=>state.operationalDashboard)
+  const approval=operational.data
   const [label, setLabel]=useState(null)
   const [data, setData]=useState(null)
   const [draw, setDraw]=useState(false)
   let usersCollections= {}
   useEffect(()=>{
-    if(collection.data){
-        let collectionPerUser=collection.data.dashboard[1][0]
-        let monthlyCollection=collection.data.monthlyData
+    if(operational.data){
+        let operationalPerUser=operational.data.approvalPerUser
     }
   },[])
   return (<div className='h-full w-full flex items-center justify-center'> 
-    {collection.data && <Bar options={options} data={
+    {operational.data && <Bar options={options} data={
     {
-        labels:Object.keys(collection.data.dashboard[1][0]),
+        labels:Object.keys(approval.approvalPerUser),
         datasets: [
           {
-            label: 'Officer vs collection amount',
+            label: 'Approval Amount per user',
             borderColor:"#00abef",
             backgroundColor: '#00abef',
-          data:Object.values(collection.data.dashboard[1][0]),
+          data:Object.values(approval.approvalPerUser),
           datalabels: {
             display: false, // Hide data labels for the target bars
           }

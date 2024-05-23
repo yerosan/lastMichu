@@ -24,6 +24,9 @@ import Alert from '@mui/material/Alert';
 import config from '../../config/config';
 import MenuItem from '@mui/material/MenuItem';
 
+import DownloadForOfflineOutlinedIcon from '@mui/icons-material/DownloadForOfflineOutlined';
+import * as XLSX from 'xlsx';
+
 const styles={
   fontFamily:"serif",
   fontWeight:"bold",
@@ -61,23 +64,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 
-const Actions=(props)=>{
-  const {open, setOpen}=useStateContext()
-  const EditDas=()=>{
-    setOpen(true)
-  }
-
-  return(
-    <div>
-      <Tooltip title="Edit" placement="bottom-end" arrow>
-        <IconButton onClick={(event)=>EditDas(event, props.row)}>
-          <Edit/>
-        </IconButton>
-      </Tooltip>
-
-    </div>
-  )
-}
 
 const totalStatus={"totalRejected":20000,"totalApproved":3000,"totalApplicant":4000}
 
@@ -98,6 +84,12 @@ export default function SalseRegister() {
   const {detailfilter, setDetailfilter}=useStateContext()
   const {detail , setDetail}=useStateContext()
   const detailData={userId:userIn.data.userId, date:today}
+  const {open, setOpen}=useStateContext()
+
+  const [userDistrict, setUserDistrict]=useState(null)
+  const [deleteRow, setDeleteRow]=useState({})
+  let [userDistrictss, setUserDistrictss]= useState([])
+
   const fetchAllSalse=async()=>{
     dispatch(salsePerUser({loading:true, error:"", data:null}))
     try{
@@ -117,7 +109,6 @@ export default function SalseRegister() {
       setDetail(false)
     }
   }
-  const {open, setOpen}=useStateContext()
   const handleRowClick = (rowData) => {
     setRowData(rowData)
   }
@@ -135,6 +126,58 @@ export default function SalseRegister() {
     }
 
   }
+
+  const getDistrict= async(userId)=>{
+    try{
+      let usersDistrict= await axios.get(`${config.apiUrl}/salse/userDistrict/${userId}`)
+      const Districtsss=[]
+      if(usersDistrict.data.message=="succeed"){
+        const data=usersDistrict.data.data
+        let datas= Object.keys(usersDistrict.data.data)
+        await Promise.all(datas.map(district=>{
+          if(data[district]===true){
+            Districtsss.push(
+              {value:district,
+               label:district
+              }
+            )
+          }
+        }))
+       setUserDistrict(usersDistrict.data.data)
+       setUserDistrictss(Districtsss)
+       setOpen(true)
+      }else{
+        setUserDistrict(usersDistrict.data.message)
+        setErrors(true)
+      }
+    }catch(error){
+      console.log("The error", error)
+    }
+  }
+  const Actions=(props)=>{
+    const {open, setOpen}=useStateContext()
+    const EditDas=()=>{
+      getDistrict(props.row.userId)
+    }
+  
+    return(
+      <div>
+        <Tooltip title="Edit" placement="bottom-end" arrow>
+          <IconButton onClick={(event)=>EditDas(event, props.row)}>
+            <Edit/>
+          </IconButton>
+        </Tooltip>
+  
+      </div>
+    )
+  }
+  const handleXlsxDownload = () => {
+    // const data= salse.map((row, id))
+    const worksheet = XLSX.utils.json_to_sheet(allsalse);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'My Data');
+    XLSX.writeFile(workbook, 'my_data.xlsx');
+  };
 
   const handleUpdate=()=>{
     updateData(rowData)
@@ -162,6 +205,7 @@ export default function SalseRegister() {
           <TableHead>
             <TableRow style={styles}>
               <StyledTableCell style={styles} >Officer Name</StyledTableCell>
+              <StyledTableCell align="left" style={styles}>District</StyledTableCell>
               <StyledTableCell align='left' style={styles} >Number Of Account</StyledTableCell>
               <StyledTableCell align="left" style={styles} >Unique Customer</StyledTableCell>
               <StyledTableCell align="left" style={styles} >Total Disbursed</StyledTableCell>
@@ -184,6 +228,7 @@ export default function SalseRegister() {
                 <StyledTableCell component="th" scope="row">
                   {userIn.data.fullName}
                 </StyledTableCell>
+                <StyledTableCell align='left'>{row.district}</StyledTableCell>
                 <StyledTableCell align="left">{row.numberOfAccount}</StyledTableCell>
                 <StyledTableCell align="left">{row.uniqueCustomer}</StyledTableCell>
                 <StyledTableCell align="left">{row.disbursedAmount}</StyledTableCell>
@@ -196,6 +241,11 @@ export default function SalseRegister() {
           
         </Table>
       </TableContainer>
+      {allsalse !==null &&
+      <div className='mt-2 flex justify-end ml-4'>
+         <Button variant="contained" onClick={handleXlsxDownload}><DownloadForOfflineOutlinedIcon/></Button>
+      </div>
+      }
 
       <Dialog 
         open={open}
@@ -217,6 +267,32 @@ export default function SalseRegister() {
                     fullWidth
                     value={userIn.data.fullName || ""}
                     />
+                <Box
+                  component="form"
+                  sx={{
+                    '& .MuiTextField-root': { my:1 ,width: '100%' },
+                  }}
+                  noValidate
+                  autoComplete="off"
+                >
+                <TextField
+                  id="district"
+                  select
+                  name='district'
+                  label="District"
+                  value={rowData.district}
+                  placeholder='select district'
+                  onChange={(e) => setRowData({ ...rowData, district: e.target.value })}
+                >
+                  {userDistrictss.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+
+                </Box>
+                
                 <TextField
                     margin="dense"
                     id="numberOfAccount"

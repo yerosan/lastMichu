@@ -1,6 +1,6 @@
 
 import MenuItem from '@mui/material/MenuItem';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useInsertionEffect} from 'react';
 import { TextField, Button, Container, Stack, Paper } from '@mui/material';
 import { Link } from "react-router-dom"
 import { Approval } from '@mui/icons-material';
@@ -12,7 +12,6 @@ import Alert from '@mui/material/Alert';
 import config from "../../config/config"
 import FormHelperText from '@mui/material/FormHelperText';
 import LinearProgress from '@mui/material/LinearProgress';
-import { useStateContext } from '../../context/ContextProvider';
   
 
 const currentDate=new Date()
@@ -20,75 +19,69 @@ const month = `0${currentDate.getMonth()+1}`.slice(-2);
 const day = `0${currentDate.getDate()}`.slice(-2);
 let today=currentDate.getFullYear()+"-"+month+"-"+day
 
-const Salseform = () => {
+ 
+const districtList=[
+    {
+    value:"Centeral Finfine",
+    label:"Centeral Finfine"
+   },
+   {
+    value:"West Finfine",
+    label:"West Finfine"
+   },
+   {
+    value:"North Finfine",
+    label:"North Finfine"
+   },
+   {
+    value:"East Finfine ",
+    label:"East Finfine"
+   },
+   {
+    value:"South Finfine",
+    label:"South Finfine"
+   }
+]
+const SalesTarget = () => {
   const userIn=useSelector(state=>state.logins)
-  const initialVaue={
-              userName:userIn.data.userName,
-              fullName:userIn.data.fullName,
-              district:"",
-              uniqueCustomer:"",
-              disbursedAmount:"",
-              numberOfAccount:"",
-              income:"",
-              date:today
-          }
+    const [districtLists, setDistrictLists]=useState(null)
+    const [loadingDistrict, setLoadingDistrict]=useState(false)
+    const [errors, setErrors]=useState(false)
+
+    const initialVaue={
+      userName:userIn.data.userName,
+      districtName:"",
+      uniqueCustomer:"",
+      disbursedAmount:"",
+      numberOfAccount:"",
+      income:"",
+      date:today
+  }
+
     const [salseData,setSalseData]=useState(initialVaue)
-    const [userDistrict, setUserDistrict]=useState(null)
     const [formActivater, setFormActivater]=useState(false)
     const alluserss=useSelector(state=>state.allUser)
     const addCollection=useSelector(state=>state.collection)
     const [dataAdding, setDataAdding]=useState(false)
-    const [errors, setErrors]=useState(false)
     const [error, setError]=useState(false)
     const dispatch=useDispatch()
-    let [userDistrictss, setUserDistrictss]= useState([])
 
     const validatePhoneNumber = (phoneNumber) => {
-      return phoneNumber.length === 12 && /^\d+$/.test(phoneNumber); 
+      return phoneNumber.length === 12 && /^\d+$/.test(phoneNumber); // Checks if the phone number is exactly 12 digits and contains only numeric characters
     };
 
     const handleForm=(e)=>{
         const values=e.target.value
         const namess=e.target.name
-
         setSalseData((prevState) => ({
           ...prevState,
           [namess]: values,
         }));
     }
-    const Districtss=[ ]
-
-    const getDistrict= async()=>{
-      try{
-        let usersDistrict= await axios.get(`${config.apiUrl}/salse/userDistrict/${userIn.data.userId}`)
-        const Districtsss=[]
-        if(usersDistrict.data.message=="succeed"){
-          const data=usersDistrict.data.data
-          let datas= Object.keys(usersDistrict.data.data)
-          await Promise.all(datas.map(district=>{
-            if(data[district]===true){
-              Districtsss.push(
-                {value:district,
-                 label:district
-                }
-              )
-            }
-          }))
-         setUserDistrict
-         setUserDistrict(usersDistrict.data.data)
-         setUserDistrictss(Districtsss)
-        }else{
-          setUserDistrict(usersDistrict.data.message)
-          setErrors(true)
-        }
-      }catch(error){
-        console.log("The error", error)
-      }
-    }
 
     const addSalse=async()=>{
       try{
-        let addingSalse= await axios.post(`${config.apiUrl}/salse/addSalse`, salseData)
+        let addingSalse= await axios.post(`${config.apiUrl}/salse/addTarget`, salseData)
         if(addingSalse.data.message=="succeed"){
           alert("Data submited")
         }
@@ -100,29 +93,48 @@ const Salseform = () => {
         alert ("Something went wrong")
       }
     }
+
+    const loadDistrictList=async()=>{
+      try{
+      let distrList= await axios.get(`${config.apiUrl}/salse/districtList`)
+      if(distrList.data.message=="succeed"){
+          setDistrictLists(distrList.data.data)
+          setLoadingDistrict(true)
+      }else{
+        setErrors(distrList.data.message)
+        setErrors(true)
+      }
+    }catch(error){
+      console.log("the Error", error)
+      setDistrictLists("Something went wrong")
+      setErrors(true)
+    }
+    }
+
+
+ 
     function handleSubmit(event) {
         event.preventDefault();
         addSalse()
         setSalseData(initialVaue) 
     }
-
-    useEffect(()=>{
-        getDistrict()
-    },[])
- 
+  useEffect(()=>{
+    loadDistrictList()
+  }, [])
     return (
         <React.Fragment>
-          {(userIn.loading || userDistrict == null)  ?  
+          {(userIn.loading || districtLists==null )?  
           <div className='flex items-center justify-center h-full w-full' >
-            <Stack sx={{ width: '100%', color: 'grey.500' }}>
-              <LinearProgress color="secondary" />
-            </Stack>
-          </div>:
-       <div>
-       {(userIn.error !=="" || errors) ? 
-        <div> {userIn.error !== "" ? <Alert sx={{mt: 2, mb: 2}} severity="error">{userIn.error}</Alert>:
-          <Alert sx={{mt: 2, mb: 2}} severity="error">{userDistrict}</Alert>}
+          <Stack sx={{ width: '100%', color: 'grey.500' }}>
+            <LinearProgress color="secondary" />
+          </Stack>
         </div>:
+       <div>
+       {(userIn.error !=="" || error) ? 
+       <di> {userIn.error !== "" ?
+          <Alert sx={{mt: 2, mb: 2}} severity="error">{userIn.error}</Alert>:
+          <Alert sx={{mt: 2, mb: 2}} severity="error">{districtLists}</Alert>}
+        </di>:
        <div>
         {userIn.data &&
               <Paper >
@@ -130,8 +142,8 @@ const Salseform = () => {
               
                   <h2 className=
                       'font-serif font-semibold text-xl p-2'
-                  >Enter Data</h2>
-                  <form onSubmit={handleSubmit} action={<Link to="/login" />}>
+                  >Target Form</h2>
+                  <form onSubmit={handleSubmit}>
                       <div className='flex  gap-4 pb-2'>
                           <div className="flex flex-col gap-2 w-full">
                             <Box
@@ -144,41 +156,24 @@ const Salseform = () => {
                             >
                               <div>
                                 <TextField
-                                  id="fullName"
-                                  // select
-                                  label="Full Name"
-                                  name='fullName'
-                                  value={salseData.fullName}
+                                 select
+                                  type='text'
+                                  id="district"
+                                  label="Select district"
+                                  name='districtName'
+                                  value={districtLists.districtName}
+                                  placeholder='Select district'
+                                  onChange={handleForm}
+                                  required
                                 >
+                                    {districtLists.map((option) => (
+                                      <MenuItem key={option.district} value={option.districtName}>
+                                        {option.district}
+                                      </MenuItem>
+                                    ))}
                                 </TextField>
                               </div>
                               </Box>
-                              <Box
-                                  component="form"
-                                  sx={{
-                                    '& .MuiTextField-root': { my:1 ,width: '100%' },
-                                  }}
-                                  noValidate
-                                  autoComplete="off"
-                                >
-                                <TextField
-                                  id="district"
-                                  select
-                                  name='district'
-                                  label="District"
-                                  value={salseData.district}
-                                  placeholder='select district'
-                                  onChange={handleForm}
-                                >
-                                  {userDistrictss.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                      {option.label}
-                                    </MenuItem>
-                                  ))}
-                                </TextField>
-
-                              </Box>
-                    
                               <Box
                                   component="form"
                                   sx={{
@@ -202,31 +197,21 @@ const Salseform = () => {
                                   </div>
                               </Box>
 
-                              <Box
-                                  component="form"
-                                  sx={{
-                                    '& .MuiTextField-root': { my:1 ,width: '100%' },
-                                  }}
-                                  noValidate
-                                  autoComplete="off"
-                                >
-
-                                <TextField
-                                      type="number"
-                                      variant='outlined'
-                                      color='primary'
-                                      name="uniqueCustomer"
-                                      label="Unique customer"
-                                      onChange={handleForm}
-                                      value={salseData.uniqueCustomer}
-                                      placeholder='Enter unique customer'
-                                      fullWidth
-                                      required
-                                      error={error}
-                                      sx={{my:1 }}
-                                >
-                                </TextField> 
-                              </Box>
+                              <TextField
+                                    type="number"
+                                    variant='outlined'
+                                    color='primary'
+                                    name="uniqueCustomer"
+                                    label="Unique customer"
+                                    onChange={handleForm}
+                                    value={salseData.uniqueCustomer}
+                                    placeholder='Enter unique customer'
+                                    fullWidth
+                                    required
+                                    error={error}
+                                    sx={{my:1 }}
+                              >
+                              </TextField> 
                           </div>
 
                           <div className='flex flex-col gap-2 w-full'>
@@ -260,7 +245,7 @@ const Salseform = () => {
                                     label="Income"
                                     onChange={handleForm}
                                     value={salseData.income}
-                                    placeholder='Enter call response'
+                                    placeholder='Enter income'
                                     required
                                     fullWidth
                                     sx={{my:1 }}
@@ -279,15 +264,10 @@ const Salseform = () => {
                                   required
                                   sx={{my:1 }}
                               />
-                              
-                              
-                              <div className='flex justify-end my-2'>
-                                <Button variant="outlined" color="primary" type="submit">Submit</Button>
-                              </div>
-                            
                           </div>
                       </div>
 
+                      <Button variant="outlined" color="primary" type="submit">Submit</Button>
                       
                   </form>
                   
@@ -304,4 +284,4 @@ const Salseform = () => {
         </React.Fragment>
     )
 }
-export default Salseform;
+export default SalesTarget;

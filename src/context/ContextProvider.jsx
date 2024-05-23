@@ -18,6 +18,14 @@ const initialRoles={
   admin:false
 
 }
+const initialDistrict={
+  "centeralFinfine":false,
+  "northFinfine":false,
+  "southFinfine":false,
+  "westFinfine":false,
+  "eastFinfine":false
+}
+
 
 
 const currentDate=new Date()
@@ -67,6 +75,10 @@ export const ContextProvider = ({children}) => {
        const [detailfilter, setDetailfilter]=useState(sevenDay)
        const [detail, setDetail]=useState(false)
        const [salseFilter, setSalseFilter]=useState(sevenDay)
+       const [district, setDistrict]=useState(initialDistrict)
+       let   [userDistrictss, setUserDistrictss]=useState([])
+       const [districtList, setDistrictList]=useState(initialDistrict)
+       const [count, setCount]=useState(1)
        const dispatch=useDispatch()
 
        useEffect(()=>{
@@ -101,6 +113,10 @@ export const ContextProvider = ({children}) => {
         detailfilter, setDetailfilter,
         detail, setDetail,
         salseFilter, setSalseFilter,
+        district, setDistrict,
+        userDistrictss,setUserDistrictss,
+        districtList, setDistrictList,
+        count, setCount
        }
     }
     >

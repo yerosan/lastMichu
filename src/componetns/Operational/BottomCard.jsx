@@ -8,81 +8,74 @@ import { CardActionArea } from '@mui/material';
 // import ActionAreaCard from './Card'
 // previousColletions
 import {useSelector, useDispatch} from "react-redux"
-const MonthlySalse = () => {
-  const salse=useSelector(state=>state.salse)
-  let monthlySalse=salse.data.monthlySalse
+const BottomCard = () => {
+  const operational=useSelector(state=>state.operationalDashboard)
+//   let totalCollections=collection.data.dashboard[0][0]
   return (
     <div>
-      {salse.data&&
-    <div className='flex mt-2 justify-around rounded-lg px-4 pt-2 pb-2'>
+      {operational.data&&
+    <div className='flex mt-3 justify-around rounded-lg px-4 pt-4 pb-2'>
 
-            <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",borderLeft:2,borderBottom:2, borderRadius:2, borderColor:"#00adef", borderBlockColor:"#00adef"}}>
+            <Card sx={{ maxWidth: 200, backgroundColor:"#f8fafc",borderRight:2, borderBottom:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#00adef"}}>
                 <CardActionArea>
                     <CardContent>
                     <Typography gutterBottom variant="h5" 
                     component="div" 
                     fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="medium">
-                     Nucmber Of Accounts
+                        Yesterday Approval
                     </Typography>
                     <Typography variant="h4" color="text.primary" fontWeight="bold"textAlign="center" fontSize="xlarge" fontFamily="serif">
-                        {Math.round(monthlySalse.numberOfAccount).toLocaleString()}
+                        {Math.round(operational.data.totalStatus.preivousApproval).toLocaleString()}
                     </Typography>
-                    <span className='text-black font-light text-center'>in last month</span>
                     </CardContent>
                 </CardActionArea>
             </Card>
 
-            <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",borderLeft:2, borderBottom:2, borderRadius:2, borderColor:"#00adef", borderBlockColor:"#00adef"}}>
+            <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",borderRight:2, borderBottom:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#00adef"}}>
               <CardActionArea>
                 <CardContent>
                   <Typography gutterBottom variant="h5" 
                   component="div" 
                   fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="medium">
-                   Unique Customer
+                    Yesterday Account
                   </Typography>
                   <Typography variant="h4" color="text.primary" fontWeight="bold" textAlign="center" fontSize="xlarge" fontFamily="serif">
-                    {Math.round(monthlySalse.uniqueCustomer).toLocaleString()}
+                    {Math.round(operational.data.totalStatus.preicousAccount).toLocaleString()}
                   </Typography>
-                  <span className='text-black text-center font-light'>in last month</span>
                 </CardContent>
               </CardActionArea>
             </Card>
 
 
-            <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",borderLeft:2, borderBottom:2, borderRadius:2, borderColor:"#00adef", borderBlockColor:"#00adef"}}>
+            <Card sx={{ maxWidth: 200, backgroundColor:"#f8fafc",borderRight:2, borderBottom:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#00adef"}}>
                 <CardActionArea>
                     <CardContent>
                     <Typography gutterBottom variant="h5" 
                     component="div" 
                     fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="medium">
-                       Disbursed Amount
+                       Live Disbursment
                     </Typography>
-                    <div className='flex justify-center gap-2 items-center'>
-                        <Typography variant="h4" color="text.primary" textAlign="center" fontWeight="bold" fontSize="xlarge" fontFamily="serif">
-                        {Math.round(monthlySalse.totalDisbursed).toLocaleString()}     
-                        </Typography>
-                        <span className='text-black font-normal text-md text-center'>ETB</span>
-                    </div>
-                    <span className='text-black font-light text-center'>in last month</span>
+                    <Typography variant="h4" color="text.primary" fontWeight="bold"textAlign="center" fontSize="xlarge" fontFamily="serif">
+                        {Math.round(operational.data.totalStatus.liveAmount).toLocaleString()}
+                    </Typography>
                     </CardContent>
                 </CardActionArea>
             </Card>
 
-            {/* <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",border:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#00adef"}}>
+            <Card sx={{ maxWidth: 200, backgroundColor:"#f8fafc",borderRight:2, borderBottom:2,borderRadius:2, borderColor:"#00adef", borderBlockColor:"#00adef"}}>
                 <CardActionArea>
                     <CardContent>
                     <Typography gutterBottom variant="h5" 
                     component="div" 
                     fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="medium">
-                      Income Generated
+                       Live Account
                     </Typography>
                     <Typography variant="h4" color="text.primary" fontWeight="bold"textAlign="center" fontSize="xlarge" fontFamily="serif">
-                        {Math.round(monthlySalse.income).toLocaleString()}
+                        {Math.round(operational.data.totalStatus.liveCustomer).toLocaleString()}
                     </Typography>
-                    <span className='text-black font-light text-center'>in last month</span>
                     </CardContent>
                 </CardActionArea>
-            </Card> */}
+            </Card>
 
           </div>
        }
@@ -90,4 +83,4 @@ const MonthlySalse = () => {
   )
 }
 
-export default MonthlySalse
+export default BottomCard

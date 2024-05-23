@@ -20,6 +20,10 @@ import { useStateContext } from '../context/ContextProvider';
 import config from '../config/config';
 import Profile from './Profile';
 
+import {Button, Dialog, DialogTitle, DialogContent} from "@mui/material"
+import DownloadForOfflineOutlinedIcon from '@mui/icons-material/DownloadForOfflineOutlined';
+import * as XLSX from 'xlsx';
+
 const styles={
   fontFamily:"serif",
   fontWeight:"bold",
@@ -111,6 +115,15 @@ export default function CollectionIndividual() {
     };
   }, [window.innerHeight]);
 
+  const handleXlsxDownload = () => {
+    // const data= salse.map((row, id))
+    const worksheet = XLSX.utils.json_to_sheet(rankedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'My Data');
+    XLSX.writeFile(workbook, 'my_data.xlsx');
+  };
+
+
 
   useEffect(()=>{
     fetchCollectionPerUser()
@@ -174,6 +187,11 @@ export default function CollectionIndividual() {
         </TableBody>
       </Table>
     </TableContainer>
+    {! dashboard &&
+    <div className='mt-2 flex justify-end ml-4'>
+         <Button variant="contained" onClick={handleXlsxDownload}><DownloadForOfflineOutlinedIcon/></Button>
+    </div>
+    }
     </div>
 }
   </div>

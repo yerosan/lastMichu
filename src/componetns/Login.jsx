@@ -58,7 +58,7 @@ const LogIn = () => {
           dispatch(loginUser({loading:false, error:loginusers.data.message, data:null}))
          }
     }catch(error){
-        dispatch(loginUser({loading:false, error:"Somethin went wrong", data:null}))
+        dispatch(loginUser({loading:false, error:"Something went wrong", data:null}))
         console.log("The error",error)
     }
 

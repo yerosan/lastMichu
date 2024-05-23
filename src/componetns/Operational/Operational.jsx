@@ -1,27 +1,29 @@
 import React from 'react'
+import BottomCard from './BottomCard'
+import SideCard from './SideCard'
 import config from '../../config/config'
+import { BarChart } from './BarChart'
+import HeadCard from './HeadCard'
 import {useSelector, useDispatch} from "react-redux"
 import { useState, useEffect } from 'react'
-import { intervalSalse } from '../../features/salse/salseSlice'
+import { operationalInterval } from '../../features/operational/operationalSlice'
 import Alert from "@mui/material/Alert"
 import Stack from '@mui/material/Stack';
 import LinearProgress from '@mui/material/LinearProgress';
+import BasicExampleDataGrid from './OperationDetail'
 import axios from 'axios'
 import { useStateContext } from '../../context/ContextProvider'
+// import IndividualStatus from './IndividualStatus'
 import Profile from '../Profile'
-import TotalSalse from './TotalSalse'
-import WeeklySalse from './WeeklySalse'
-import MonthlySalse from './MonthlySalses'
-import DistrictDisplay from './DistrictDisplay'
-import Income from './Income'
-
-import BarChart from './ActualTargetRatio'
-
-
-const SalseDashboard = () => {
-  const salse= useSelector(state=>state.salse)
+import OpeationalForm from './OperationalForm'
+const Operational = () => {
+  const operational= useSelector(state=>state.operationalDashboard)
+//   const operational= operationals.data
   const dispatch=useDispatch()
+  const [loops, setLoops]=useState(false)
   const [load, setLoad]=useState(false)
+  const [previousAccount, setPreviousAccount]=useState(0)
+  const [liveAccount, setLiveAccount]=useState(0)
   const {dbfilter, setDbfilter}=useStateContext()
   const {dateVeriation, setDateVeriation}=useStateContext()
   const {dashboard, setDashboard}=useStateContext()
@@ -30,7 +32,6 @@ const SalseDashboard = () => {
   const currentDay=new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate())
   const endOfPreviousMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
   let weekRange={}
-
   const weekFunction=()=>{
     let today=currentDate.getDate()
     let day=currentDay.getDay()
@@ -53,107 +54,81 @@ const SalseDashboard = () => {
   const month = `0${currentMonth}`.slice(-2);
   const dayDate = `0${toDayDate}`.slice(-2);
   const today=`${currentYear}-${month}-${dayDate}`;
-
   const defaultStartDate = startOfPreviousMonth.toISOString();
   const defaultEndDate = endOfPreviousMonth.toISOString();
   const dateRange={startDate:defaultStartDate, endDate:defaultEndDate}
 
-  const timeIntervalSalse=async(data)=>{
+  const timeIntervalOperational=async(data)=>{
     let userDetails={}
     let liveCollection=0
     let liveAccount=0
     let previousAccount=0
     let previousCollection=0
     try{
-      let totalSalse= await axios.post(`${config.apiUrl}/salse/total`, dateVeriation)
-      let salesTarget= await axios.post(`${config.apiUrl}/salse/givenDateTarget`, dateVeriation)
-      let salsePerUser=await axios.post(`${config.apiUrl}/salse/salsePerUser`, dateVeriation)
-      if(totalSalse.data.message=="succeed" && salsePerUser.data.message=="succeed"){
+      let operationalss= await axios.post(`${config.apiUrl}/operational/totalData`, data)
+      let approvalPeruser= await axios.post(`${config.apiUrl}/operational/totalApprovalPerUser`, data)
+      if(operationalss.data.message=="succeed" && approvalPeruser.data.message=="succeed"){
         setDbfilter(false)
-        const dashboard=totalSalse.data.data
-        const salsePerUsers=salsePerUser.data.data
-        const monthlySalse= await axios.post(`${config.apiUrl}/salse/total`, data.monthly)
-        const weeklySalse=await axios.post(`${config.apiUrl}/salse/total`, data.weekly)
-        if(weeklySalse.data.message=='succeed' && monthlySalse.data.message=="succeed"){
-          const monthlySalses=monthlySalse.data.data
-          const weeklySalses=weeklySalse.data.data
-          let AllData={totalSalse:dashboard, 
-            salsePerUser:salsePerUsers, 
-            monthlySalse:monthlySalses, 
-            weeklySalse:weeklySalses,
-            salesTargets:salesTarget.data.data}
-          dispatch(intervalSalse({loading:false, error:"", data:AllData}))
-          setLoad(true)
-        }else{
-          dispatch(intervalSalse({loading:false, error:weeklySalse.data.message, data:null}))
-          
-        }
+        let operationalStatus={}
+        operationalStatus.totalStatus=operationalss.data.data 
+        operationalStatus.approvalPerUser=approvalPeruser.data.data
+        dispatch(operationalInterval({loading:false, error:"", data:operationalStatus}))
+        setLoad(true)
       }else{
-        {totalSalse.data.message=="succeed" ?  
-        dispatch(intervalSalse({loading:false, error:salsePerUser.data.message, data:null}))
-        :
-        dispatch(intervalSalse({loading:false, error:totalSalse.data.message, data:null}))
-      }
+        {approvalPeruser.data.message=="succeed" ? dispatch(operationalInterval({loading:false, error:operationalss.data.message, data:null})):
+        dispatch(operationalInterval({loading:false, error:approvalPeruser.data.message, data:null}))}
       }
     }catch(error){
-      dispatch(intervalSalse({loading:false, error:"Something went wrong", data:null}))
+      dispatch(operationalInterval({loading:false, error:"Something went wrong", data:null}))
       console.log("An error occered",error)
     }
   }
 
   if(dbfilter){
-    let timeBase={totalDate:dateVeriation,monthly:dateRange, weekly:weekRange}
     weekFunction()
-    timeIntervalSalse(timeBase)
+    let timeBase={... dateVeriation, "weekStart":weekRange.startDate,"weekEnd":weekRange.endDate}
+    timeIntervalOperational(timeBase)
   }
-
-  const actualTargetdata = {
-    labels: ['January', 'February', 'March', 'April', 'May'],
-    targets: [100, 120, 150, 130, 170],
-    actuals: [90, 110, 130, 115, 160],
-  };
 
   useEffect(()=>{
     weekFunction()
   })
 
-  useEffect(()=>{
-    let timeBase={totalDate:dateVeriation,monthly:dateRange, weekly:weekRange}
-    timeIntervalSalse(timeBase)
 
+  useEffect(()=>{
+    let timeBase={... dateVeriation, "weekStart":weekRange.startDate,"weekEnd":weekRange.endDate}
+    timeIntervalOperational(timeBase)
   },[])
   return (
     <div className='w-full h-full'>
-      {salse.loading ? 
+      {operational.loading ? 
       <div className='flex items-center justify-center h-full w-full' >
         <Stack sx={{ width: '100%', color: 'grey.500' }}>
           <LinearProgress color="secondary" />
         </Stack>
       </div>:
+       
        <div className='w-full h-full'>
-        {salse.error !=="" ?<Alert sx={{mt: 2, mb: 2}} severity="error">{salse.error}</Alert>:
+        {operational.error !=="" ?<Alert sx={{mt: 2, mb: 2}} severity="error">{operational.error}</Alert>:
         load && 
         <div className='w-full h-full flex flex-col flex-1'>
           <div className='flex flex-auto'>
              {dashboard && <Profile/>}
-             <p className='font-semibold w-full text-center text-2xl pb-2 font-arial text-black border-b-2 rounded-lg'>Michu Loan Sales Dashboard</p>
+             <p className='font-semibold w-full text-center text-2xl pb-2 font-arial text-black border-b-2 rounded-lg'>Michu Loan Operational Dashboard</p>
           </div>
           
           <div className='mt-2'>
-            <TotalSalse/>
+            <HeadCard/>
           </div>
           <div className="flex py-2 flex-1 h-full">
           
             <div className='w-[80%] flex flex-col justify-around h-full flex-auto'>
-              <div className='h-[90%] flex justify-end items-center '>
-                {/* <h1>Monthly Performance</h1>
-                <BarChart/> */}
-                {/* <DistrictDisplay/> */}
-                <Income/>
+              <div className='h-[100%] flex justify-end items-center '>
+                <BarChart/>
               </div>
-              <MonthlySalse/>
+              <BottomCard/>
             </div>
-            <WeeklySalse/>
+            <SideCard/>
           </div>
         
         </div> }
@@ -162,4 +137,4 @@ const SalseDashboard = () => {
   )
 }
 
-export default SalseDashboard
+export default Operational

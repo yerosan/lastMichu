@@ -41,7 +41,9 @@ const items = [
   {
     type: 'divider',
   },
-  getItem('Income', 'income', <AttachMoneyIcon/>, [getItem('wabi', '13'), getItem('guyya', '14')]),
+  getItem('Income', 'income', <AttachMoneyIcon/>, [
+    getItem('income', 'income')
+  ]),
   {
     type:"divider"
   },

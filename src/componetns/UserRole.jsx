@@ -52,7 +52,6 @@ const Chips=(props)=> {
     const [updating, setUpdating]=useState(props.initialValue)
     const userIn=useSelector(state=>state.logins)
     const {userRoles, setUserRoles}=useStateContext()
-    console.log("this si the Role__________--------__________", userRoles)
     const handleClick = (label) => { 
         setRole({...updating, [label]:!role[label]})
         setUpdating({...updating, [label]:!updating[label]})

@@ -8,59 +8,58 @@ import { useSelector, useDispatch } from 'react-redux';
 import PaidIcon from '@mui/icons-material/Paid';
 
 
-const TotalSalse = () => {
-  const salse=useSelector(state=>state.salse)
-  let totalSalses=salse.data.totalSalse
+const HeadCard = () => {
+  const operational=useSelector(state=>state.operationalDashboard)
   return (
     <div >
-      {salse.data &&
+      {operational.data&&
         <div className='flex justify-around items-center gap-2'>
-         <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",borderLeft:4,borderColor:"#00adef",  borderRadius:2, borderBlockColor:"#f8fafc"}}>
+         <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",borderBottom:3,borderRadius:2, borderColor:"#00adef"}}>
             <CardActionArea>
               <CardContent>
                 <Typography gutterBottom variant="h5" 
                 component="div" 
                 fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="medium">
-                 Total Number Of Accounts
+                 Total disbursed amount
                 </Typography>
                 <div className='flex justify-center gap-2 items-center'>
                 <Typography variant="h4" color="text.primary" fontWeight="bold" textAlign="center" fontSize="xlarge" fontFamily="serif">
-                  {Math.round(totalSalses.numberOfAccount).toLocaleString()}
+                  {Math.round(operational.data.totalStatus.totalApprovedAmount).toLocaleString()}
                 </Typography>
-                {/* <span className='text-black font-semibold text-center'>ETB</span> */}
+                <span className='text-black font-semibold text-center'>ETB</span>
                 </div>
               </CardContent>
             </CardActionArea>
           </Card> 
 
 
-          <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",borderLeft:4,borderColor:"#00adef",  borderRadius:2, borderBlockColor:"#f8fafc"}}>
+          <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",borderBottom:3,borderRadius:2, borderColor:"#00adef"}}>
             <CardActionArea>
               <CardContent>
                 <Typography gutterBottom variant="h5" 
                 component="div" 
                 fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="medium">
-                  Total Unique Customers
+                  Total account disbursed for
                 </Typography>
                 <Typography variant="h4" color="text.primary" fontWeight="bold" textAlign="center" fontSize="xlarge" fontFamily="serif">
-                {totalSalses.uniqueCustomer.toLocaleString()}
+                {operational.data.totalStatus.totalAccounts.toLocaleString()}
                 </Typography>
               </CardContent>
             </CardActionArea>
           </Card>
 
 
-          <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",borderLeft:4,borderColor:"#00adef",  borderRadius:2, borderBlockColor:"#f8fafc"}}>
+          <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",borderRadius:2, borderBottom:3,borderColor:"#00adef"}}>
             <CardActionArea>
               <CardContent>
                 <Typography gutterBottom variant="h5" 
                 component="div" 
                 fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="medium">
-                  Total Disbursed Amount
+                  Disbursement per day
                 </Typography>
                 <div className='flex justify-center gap-2 items-center'>
                 <Typography variant="h4" color="text.primary" textAlign="center" fontWeight="bold" fontSize="xlarge" fontFamily="serif">
-                 {Math.round(totalSalses.totalDisbursed).toLocaleString()}
+                 {Math.round(operational.data.totalStatus.totalApprovedAmount/operational.data.totalStatus.workingDay).toLocaleString()}
                 </Typography>
                 <span className='text-black font-semibold text-center'>ETB</span>
                 </div>
@@ -70,20 +69,20 @@ const TotalSalse = () => {
           </Card>
 
 
-          {/* <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",borderLeft:4,borderColor:"#00adef",  borderRadius:2 ,borderBlockColor:"#f8fafc"}}>
+          <Card sx={{ maxWidth: 300, backgroundColor:"#f8fafc",borderBottom:3,borderRadius:2, borderColor:"#00adef"}}>
             <CardActionArea>
               <CardContent>
                 <Typography gutterBottom variant="h5" 
                 component="div" 
                 fontFamily="serif" fontWeight="bold" borderColor="skyblue" textAlign="center" fontSize="medium">
-                 Total Income Generated
+                 Account per day
                 </Typography>
                 <Typography variant="h4" color="text.primary" fontWeight="bold" textAlign="center" fontSize="xlarge" fontFamily="serif">
-                {Math.round(totalSalses.income).toLocaleString()}
+                {Math.round(Number(operational.data.totalStatus.totalAccounts ) / Number(operational.data.totalStatus.workingDay)).toLocaleString()}
                 </Typography>
               </CardContent>
             </CardActionArea>
-          </Card> */}
+          </Card>
 
 
         </div>
@@ -92,4 +91,4 @@ const TotalSalse = () => {
   )
 }
 
-export default TotalSalse
+export default HeadCard

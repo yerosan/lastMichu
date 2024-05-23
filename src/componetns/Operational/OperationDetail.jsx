@@ -1,66 +1,24 @@
 import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
-import { Tooltip, IconButton, DialogContentText, DialogActions, Box } from '@mui/material';
-import DeleteIcon from "@mui/icons-material/Delete"
-import { useState } from 'react';
-import {Button, Dialog, DialogTitle, DialogContent} from "@mui/material"
-import { Edit } from '@mui/icons-material';
-import Form from './Form';
-import { useStateContext } from '../context/ContextProvider';
-import {TableFooter} from '@mui/material';
-import { allCollection } from '../features/collection/collectionSlice';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect} from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
-import Stack from '@mui/material/Stack';
-import LinearProgress from '@mui/material/LinearProgress';
-import Alert from '@mui/material/Alert';
-import config from '../config/config';
-import DetailFilter from "./Colletion/DetailFilter"
+import config from '../../config/config';
+import { operationalDetail } from '../../features/operational/operationalDetail';
+import {Button, Dialog, DialogTitle, DialogContent} from "@mui/material"
+import { Tooltip, IconButton, DialogContentText, DialogActions, Box } from '@mui/material';
+import TextField from '@mui/material/TextField';
+import { useState } from 'react';
+import DetailFilter from './DetailFilter';
+
+import DeleteIcon from "@mui/icons-material/Delete"
+// import { useState } from 'react';
+// import {Button, Dialog, DialogTitle, DialogContent} from "@mui/material"
+import { Edit } from '@mui/icons-material';
 
 import MenuItem from '@mui/material/MenuItem';
-
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { data } from 'autoprefixer';
-
-import DownloadForOfflineOutlinedIcon from '@mui/icons-material/DownloadForOfflineOutlined';
-import * as XLSX from 'xlsx';
-
-
-function createData(name, contactedCustomer, payedCustomer, unpayedCustomer,totalPayed, date) {
-  return { name, contactedCustomer, payedCustomer, unpayedCustomer,totalPayed, date };
-}
-const styles={
-  fontFamily:"serif",
-  fontWeight:"bold",
-  color:"black"
-}
-
-const footerStyles={
-   fontFamily:"arial",
-   fontWeight:"semibold",
-   color:'black'
-}
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#38bdf8",
-    color: theme.palette.common.white ,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-    fontFamily:"serif"
-  },
-}));
-
+import { useStateContext } from '../../context/ContextProvider';
+const VISIBLE_FIELDS = ['officerName', 'customerName', 'customerPhone', 'applicationStatus', 'approvedAmount', 'RejectionReason', 'approvalDate'];
 
 const callResponce = [
   {
@@ -121,65 +79,55 @@ const paymentStatus = [
 ];
 
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "hover": {
-    color: "#cbd5e1",
-    backgroundColor:"red",
+const approvalStatus = [
+  {
+    value: 'approved',
+    label: 'Approved',
   },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
+  {
+    value: 'rejected',
+    label: 'Rejected',
   },
-}));
-
-const VISIBLE_FIELDS = ['fullName', 'customerPhone', 'callResponce', 'paymentStatus', 'payedAmount', 'date'];
-
-export default function CollectionDetail() {
-  const userIn=useSelector(state=>state.logins)
-  const dispatch=useDispatch()
-  const [allcollection, setAllcollection]=useState(null)
-  const [load, setLoad]=useState(false)
-  const collection=useSelector(state=> state.collection)
-  const [rowData, setRowData]=useState({})
-  const {detailfilter, setDetailfilter}=useStateContext()
-  const {detail , setDetail}=useStateContext()
-  const [delets,setDelets]=useState(false)
-  const [deleteRow, setDeleteRow]=useState({})
-  const {userRoles,setUserRoles}=useStateContext()
-  const detailData=detailfilter
-  detailData.userId=userIn.data.userId
-  const fetchAllCollection=async()=>{
-    dispatch(allCollection({loading:true, error:"", data:null}))
-    try{
-      let Collections=await  axios.post(`${config.apiUrl}/collection/allCollection`, detailData)
-      if(Collections.data.message=="succeed"){
-         dispatch(allCollection({loading:false, error:"",data:Collections.data.data}))
-         setAllcollection(Collections.data.data)
-         setLoad(true)
-         setDetail(false)
-      }else{
-        dispatch(allCollection({loading:false, data:null, error:Collections.data.message}))
-        setDetail(false)
+  {
+      value: 'blocked',
+      label: 'Blocked',
     }
-    }catch(error){
-      dispatch(allCollection({loading:false, error:"Something went wrong", data:null}))
+];
+
+
+export default function OperationalDetail() {
+  const operationalDetails = useSelector(state => state.operationalDetail);
+  const [rowData, setRowData]=useState({})
+  const [delets,setDelets]=useState(false)
+  const {open, setOpen}=useStateContext()
+  const {detailfilter, setDetailfilter}=useStateContext()
+  const dispatch = useDispatch();
+  const dateSet = { startDate: "2024-05-15", endDate: "2024-05-21" };
+  const {detail,setDetail}=useStateContext()
+  const {dateVeriation, setDateVeriation}=useStateContext()
+
+  const fetchDetailOperation = async () => {
+    try {
+      const detailData = await axios.post(`${config.apiUrl}/operational/givenDateData`, detailfilter);
+      if (detailData.data.message === "succeed") {
+        dispatch(operationalDetail({ loading: false, error: "", data: detailData.data.data }));
+        setDetail(false)
+      } else {
+        dispatch(operationalDetail({ loading: false, error: detailData.data.message, data: null }));
+        setDetail(false)
+      }
+    } catch (error) {
+      console.log("An internal error", error);
+      dispatch(operationalDetail({ loading: false, error: "Something went wrong", data: null }));
       setDetail(false)
     }
-  }
-  const {open, setOpen}=useStateContext()
-  const handleRowClick = (params) => {
-    setRowData(params.row)
-  }
-
-  if(detail){
-    fetchAllCollection()
   }
 
   const updateData= async(data)=>{
     try{
-      let update= await axios.patch(`${config.apiUrl}/collection/update`, data)
+      let update= await axios.patch(`${config.apiUrl}/operational/operationaUpdate`, data)
       if (update.data.message=="succeed"){
-        fetchAllCollection()
+        fetchDetailOperation()
       }else(
         alert(update.data.message)
       )
@@ -194,16 +142,21 @@ export default function CollectionDetail() {
     setOpen(false)
   }
 
+  if(detail){
+    fetchDetailOperation()
+  }
+
 
   const handleDelete=async()=>{
-    let data={collectionId:rowData.collectionId, userId:rowData.userId}
+    let dataId=rowData.operationalId
     try{
-      let deleteData= await  axios.delete(`${config.apiUrl}/collection/delete`, {data})
+      let deleteData= await  axios.delete(`${config.apiUrl}/operational/deleteData/${dataId}`)
+      console.log("This is the deleteData", deleteData)
       if(deleteData.data.message=="succeed"){
-        fetchAllCollection()
+        fetchDetailOperation()
         setDelets(false)
       }else{
-        alert("Unable to delete data")
+        alert(deleteData.data.message)
         setDelets(false)
       }
   }catch(error){
@@ -211,8 +164,11 @@ export default function CollectionDetail() {
     alert('An internal error')
   }
   }
-
-
+  const handleRowClick = (params) => {
+    console.log("Row data:", params.row);
+    setRowData(params.row)
+    // Perform any additional actions with the row data here
+  };
 
   const Actions=(props)=>{
 
@@ -223,7 +179,6 @@ export default function CollectionDetail() {
     const DeleteHandler=()=>{
       setDelets(true)
     }
-
   
     return(
       <div>
@@ -243,6 +198,10 @@ export default function CollectionDetail() {
     )
   }
 
+  useEffect(() => {
+    fetchDetailOperation();
+  }, []);
+
   const columns = [
     ...VISIBLE_FIELDS.map(field => ({
       field,
@@ -258,32 +217,17 @@ export default function CollectionDetail() {
   ];
 
 
-
-
-  useEffect(()=>{
-    fetchAllCollection()
-  }, [])
-
   return (
-    <div className='h-full w-full'>
-    {collection.loading ? 
-      <div className='flex items-center justify-center h-full w-full' >
-        <Stack sx={{ width: '100%', color: 'grey.500' }}>
-          <LinearProgress color="secondary" />
-        </Stack>
-      </div>:
-    <div className='h-full w-full'>
-      <DetailFilter/>
-      {collection.error !=='' ?<Alert sx={{mt: 2, mb: 2}} severity="error">{collection.error}</Alert>:
-    load &&
-    <div className=''>
-    <Box sx={{borderBottom:1 , borderColor:"divider",height:100}}>
-       <div style={{ height:500, width: '100%'}}>
+    <div style={{ height: 650, width: '100%'}}>
+      {operationalDetails.data && (
+        <div className='h-full w-full'>
+          <DetailFilter/>
           <DataGrid
-            rows={collection.data.map((row, index) => ({ ...row, id: index }))}
+            rows={operationalDetails.data.map((row, index) => ({ ...row, id: index }))}
             columns={columns}
             slots={{ toolbar: GridToolbar }}
             onRowClick={handleRowClick}
+
             sx={{
               '& .MuiDataGrid-columnHeaders': {
                 backgroundColor:"#00adef", // Change this color to your desired background color
@@ -297,7 +241,9 @@ export default function CollectionDetail() {
             }}
           />
         </div>
-      <Dialog 
+      )}
+
+    <Dialog 
         open={open}
         onClose={open=>{setOpen(false)}}
         aria-label='dialog-title' 
@@ -311,13 +257,23 @@ export default function CollectionDetail() {
                 <TextField
                     autoFocus
                     margin="dense"
-                    id="fullname"
-                    label="Full Name"
+                    id="officerName"
+                    label="Officer Name"
                     type="text"
                     fullWidth
-                    value={rowData.fullName || ""}
+                    value={rowData.officerName || ""}
                     // onChange={(e) => setRowData({ ...rowData, fullName: e.target.value })}
                     />
+                <TextField
+                    margin="dense"
+                    id="customerName"
+                    label="Customer Name"
+                    type="text"
+                    placeholder='Enter customer Name'
+                    fullWidth
+                    value={rowData.customerName}
+                    onChange={(e) => setRowData({ ...rowData, customerName: e.target.value })}
+                />
                 <TextField
                     margin="dense"
                     id="customerPhone"
@@ -328,6 +284,7 @@ export default function CollectionDetail() {
                     value={rowData.customerPhone}
                     onChange={(e) => setRowData({ ...rowData, customerPhone: e.target.value })}
                 />
+                
                 <Box
                   component="form"
                   sx={{
@@ -338,15 +295,15 @@ export default function CollectionDetail() {
                 >
                   <div>
                     <TextField
-                      id="callResponce"
+                      id="applicationStatus"
                       select
-                      label="Call responce"
-                      name='callResponce'
-                      value={rowData.callResponce}
+                      label="Application Status"
+                      name='applicationStatus'
+                      value={rowData.applicationStatus}
                       placeholder='Select call response'
-                      onChange={(e) => setRowData({ ...rowData, callResponce: e.target.value })}
+                      onChange={(e) => setRowData({ ...rowData, applicationStatus: e.target.value })}
                     >
-                      {callResponce.map((option) => (
+                      {approvalStatus.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
                           {option.label}
                         </MenuItem>
@@ -368,15 +325,15 @@ export default function CollectionDetail() {
                 >
                   <div>
                     <TextField
-                      id="paymentStatus"
+                      id="RejectionReason"
                       select
                       // name='paymentStatus'
-                      label="Payment type"
-                      value={rowData.paymentStatus}
-                      placeholder='select payment status'
-                      onChange={(e) => setRowData({ ...rowData, paymentStatus: e.target.value })}
+                      label="Rejection Reason"
+                      value={rowData.RejectionReason}
+                      placeholder='select rejection reason'
+                      onChange={(e) => setRowData({ ...rowData, RejectionReason: e.target.value })}
                     >
-                      {paymentStatus.map((option) => (
+                      {approvalStatus.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
                           {option.label}
                         </MenuItem>
@@ -386,21 +343,21 @@ export default function CollectionDetail() {
                 </Box>
                 <TextField
                     margin='dense'
-                    id="paidAmount"
-                    label="Paid amount"
+                    id="approvedAmount"
+                    label="Approved Amount"
                     type="text"
                     fullWidth
-                    value={rowData.payedAmount}
-                    onChange={(e) => setRowData({ ...rowData, payedAmount: e.target.value })}
+                    value={rowData.approvedAmount}
+                    onChange={(e) => setRowData({ ...rowData, approvedAmount: e.target.value })}
                 />
                 <TextField
                     margin="dense"
-                    id="date"
-                    label="Date"
+                    id="approvalDate"
+                    label="Approval Date"
                     type="date"
                     fullWidth
-                    value={rowData.date}
-                    onChange={(e) => setRowData({ ...rowData, date: e.target.value })}
+                    value={rowData.approvalDate}
+                    onChange={(e) => setRowData({ ...rowData, approvalDate: e.target.value })}
                 />
             </div>
         </div>
@@ -426,7 +383,7 @@ export default function CollectionDetail() {
             color:'secondary.main',
           }}>
             <p 
-            className='text-center font-semibold text-lg'>Are you sure to delete {rowData.fullName}'s data on {rowData.date} date ?
+            className='text-center font-semibold text-lg'>Are you sure to delete {rowData.officerName}'s data on {rowData.approvalDate} date ?
             </p>
           </DialogTitle>
             <DialogActions>
@@ -434,12 +391,6 @@ export default function CollectionDetail() {
               <Button sx={{textTransform: 'capitalize'}}  autoFocus onClick={()=>setDelets(false)}>No</Button>
             </DialogActions>
         </Dialog>
-
-
-    </Box>
     </div>
-  }
-   </div>}
-  </div>
   );
 }

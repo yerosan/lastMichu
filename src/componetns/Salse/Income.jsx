@@ -12,7 +12,7 @@ Chart.register(ChartDataLabels);
 
 Chart.register(...registerables);
 
-const Salsechart = () => {
+const Income = () => {
 
   const salses=useSelector(state=>state.salse)
   const collecte=salses.data
@@ -24,21 +24,20 @@ const Salsechart = () => {
   let combinedDistrictName=[]
   const achivedData=[]
   const targetData=[]
+ 
   const valuess= datas.map((district, index)=>{
     if(salses.data.salesTargets[districtName[index]].dataStatus==0){
     }else{
       combinedDistrictName.push(districtName[index])
-      achivedData.push(district.disbursedAmount),
-      targetData.push(salses.data.salesTargets[districtName[index]].dataStatus[0].totalDisbursed)
+      achivedData.push(district.income),
+      targetData.push(salses.data.salesTargets[districtName[index]].dataStatus[0].income)
     }
 })
-
-
   const chartData = {
     labels: combinedDistrictName,
     datasets: [
       {
-        label: 'Targeted disbursement',
+        label: 'Targeted Income',
         borderWidth: 1,
         fill:true,
         borderColor:"#e38524",
@@ -49,7 +48,7 @@ const Salsechart = () => {
         },
       },
       {
-        label: 'Actual disbursement',
+        label: 'Actual Income',
         fill:true,
         borderColor:"#00adef",
         backgroundColor: '#00adef',
@@ -88,13 +87,13 @@ const Salsechart = () => {
       datalabels: {
         display: function(context) {
           // Only display data labels for the actual bars
-          return context.dataset.label === 'Actual disbursement';
+          return context.dataset.label === 'Actual Income';
         },
       },
 
       title: {
               display: true,
-              text: 'Disbursed Amount per District',
+              text: 'Income per District',
               font: {
                 size: 20
             }
@@ -121,4 +120,4 @@ const Salsechart = () => {
   return (salses.data && <Bar data={chartData} options={options} />);
 };
 
-export default Salsechart;
+export default Income;

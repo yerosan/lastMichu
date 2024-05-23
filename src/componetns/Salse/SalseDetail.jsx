@@ -24,6 +24,12 @@ import config from '../../config/config';
 import { useStateContext } from '../../context/ContextProvider';
 import { allSalse } from '../../features/salse/salseSlice';
 import SalseFilter from './SalseFilter';
+import DownloadForOfflineOutlinedIcon from '@mui/icons-material/DownloadForOfflineOutlined';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import * as XLSX from 'xlsx';
+// import { CSVWriter } from 'react-csv';
+
+import { CSVLink, CSVDownload } from "react-csv";
 
 import MenuItem from '@mui/material/MenuItem';
 import { data } from 'autoprefixer';
@@ -56,64 +62,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 
-// const callResponce = [
-//   {
-//     value: 'Promised to pay',
-//     label: 'Promised to pay',
-//   },
-//   {
-//     value: 'paid',
-//     label: 'Paid',
-//   },
-//   {
-//     value: 'Not answering',
-//     label: 'Not answering',
-//   },
-//   {
-//     value: 'Refused to pay',
-//     label: 'Refused to pay',
-//   },
-//   {
-//     value:"Out of service",
-//     label:"Out of service"
-//   },
-//   {
-//     value:"Hung up",
-//     label:"Hung up"
-//   },
-//   {
-//     value:"Line busy",
-//     label:"Line busy"
-//   },
-//   {
-//     value:"Incorrect number",
-//     label:"Incorrect number"
-//   },
-//   {
-//     value:"Switched off",
-//     label:"Switched off"
-//   },
-//   {
-//     value:"Call forwarding",
-//     label:"Call forwarding"
-//   },
-//   {
-//     value:"Not working",
-//     label:"Not working"
-//   }
-// ];
-
-// const paymentStatus = [
-//   {
-//     value: 'Fully paid',
-//     label: 'Fully paid',
-//   },
-//   {
-//     value: 'Partially paid',
-//     label: 'Partially paid',
-//   }
-// ];
-
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "hover": {
@@ -126,7 +74,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const totalStatus={"totalRejected":20000,"totalApproved":3000,"totalApplicant":4000}
 
 export default function SalseDetail() {
   const userIn=useSelector(state=>state.logins)
@@ -138,8 +85,15 @@ export default function SalseDetail() {
   const {salseFilter, setSalseFilter}=useStateContext()
   const {detail , setDetail}=useStateContext()
   const [delets,setDelets]=useState(false)
+  const [userDistrict, setUserDistrict]=useState(null)
   const [deleteRow, setDeleteRow]=useState({})
+  let [userDistrictss, setUserDistrictss]= useState([])
+  const [download, setDownload]=useState(null)
+  const Download=[]
   const detailData=salseFilter
+
+  const VISIBLE_FIELDS= ["fullName","district","uniqueCustomer","numberOfAccount","disbursedAmount","income","date"]
+  
   const fetchAllSalse=async()=>{
     dispatch(allSalse({loading:true, error:"", data:null}))
     try{
@@ -158,9 +112,43 @@ export default function SalseDetail() {
       setDetail(false)
     }
   }
+
+
+
+
+    const getDistrict= async(userId)=>{
+      try{
+        let usersDistrict= await axios.get(`${config.apiUrl}/salse/userDistrict/${userId}`)
+        const Districtsss=[]
+        if(usersDistrict.data.message=="succeed"){
+          const data=usersDistrict.data.data
+          let datas= Object.keys(usersDistrict.data.data)
+          await Promise.all(datas.map(district=>{
+            if(data[district]===true){
+              Districtsss.push(
+                {value:district,
+                 label:district
+                }
+              )
+            }
+          }))
+         setUserDistrict(usersDistrict.data.data)
+         setUserDistrictss(Districtsss)
+        setOpen(true)
+        }else{
+          setUserDistrict(usersDistrict.data.message)
+          setErrors(true)
+        }
+      }catch(error){
+        console.log("The error", error)
+      }
+    }
+
+
+
   const {open, setOpen}=useStateContext()
-  const handleRowClick = (rowData) => {
-    setRowData(rowData)
+  const handleRowClick = (params) => {
+    setRowData(params.row)
   }
 
   if(detail){
@@ -186,10 +174,6 @@ export default function SalseDetail() {
     setOpen(false)
   }
 
-  // if(load){
-  //   console.log("theloadSalse", salse)
-  // }
-
 
   const handleDelete=async()=>{
     let data={salseId:rowData.salseId, userId:rowData.userId}
@@ -211,10 +195,11 @@ export default function SalseDetail() {
 
 
 
-  const Actions=(props)=>{
 
+  const Actions=(props)=>{
+    
     const EditDas=()=>{
-      setOpen(true)
+      getDistrict(props.row.userId)
     }
 
     const DeleteHandler=()=>{
@@ -240,6 +225,20 @@ export default function SalseDetail() {
   }
 
 
+  const columns = [
+    ...VISIBLE_FIELDS.map(field => ({
+      field,
+      headerName: field.charAt(0).toUpperCase() + field.slice(1),
+      width: 150,
+    })),
+    {
+      field: 'action',
+      headerName: 'Actions',
+      width: 150,
+      renderCell: (params) => <Actions row={params.row} />,
+    },
+  ];
+
 
 
   useEffect(()=>{
@@ -259,45 +258,25 @@ export default function SalseDetail() {
     load &&
     <div className=''>
     <Box sx={{borderBottom:1 , borderColor:"divider",height:100}}>
-      <TableContainer component={Paper} sx={{maxHeight:540}}>
-        <Table sx={{ minWidth: 650 }} stickyHeader aria-label="simple table">
-          <TableHead>
-            <TableRow style={styles}>
-              <StyledTableCell style={styles} >Officer Name</StyledTableCell>
-              <StyledTableCell align='left' style={styles} >Unique Customer</StyledTableCell>
-              <StyledTableCell align="left" style={styles} >Number of Account</StyledTableCell>
-              <StyledTableCell align="left" style={styles} >Disbursed Amount</StyledTableCell>
-              <StyledTableCell align="left" style={styles} >Income</StyledTableCell>
-              <StyledTableCell align="left" style={styles} >Report Date</StyledTableCell>
-              <StyledTableCell align="center" style={styles} >Action</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {salse.map((row,id) => (
-              <StyledTableRow
-                key={id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0, fontFamily:"serif" } }}
-                onClick={(event) => handleRowClick(row)}
-                className={{
-                }}
-                hover
-              >
-                <StyledTableCell component="th" scope="row">
-                  {row.fullName}
-                </StyledTableCell>
-                <StyledTableCell align="left">{row.uniqueCustomer}</StyledTableCell>
-                <StyledTableCell align="left">{row.numberOfAccount}</StyledTableCell>
-                <StyledTableCell align="left">{row.totalDisbursed}</StyledTableCell>
-                <StyledTableCell align="left">{row.income}</StyledTableCell>
-                <StyledTableCell align="left">{row.date}</StyledTableCell>
-                <StyledTableCell align="center"><Actions row={row}/> </StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-          
-        </Table>
-      </TableContainer>
-
+       <div style={{ height:500, width: '100%'}}>
+          <DataGrid
+            rows={salse.map((row, index) => ({ ...row, id: index }))}
+            columns={columns}
+            slots={{ toolbar: GridToolbar }}
+            onRowClick={handleRowClick}
+            sx={{
+              '& .MuiDataGrid-columnHeaders': {
+                backgroundColor:"#00adef", // Change this color to your desired background color
+                // color: "fff", 
+                fontFamily:"serif",
+                // fontWeight:"semibold",
+                fontWeight:"bold",
+                color:"black",
+                
+              },
+            }}
+          />
+        </div>
       <Dialog 
         open={open}
         onClose={open=>{setOpen(false)}}
@@ -319,6 +298,31 @@ export default function SalseDetail() {
                     value={rowData.fullName || ""}
                     // onChange={(e) => setRowData({ ...rowData, fullName: e.target.value })}
                     />
+                <Box
+                  component="form"
+                  sx={{
+                    '& .MuiTextField-root': { my:1 ,width: '100%' },
+                  }}
+                  noValidate
+                  autoComplete="off"
+                >
+                <TextField
+                  id="district"
+                  select
+                  name='district'
+                  label="District"
+                  value={rowData.district}
+                  placeholder='select district'
+                  onChange={(e) => setRowData({ ...rowData, district: e.target.value })}
+                >
+                  {userDistrictss.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+
+                </Box>
                 <TextField
                     margin="dense"
                     id="uniqueCustomer"
@@ -415,7 +419,7 @@ export default function SalseDetail() {
             color:'secondary.main',
           }}>
             <p 
-            className='text-center font-semibold text-lg'>Are you sure to delete {rowData.fullName}'s data on {rowData.date} date ?
+            className='text-center font-semibold text-lg'>Are you sure to delete <span className='font-light te'>{rowData.fullName}'s</span> data on {rowData.date} date ?
             </p>
           </DialogTitle>
             <DialogActions>

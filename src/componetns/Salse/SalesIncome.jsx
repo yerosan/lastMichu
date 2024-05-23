@@ -14,11 +14,12 @@ import WeeklySalse from './WeeklySalse'
 import MonthlySalse from './MonthlySalses'
 import DistrictDisplay from './DistrictDisplay'
 import Income from './Income'
-
+import SalesIncome from './IncomeHead'
 import BarChart from './ActualTargetRatio'
+import DashboardFilter from '../Colletion/DashboardFilter'
 
 
-const SalseDashboard = () => {
+const IncomeDashboard = () => {
   const salse= useSelector(state=>state.salse)
   const dispatch=useDispatch()
   const [load, setLoad]=useState(false)
@@ -107,11 +108,6 @@ const SalseDashboard = () => {
     timeIntervalSalse(timeBase)
   }
 
-  const actualTargetdata = {
-    labels: ['January', 'February', 'March', 'April', 'May'],
-    targets: [100, 120, 150, 130, 170],
-    actuals: [90, 110, 130, 115, 160],
-  };
 
   useEffect(()=>{
     weekFunction()
@@ -136,24 +132,19 @@ const SalseDashboard = () => {
         <div className='w-full h-full flex flex-col flex-1'>
           <div className='flex flex-auto'>
              {dashboard && <Profile/>}
-             <p className='font-semibold w-full text-center text-2xl pb-2 font-arial text-black border-b-2 rounded-lg'>Michu Loan Sales Dashboard</p>
+             <p className='font-semibold w-full text-center text-2xl pb-2 font-arial text-black border-b-2 rounded-lg'>Michu Loan Income Dashboard</p>
           </div>
           
           <div className='mt-2'>
-            <TotalSalse/>
+            <SalesIncome/>
           </div>
-          <div className="flex py-2 flex-1 h-full">
-          
+          <div className="flex py-2 flex-1 h-full w-full">
             <div className='w-[80%] flex flex-col justify-around h-full flex-auto'>
-              <div className='h-[90%] flex justify-end items-center '>
-                {/* <h1>Monthly Performance</h1>
-                <BarChart/> */}
-                {/* <DistrictDisplay/> */}
+              <div className='h-[90%] flex justify-end items-center'>
                 <Income/>
               </div>
-              <MonthlySalse/>
             </div>
-            <WeeklySalse/>
+            <div className='flex justify-start items-start'><DashboardFilter/></div>
           </div>
         
         </div> }
@@ -162,4 +153,4 @@ const SalseDashboard = () => {
   )
 }
 
-export default SalseDashboard
+export default IncomeDashboard

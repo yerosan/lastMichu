@@ -49,8 +49,8 @@ export const data = {
       label: 'Michu Loan Disbursment',
       data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
       // borderColor: 'rgb(53, 162, 235)',
-      borderColor:"#00abef1f",
-      backgroundColor: '#00abef7a',
+      borderColor:"#00abe",
+      backgroundColor: '#00abe',
       // backgroundColor:"rgb(0, 173, 239)"
     },
   ],

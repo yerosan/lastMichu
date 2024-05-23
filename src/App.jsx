@@ -9,8 +9,6 @@ import { BrowserRouter,Route, Routes } from 'react-router-dom'
 import Disbursement from './componetns/Disbursement'
 import Individual from './componetns/Individual'
 import ScrolableTable from './componetns/ScrolableTable'
-// import DataTable from './componetns/Table'
-// import CustomizedTables from './componetns/TheamePlate'
 import CoreData from './componetns/CoreData'
 import EditableTable from './componetns/EditableTable'
 import RegisterForm from './componetns/Form'
@@ -23,7 +21,7 @@ import { cyan, purple } from '@mui/material/colors';
 import CollectionFromExist from './componetns/ExistForm'
 import CollectionTab from './componetns/CollectionTab'
 import CreateUser from './componetns/CreateUser'
-import OperationalTab from './componetns/OperationalTab'
+// import OperationalTab from './componetns/OperationalTab'
 import CollectionPerformance from './componetns/CollectionPerformance'
 import DataGridDemo from './componetns/DataGrid'
 import Collection from './componetns/Collection'
@@ -38,6 +36,14 @@ import Salseform from './componetns/Salse/SalseForm'
 import SalseDashboard from './componetns/Salse/Salse'
 import SalseTab from './componetns/Salse/SalseTab'
 import SalesDisplay from './SalesDisplay'
+import Operational from './componetns/Operational/Operational'
+import OperationalDisplay from './OperationalDisplay'
+// import OperationalTab from './componetns/Operational/OperationalTab'
+import OperationalTab from './componetns/Operational/OperationalTab'
+
+import IncomeDashboard from './componetns/Salse/SalesIncome'
+
+import OperaionalPerformance from './componetns/Operational/OperarionalPerformance'
 const theme = createTheme({
   palette: {
     primary: {
@@ -66,13 +72,11 @@ const App = () => {
     userRole()
     }
   },[login])
-  {/* <Navigate to="/michus"></Navigate> */}
         
   return (
     // <div></div>
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        {/* <Router> */}
         {login ? <div>
           <Navigate to= "/michu/login"></Navigate>
           <LoginPage/>
@@ -80,14 +84,6 @@ const App = () => {
         <div>
         {userRoles ? 
         <div className="flex relative h-full w-full bg-slate-200">
-          {/* {(userRoles.collectionUser)? 
-          <div className="flex h-screen w-full bg-slate-200">
-            <Navigate to= "/michu/form/collectionForm"></Navigate>
-            <Navbar/>
-            <div className='mt-14 w-full items-center px-6'>
-               <CollectionTab/>
-            </div>
-          </div>:  */}
         <div className=' flex relative h-full w-full bg-slate-200' >
           {navs.length==0 ? 
           <Navigate to= "michu/dashboard"></Navigate>
@@ -107,18 +103,20 @@ const App = () => {
             <div className={`${menu ? "mt-14 px-4 w-full max-h-screen":"mt-14 px-4 w-full max-h-screen"}`}>
               <Routes>
                 <Route path='/michu/login' element={<LoginPage/>}/>
-                <Route path='/michu/dashboard' element={<Collection/>}/>
+                <Route path='/michu/dashboard' element={<Operational/>}/>
                 <Route path='/michu/dashboard/screen' element={<Display/>}/>
-                <Route path='michu/dashboard/disbursement' element={<Collection/>}/>
+                <Route path='michu/dashboard/disbursement' element={<Operational/>}/>
                 <Route path='michu/dashboard' element={<Collection/>}/>
                 <Route path='michu/dashboard/sales' element={<SalseDashboard/>}/>
                 <Route path='michu/dashboard/collection' element={<Collection/>}/>
                 <Route path ='/michu/screen/salesScreen' element={<SalesDisplay/>}/>
                 <Route path ="/michu/screen/collectionScreen" element={<Display/>}/>
-                <Route path='/michu/performance/operationalPerformance' element={<CollectionPerformance/>}/>
+                <Route path ="/michu/screen/operationalScreen" element={<OperationalDisplay/>}/>
+                <Route path='/michu/performance/operationalPerformance' element={<OperaionalPerformance/>}/>
                 <Route path="/michu/performance/collectionPerformance" element={<CollectionPerformance/>}/>
                 <Route path="/michu/performance/salesPerformance" element={<SalsePerformance/>}/>
-                <Route path='/michu/form/operationalForm' element={<CollectionTab/>}/>
+                <Route path="/michu/income/income" element={<IncomeDashboard/>}/>
+                <Route path='/michu/form/operationalForm' element={<OperationalTab/>}/>
                 <Route path='/michu/form/collectionForm' element={<CollectionTab/>}/>
                 <Route path='/michu/form/salesForm' element={<SalseTab/>}/>
                 <Route path="michu/setting/addUser" element={<User/>}></Route>
