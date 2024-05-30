@@ -43,8 +43,8 @@ const styles={
 
 const footerStyles={
    fontFamily:"arial",
-   fontWeight:"semibold",
-   color:'black'
+   fontWeight:"bold",
+   color:"#e38524"
 }
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -206,8 +206,6 @@ export default function Individualcollection() {
   }
 
   const handleXlsxDownload = () => {
-    // const data= salse.map((row, id))
-    console.log("This is all Collection_----------________", allCollection)
     const worksheet = XLSX.utils.json_to_sheet(allcollection);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'My Data');
@@ -222,6 +220,9 @@ export default function Individualcollection() {
   useEffect(()=>{
     fetchAllCollection()
   }, [])
+
+  const totalPayedAmount = allcollection ? allcollection.reduce((sum, row) => sum + row.payedAmount, 0) : 0;
+  const totalCustomerCount = allcollection ? allcollection.length : 0;
   return (
     <div className='h-full w-full'>
     {collection.loading ? 
@@ -271,6 +272,15 @@ export default function Individualcollection() {
               </StyledTableRow>
             ))}
           </TableBody>
+
+            <TableFooter>
+              <TableRow>
+                <StyledTableCell colSpan={2} align="right" style={footerStyles}>Total Contacted Customers</StyledTableCell>
+                <StyledTableCell align="left" style={footerStyles}>{totalCustomerCount}</StyledTableCell>
+                <StyledTableCell colSpan={2} align="right" style={footerStyles}>Total Collected Amount</StyledTableCell>
+                <StyledTableCell align="left" style={footerStyles}>{totalPayedAmount}</StyledTableCell>
+              </TableRow>
+            </TableFooter>
           
         </Table>
       </TableContainer>
