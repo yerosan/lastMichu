@@ -74,7 +74,7 @@ const IndividualStatus = () => {
   const {filter, setFilter}=useStateContext()
   const [rankedData, setRankedData] = useState([])
   const {dashboard, setDashboard}=useStateContext()
-  const [maxTableHeight, setMaxTableHeight] = useState(600);
+  const {maxTableHeight, setMaxTableHeight} = useStateContext();
   const fetchOperationalPerUser=async()=>{
     try{
       const operationals=await axios.post(`${config.apiUrl}/operational/userStatus`, dateRanges)

@@ -3,9 +3,6 @@ import React from 'react'
 import {Box, Tab} from "@mui/material"
 import {TabContext, TabList, TabPanel} from "@mui/lab"
 import { useState } from 'react'
-// import Individual from './Individual'
-// import ApprovalDetail from "./ApprovalDetail"
-// import FavoriteIcon from "@mui/icons-material/Favorite"
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
 import AutoAwesomeMotionIcon from '@mui/icons-material/AutoAwesomeMotion'
 import SalseDetail from './SalseDetail'

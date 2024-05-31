@@ -148,7 +148,6 @@ const Actions=(props)=>{
   )
 }
 
-const totalStatus={"totalRejected":20000,"totalApproved":3000,"totalApplicant":4000}
 
 export default function Individualcollection() {
   const currentDate= new Date()
@@ -241,7 +240,9 @@ export default function Individualcollection() {
           <TableHead>
             <TableRow style={styles}>
               <StyledTableCell style={styles} >Officer Name</StyledTableCell>
+              <StyledTableCell align='left' style={styles} >Customer Name</StyledTableCell>
               <StyledTableCell align='left' style={styles} >Customer Phone</StyledTableCell>
+              <StyledTableCell align='left' style={styles} >Customer Account</StyledTableCell>
               <StyledTableCell align="left" style={styles} >Call Responce</StyledTableCell>
               <StyledTableCell align="left" style={styles} >Payment Status</StyledTableCell>
               <StyledTableCell align="left" style={styles} >Paid Amount</StyledTableCell>
@@ -263,7 +264,9 @@ export default function Individualcollection() {
                 <StyledTableCell component="th" scope="row">
                   {row.fullName}
                 </StyledTableCell>
+                <StyledTableCell align="left">{row.customerName}</StyledTableCell>
                 <StyledTableCell align="left">{row.customerPhone}</StyledTableCell>
+                <StyledTableCell align="left">{row.customerAccount}</StyledTableCell>
                 <StyledTableCell align="left">{row.callResponce}</StyledTableCell>
                 <StyledTableCell align="left">{row.paymentStatus}</StyledTableCell>
                 <StyledTableCell align="left">{row.payedAmount}</StyledTableCell>
@@ -311,6 +314,17 @@ export default function Individualcollection() {
                     />
                 <TextField
                     margin="dense"
+                    id="customerName"
+                    label="Customer name"
+                    type="text"
+                    placeholder='Enter customer name'
+                    fullWidth
+                    value={rowData.customerName}
+                    onChange={(e) => setRowData({ ...rowData, customerName: e.target.value })}
+                />
+
+                <TextField
+                    margin="dense"
                     id="customerPhone"
                     label="Customer Phone"
                     type="text"
@@ -319,7 +333,19 @@ export default function Individualcollection() {
                     value={rowData.customerPhone}
                     onChange={(e) => setRowData({ ...rowData, customerPhone: e.target.value })}
                 />
-                <Box
+                <TextField
+                    margin="dense"
+                    id="customerAccount"
+                    label="Customer account"
+                    type="text"
+                    placeholder='Enter customer account'
+                    fullWidth
+                    value={rowData.customerAccount}
+                    onChange={(e) => setRowData({ ...rowData, customerAccount: e.target.value })}
+                />
+            </div>
+            <div className='flex flex-col gap-1'>
+              <Box
                   component="form"
                   sx={{
                     '& .MuiTextField-root': { my:1 ,width: '100%' },
@@ -345,8 +371,6 @@ export default function Individualcollection() {
                     </TextField>
                   </div>
                 </Box>
-            </div>
-            <div className='flex flex-col gap-2'>
 
 
                 <Box

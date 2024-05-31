@@ -115,7 +115,7 @@ const App = () => {
                 <Route path='/michu/performance/operationalPerformance' element={<OperaionalPerformance/>}/>
                 <Route path="/michu/performance/collectionPerformance" element={<CollectionPerformance/>}/>
                 <Route path="/michu/performance/salesPerformance" element={<SalsePerformance/>}/>
-                <Route path="/michu/income/income" element={<IncomeDashboard/>}/>
+                <Route path="/michu/incomes/income" element={<IncomeDashboard/>}/>
                 <Route path='/michu/form/operationalForm' element={<OperationalTab/>}/>
                 <Route path='/michu/form/collectionForm' element={<CollectionTab/>}/>
                 <Route path='/michu/form/salesForm' element={<SalseTab/>}/>

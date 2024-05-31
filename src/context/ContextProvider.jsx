@@ -78,8 +78,10 @@ export const ContextProvider = ({children}) => {
        const [district, setDistrict]=useState(initialDistrict)
        let   [userDistrictss, setUserDistrictss]=useState([])
        const [districtList, setDistrictList]=useState(initialDistrict)
+       const [maxTableHeight, setMaxTableHeight] = useState(560);
        const [count, setCount]=useState(1)
        const dispatch=useDispatch()
+
 
        useEffect(()=>{
         const intervalId= setInterval(()=>{
@@ -116,7 +118,9 @@ export const ContextProvider = ({children}) => {
         district, setDistrict,
         userDistrictss,setUserDistrictss,
         districtList, setDistrictList,
-        count, setCount
+        count, setCount,
+        maxTableHeight,
+        setMaxTableHeight
        }
     }
     >

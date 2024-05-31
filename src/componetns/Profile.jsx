@@ -26,6 +26,7 @@ import { useNavigate } from 'react-router-dom';
 export default function Profile() {
   const [anchorEl, setAnchorEl] = useState(null);
   const {dashboard, setDashboard}=useStateContext()
+  const {maxTableHeight, setMaxTableHeight} = useStateContext();
   const {navs, setNavs}=useStateContext()
   const [dateRange, setDateRange]=useState('')
   const {login, setLogin}=useStateContext()
@@ -54,6 +55,7 @@ export default function Profile() {
     if(value=="logout"){
         handleSingout()
         setDashboard(false)
+        setMaxTableHeight(560)
 
     }
 

@@ -16,7 +16,7 @@ import { Edit } from '@mui/icons-material';
 
 import MenuItem from '@mui/material/MenuItem';
 import { useStateContext } from '../../context/ContextProvider';
-const VISIBLE_FIELDS = ['officerName', 'customerName', 'customerPhone', 'applicationStatus', 'approvedAmount', 'RejectionReason', 'approvalDate'];
+const VISIBLE_FIELDS = ['officerName','customerId', 'customerName', 'customerPhone','callStatus', 'applicationStatus', 'approvedAmount', 'RejectionReason', 'approvalDate'];
 export default function UserDetail() {
   const operationalDetails = useSelector(state => state.operationalDetail);
   const [rowData, setRowData]=useState({})

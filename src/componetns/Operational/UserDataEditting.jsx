@@ -18,7 +18,7 @@ import { Edit } from '@mui/icons-material';
 
 import MenuItem from '@mui/material/MenuItem';
 import { useStateContext } from '../../context/ContextProvider';
-const VISIBLE_FIELDS = ['officerName', 'customerName', 'customerPhone', 'applicationStatus', 'approvedAmount', 'RejectionReason', 'approvalDate'];
+const VISIBLE_FIELDS = ['officerName',"customerId", 'customerName', 'customerPhone','callStatus', 'applicationStatus', 'approvedAmount', 'RejectionReason', 'approvalDate'];
 
 const approvalStatus = [
   {
@@ -200,6 +200,17 @@ export default function UserDataEditting() {
                     />
                 <TextField
                     margin="dense"
+                    id="customerId"
+                    label="Customer Id"
+                    type="text"
+                    placeholder='Enter customer id'
+                    fullWidth
+                    value={rowData.customerId}
+                    onChange={(e) => setRowData({ ...rowData, customerId: e.target.value })}
+                />
+
+                <TextField
+                    margin="dense"
                     id="customerName"
                     label="Customer Name"
                     type="text"
@@ -248,6 +259,27 @@ export default function UserDataEditting() {
             </div>
             <div className='flex flex-col gap-2'>
 
+            <Box
+                  component="form"
+                  sx={{
+                    '& .MuiTextField-root': { my:1 ,width: '100%' },
+                  }}
+                  noValidate
+                  autoComplete="off"
+                >
+                  <div>
+                    <TextField
+                      id="callStatus"
+                      name='callStatus'
+                      label="Call Status"
+                      value={rowData.callStatus}
+                      placeholder='Enter call status'
+                      onChange={(e) => setRowData({ ...rowData, callStatus: e.target.value })}
+                    >
+                    </TextField>
+                  </div>
+                </Box>
+
 
                 <Box
                   component="form"
@@ -260,18 +292,12 @@ export default function UserDataEditting() {
                   <div>
                     <TextField
                       id="RejectionReason"
-                      select
-                      // name='paymentStatus'
+                      name='RejectionReason'
                       label="Rejection Reason"
                       value={rowData.RejectionReason}
-                      placeholder='select rejection reason'
+                      placeholder='Enter rejection reason'
                       onChange={(e) => setRowData({ ...rowData, RejectionReason: e.target.value })}
                     >
-                      {approvalStatus.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
                     </TextField>
                   </div>
                 </Box>

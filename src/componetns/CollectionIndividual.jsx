@@ -74,6 +74,7 @@ export default function CollectionIndividual() {
   const {filter, setFilter}=useStateContext()
   const [rankedData, setRankedData] = useState([]);
   const {dashboard, setDashboard}=useStateContext()
+  const {maxTableHeight, setMaxTableHeight} = useStateContext();
   const fetchCollectionPerUser=async()=>{
     try{
       const collections=await axios.post(`${config.apiUrl}/collection/customer`, dateRanges)
@@ -98,13 +99,12 @@ export default function CollectionIndividual() {
   if(filter){
     fetchCollectionPerUser()
   }
-  const [maxTableHeight, setMaxTableHeight] = useState(600);
   useEffect(() => {
     const handleResize = () => {
       if(Window.innerHeight>1200){
         setMaxTableHeight(840);
       }else{
-        setMaxTableHeight(600)
+        setMaxTableHeight(760)
       }
     };
 

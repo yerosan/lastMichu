@@ -141,7 +141,7 @@ const Collection = () => {
           <div className="flex py-2 flex-1 h-full">
           
             <div className='w-[80%] flex flex-col justify-around h-full flex-auto'>
-              <div className='h-[100%] flex justify-end items-center '>
+              <div className='h-[90%] flex justify-end items-center '>
                 <BarChart/>
               </div>
               <BottomCard/>

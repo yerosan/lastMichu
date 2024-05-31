@@ -18,7 +18,7 @@ import { Edit } from '@mui/icons-material';
 
 import MenuItem from '@mui/material/MenuItem';
 import { useStateContext } from '../../context/ContextProvider';
-const VISIBLE_FIELDS = ['officerName', 'customerName', 'customerPhone', 'applicationStatus', 'approvedAmount', 'RejectionReason', 'approvalDate'];
+const VISIBLE_FIELDS = ['officerName',"customerId", 'customerName', 'customerPhone',"callStatus", 'applicationStatus', 'approvedAmount', 'RejectionReason', 'approvalDate'];
 
 const callResponce = [
   {
@@ -264,6 +264,18 @@ export default function OperationalDetail() {
                     value={rowData.officerName || ""}
                     // onChange={(e) => setRowData({ ...rowData, fullName: e.target.value })}
                     />
+                  
+                  <TextField
+                    margin="dense"
+                    id="customerId"
+                    label="Customer Id"
+                    type="text"
+                    placeholder='Enter customer id'
+                    fullWidth
+                    value={rowData.customerId}
+                    onChange={(e) => setRowData({ ...rowData, customerId: e.target.value })}
+                />
+
                 <TextField
                     margin="dense"
                     id="customerName"
@@ -314,6 +326,17 @@ export default function OperationalDetail() {
             </div>
             <div className='flex flex-col gap-2'>
 
+                <TextField
+                    margin='dense'
+                    id="callStatus"
+                    label="Call Status"
+                    type="text"
+                    fullWidth
+                    value={rowData.callStatus}
+                    onChange={(e) => setRowData({ ...rowData, callStatus: e.target.value })}
+                />
+
+
 
                 <Box
                   component="form"
@@ -326,18 +349,12 @@ export default function OperationalDetail() {
                   <div>
                     <TextField
                       id="RejectionReason"
-                      select
-                      // name='paymentStatus'
+                      name='RejectionReason'
                       label="Rejection Reason"
                       value={rowData.RejectionReason}
                       placeholder='select rejection reason'
                       onChange={(e) => setRowData({ ...rowData, RejectionReason: e.target.value })}
                     >
-                      {approvalStatus.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
                     </TextField>
                   </div>
                 </Box>

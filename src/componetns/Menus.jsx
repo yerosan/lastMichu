@@ -20,10 +20,6 @@ function getItem(label, key, icon, children, type) {
     type,
   };
 }
-
-// <MailOutlined />
-// [getItem('disbursement', 'disbursement'), getItem('disbursement', 'disbursement1')]
-//  null, [getItem('collection', 'collection'), getItem('collection', '4collection')]
 const items = [
   getItem('Dashboard', 'dashboard', <DashboardOutlinedIcon/>, [
     getItem('disbursement', 'disbursement', null), 
@@ -41,7 +37,7 @@ const items = [
   {
     type: 'divider',
   },
-  getItem('Income', 'income', <AttachMoneyIcon/>, [
+  getItem('Incomes', 'incomes', <AttachMoneyIcon/>, [
     getItem('income', 'income')
   ]),
   {
@@ -82,10 +78,6 @@ const collectionItems= [
   {
     type: 'divider',
   },
-  // getItem('Income', 'income', <AttachMoneyIcon/>, [getItem('wabi', '13'), getItem('guyya', '14')]),
-  // {
-  //   type:"divider"
-  // },
   getItem('Forms', 'form', <InputIcon />, [
     getItem('collection', 'collectionForm'),
   ]),
@@ -120,10 +112,6 @@ const salseItems = [
   {
     type: 'divider',
   },
-  // getItem('Income', 'income', <AttachMoneyIcon/>, [getItem('wabi', '13'), getItem('guyya', '14')]),
-  // {
-  //   type:"divider"
-  // },
   getItem('Forms', 'form', <InputIcon />, [
     getItem('sales', 'salesForm'),
   ]),
@@ -160,10 +148,6 @@ const operationalSalseitems = [
   {
     type: 'divider',
   },
-  // getItem('Income', 'income', <AttachMoneyIcon/>, [getItem('wabi', '13'), getItem('guyya', '14')]),
-  // {
-  //   type:"divider"
-  // },
   getItem('Forms', 'form', <InputIcon />, [
     getItem('operational', 'operationalForm'),
     getItem('sales', 'salesForm'),
@@ -200,10 +184,6 @@ const collectionSalseitems = [
   {
     type: 'divider',
   },
-  // getItem('Income', 'income', <AttachMoneyIcon/>, [getItem('wabi', '13'), getItem('guyya', '14')]),
-  // {
-  //   type:"divider"
-  // },
   getItem('Forms', 'form', <InputIcon />, [
     getItem('collection', 'collectionForm'),
     getItem('sales', 'salesForm'),
@@ -239,10 +219,6 @@ const operationalItems = [
   {
     type: 'divider',
   },
-  // getItem('Income', 'income', <AttachMoneyIcon/>, [getItem('wabi', '13'), getItem('guyya', '14')]),
-  // {
-  //   type:"divider"
-  // },
   getItem('Forms', 'form', <InputIcon />, [
     getItem('operational', 'operationalForm'),
   ]),
@@ -366,6 +342,7 @@ const operationalCollectionitems = [
 const Menus = () => {
   const {navs, setNavs}=useStateContext()
   const {dashboard, setDashboard}=useStateContext()
+  const {maxTableHeight, setMaxTableHeight} = useStateContext();
   const {menu, setMenu}=useStateContext()
   const {userRoles, setUserRoles}=useStateContext()
   const userIn=useSelector(state=>state.logins)
@@ -406,6 +383,7 @@ const Menus = () => {
     (e.keyPath[0]=="operationalScreen" && e.keyPath[1]=="screen") ){
       setMenu(false)
       setDashboard(true)
+      setMaxTableHeight(840)
     }
     setNavs(e.keyPath)
   };

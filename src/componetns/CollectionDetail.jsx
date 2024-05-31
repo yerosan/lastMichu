@@ -132,7 +132,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const VISIBLE_FIELDS = ['fullName', 'customerPhone', 'callResponce', 'paymentStatus', 'payedAmount', 'date'];
+const VISIBLE_FIELDS = ['fullName', 'customerName','customerPhone','customerAccount', 'callResponce', 'paymentStatus', 'payedAmount', 'date'];
 
 export default function CollectionDetail() {
   const userIn=useSelector(state=>state.logins)
@@ -318,6 +318,17 @@ export default function CollectionDetail() {
                     value={rowData.fullName || ""}
                     // onChange={(e) => setRowData({ ...rowData, fullName: e.target.value })}
                     />
+
+                 <TextField
+                    margin="dense"
+                    id="customerName"
+                    label="Customer name"
+                    type="text"
+                    placeholder='Enter customer name'
+                    fullWidth
+                    value={rowData.customerName}
+                    onChange={(e) => setRowData({ ...rowData, customerName: e.target.value })}
+                />
                 <TextField
                     margin="dense"
                     id="customerPhone"
@@ -328,6 +339,20 @@ export default function CollectionDetail() {
                     value={rowData.customerPhone}
                     onChange={(e) => setRowData({ ...rowData, customerPhone: e.target.value })}
                 />
+
+               <TextField
+                    margin="dense"
+                    id="customerAccount"
+                    label="Customer account"
+                    type="text"
+                    placeholder='Enter customer account'
+                    fullWidth
+                    value={rowData.customerAccount}
+                    onChange={(e) => setRowData({ ...rowData, customerAccount: e.target.value })}
+                />
+            </div>
+            <div className='flex flex-col gap-1'>
+
                 <Box
                   component="form"
                   sx={{
@@ -353,10 +378,7 @@ export default function CollectionDetail() {
                       ))}
                     </TextField>
                   </div>
-                </Box>
-            </div>
-            <div className='flex flex-col gap-2'>
-
+                </Box> 
 
                 <Box
                   component="form"

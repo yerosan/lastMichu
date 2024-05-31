@@ -70,6 +70,7 @@ export default function SalesNumberOfAccountperformance() {
   const {filter, setFilter}=useStateContext()
   const [rankedData, setRankedData] = useState([]);
   const {dashboard, setDashboard}=useStateContext()
+  const {maxTableHeight, setMaxTableHeight} = useStateContext();
   const fetchSalsePerUser=async()=>{
     try{
       const salsess=await axios.post(`${config.apiUrl}/salse/salsePerformance`, dateRanges)
@@ -94,7 +95,6 @@ export default function SalesNumberOfAccountperformance() {
   if(filter){
     fetchSalsePerUser()
   }
-  const [maxTableHeight, setMaxTableHeight] = useState(600);
   useEffect(() => {
     const handleResize = () => {
       if(Window.innerHeight>1200){

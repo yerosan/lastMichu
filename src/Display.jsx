@@ -15,7 +15,6 @@ const Display = () => {
   return (
     <div className='ml-0 ease-in-out duration-1000 delay-300 grid content-around h-full'>
         {lognum ? <Collection/> :<CollectionIndividual/> }
-        {/* {lognum===2 && <CollectionIndividual/>} */}
     </div>
   )
 }

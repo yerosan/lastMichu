@@ -146,10 +146,7 @@ const SalseDashboard = () => {
           
             <div className='w-[80%] flex flex-col justify-around h-full flex-auto'>
               <div className='h-[90%] flex justify-end items-center '>
-                {/* <h1>Monthly Performance</h1>
-                <BarChart/> */}
-                {/* <DistrictDisplay/> */}
-                <Income/>
+                <DistrictDisplay/>
               </div>
               <MonthlySalse/>
             </div>

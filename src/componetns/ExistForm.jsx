@@ -83,7 +83,9 @@ const CollectionFromExist = () => {
   const userIn=useSelector(state=>state.logins)
   const initialVaue={
               userName:userIn.data.userName,
+              customerName:"",
               customerPhone:"",
+              customerAccount:"",
               callResponce:"",
               payedAmount:0,
               paymentStatus:"",
@@ -96,10 +98,15 @@ const CollectionFromExist = () => {
     const addCollection=useSelector(state=>state.collection)
     const [dataAdding, setDataAdding]=useState(false)
     const [error, setError]=useState(false)
+    const [iderror, setIderror]=useState(false)
     const dispatch=useDispatch()
 
     const validatePhoneNumber = (phoneNumber) => {
       return phoneNumber.length === 12 && /^\d+$/.test(phoneNumber); // Checks if the phone number is exactly 12 digits and contains only numeric characters
+    };
+
+    const validateCustomerAccount = (customerAccount) => {
+      return customerAccount.length === 13 && /^\d+$/.test(customerAccount); // Checks if the phone number is exactly 12 digits and contains only numeric characters
     };
 
     const handleForm=(e)=>{
@@ -118,6 +125,10 @@ const CollectionFromExist = () => {
         }));
         if (namess === 'customerPhone') {
           setError(!validatePhoneNumber(values)); // Set error to true if the phone number is invalid
+        }
+
+        if (namess === 'customerAccount') {
+          setIderror(!validateCustomerAccount(values)); // Set error to true if the phone number is invalid
         }
     }
 
@@ -192,6 +203,21 @@ const CollectionFromExist = () => {
                               </div>
                               </Box>
 
+                              <TextField
+                                    type="text"
+                                    variant='outlined'
+                                    color='primary'
+                                    name="customerName"
+                                    label="Customer name"
+                                    onChange={handleForm}
+                                    value={collectionData.customerName}
+                                    placeholder='Enter customer name'
+                                    fullWidth
+                                    required
+                                    sx={{my:1 }}
+                              >
+                              </TextField> 
+
                               <Box
                                 component="form"
                                 sx={{
@@ -264,6 +290,22 @@ const CollectionFromExist = () => {
                                     sx={{my:1 }}
                               >
                               </TextField> 
+                              <TextField
+                                    type="number"
+                                    variant='outlined'
+                                    color='primary'
+                                    name="customerAccount"
+                                    label="Customer account"
+                                    onChange={handleForm}
+                                    value={collectionData.customerAccount}
+                                    placeholder='Enter customer account'
+                                    fullWidth
+                                    required
+                                    error={iderror}
+                                    sx={{my:1 }}
+                              >
+                              </TextField> 
+
                               {formActivater &&
                                 <TextField
                                     type="number"

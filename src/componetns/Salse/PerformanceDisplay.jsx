@@ -10,7 +10,7 @@ const PerformanceDisplay = () => {
     useEffect(()=>{
         const intervalId= setInterval(()=>{
              setCount((prevCount)=> (prevCount % 3 )+1)
-          },20000)
+          },10000)
           return () => clearInterval(intervalId);
       },[])
   return (

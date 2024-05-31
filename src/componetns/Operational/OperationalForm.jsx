@@ -5,8 +5,6 @@ import { TextField, Button, Container, Stack, Paper } from '@mui/material';
 import { Link } from "react-router-dom"
 import { Approval } from '@mui/icons-material';
 import axios from "axios"
-// import { getAllUsers } from '../features/userCreation/allUserSlice';
-// import { addingCollection } from '../features/collection/collectionSlice';
 import {useSelector, useDispatch} from 'react-redux'
 import {Tab, Box} from "@mui/material"
 import { TabList, TabContext, TabPanel } from '@mui/lab';
@@ -14,52 +12,6 @@ import Alert from '@mui/material/Alert';
 import config from '../../config/config';
 import FormHelperText from '@mui/material/FormHelperText';
 import LinearProgress from '@mui/material/LinearProgress';
-  const callResponce = [
-    {
-      value: 'promise',
-      label: 'promise',
-    },
-    {
-      value: 'paid',
-      label: 'Paid',
-    },
-    {
-      value: 'notAnswer',
-      label: 'Not answer',
-    },
-    {
-      value: 'refusedToPay',
-      label: 'Refused to pay',
-    },
-    {
-      value:"outOfService",
-      label:"Out of service"
-    },
-    {
-      value:"hangUP",
-      label:"Hung up"
-    },
-    {
-      value:"lineBusy",
-      label:"Line busy"
-    },
-    {
-      value:"incorrectNumber",
-      label:"Incorrect number"
-    },
-    {
-      value:"switchOff",
-      label:"Switch off"
-    },
-    {
-      value:"callForWarding",
-      label:"Call forwarding"
-    },
-    {
-      value:"notWorking",
-      label:"Not working"
-    }
-  ];
 
   const approvalStatus = [
     {
@@ -89,11 +41,13 @@ const OpeationalForm = () => {
               userId:userIn.data.userId,
               userName:userIn.data.userName,
               officerName:userIn.data.fullName,
+              customerId:"",
               customerName:"",
               customerPhone:"",
+              callStatus:"",
               applicationStatus:"",
               approvedAmount:0,
-              RejectionReason:"Verifed",
+              RejectionReason:"Verified",
               approvalDate:today
           }
     const [operationalData,setOperationalData]=useState(initialVaue)
@@ -103,10 +57,15 @@ const OpeationalForm = () => {
     const addCollection=useSelector(state=>state.collection)
     const [dataAdding, setDataAdding]=useState(false)
     const [error, setError]=useState(false)
+    const [iderror, setIderror]=useState(false)
     const dispatch=useDispatch()
 
     const validatePhoneNumber = (phoneNumber) => {
       return phoneNumber.length === 12 && /^\d+$/.test(phoneNumber); // Checks if the phone number is exactly 12 digits and contains only numeric characters
+    };
+
+    const validateCustomerId = (customerId) => {
+      return customerId.length === 10 && /^\d+$/.test(customerId); // Checks if the phone number is exactly 12 digits and contains only numeric characters
     };
 
     const handleForm=(e)=>{
@@ -125,6 +84,10 @@ const OpeationalForm = () => {
         }));
         if (namess === 'customerPhone') {
           setError(!validatePhoneNumber(values)); // Set error to true if the phone number is invalid
+        }
+
+        if (namess === 'customerId') {
+          setIderror(!validateCustomerId(values)); // Set error to true if the phone number is invalid
         }
     }
 
@@ -148,6 +111,9 @@ const OpeationalForm = () => {
         event.preventDefault();
         if(error){
           alert("Incorrect phone number")
+        }
+        else if(iderror){
+          alert("Incorrect customer id")
         }else{
            addColleciton()
            setOperationalData(initialVaue)
@@ -206,6 +172,30 @@ const OpeationalForm = () => {
                               >
                                 <div>
                                   <TextField
+                                    id="customerId"
+                                    label="Customer Id"
+                                    name='customerId'
+                                    value={operationalData.customerId}
+                                    placeholder='Enter customer id'
+                                    onChange={handleForm}
+                                    required
+                                    error={iderror}
+                                  >
+                                  </TextField>
+                                </div>
+                              </Box>
+
+
+                              <Box
+                                component="form"
+                                sx={{
+                                  '& .MuiTextField-root': { my:1 ,width: '100%' },
+                                }}
+                                noValidate
+                                autoComplete="off"
+                              >
+                                <div>
+                                  <TextField
                                     id="customerName"
                                     // select
                                     label="Customer Name"
@@ -213,6 +203,7 @@ const OpeationalForm = () => {
                                     value={operationalData.customerName}
                                     placeholder='Enter customer name'
                                     onChange={handleForm}
+                                    required
                                   >
                                   </TextField>
                                 </div>
@@ -237,6 +228,30 @@ const OpeationalForm = () => {
                           </div>
 
                           <div className='flex flex-col gap-2 w-full'>
+
+                          <Box
+                                component="form"
+                                sx={{
+                                  '& .MuiTextField-root': { my:1 ,width: '100%' },
+                                }}
+                                noValidate
+                                autoComplete="off"
+                              >
+                                <div>
+                                  <TextField
+                                    id="callStatus"
+                                    // select
+                                    label="Call status"
+                                    name='callStatus'
+                                    value={operationalData.callStatus}
+                                    placeholder='Enter call status'
+                                    onChange={handleForm}
+                                    required
+                                  >
+                                  </TextField>
+                                </div>
+                              </Box>
+
                           <Box
                                 component="form"
                                 sx={{
@@ -254,6 +269,7 @@ const OpeationalForm = () => {
                                     value={operationalData.applicationStatus}
                                     placeholder='select application status'
                                     onChange={handleForm}
+                                    required
                                   >
                                     {approvalStatus.map((option) => (
                                       <MenuItem key={option.value} value={option.value}>
@@ -297,8 +313,6 @@ const OpeationalForm = () => {
                               }
                               <TextField
                                   type="date"
-                                  // inputProps={{ format: 'yyyy-MM-dd' }}
-                                  // defaultValue={operationalData.approvalDate}
                                   variant='outlined'
                                   name="approvalDate"
                                   color='primary'

@@ -22,7 +22,7 @@ const OperaionalPerformance = () => {
                  indicatorColor='primary'
 
                 >
-                    <Tab label="Collection Detail" value="1" icon={<AutoAwesomeMotionIcon/>} iconPosition='start'/>
+                    <Tab label="Operational Detail" value="1" icon={<AutoAwesomeMotionIcon/>} iconPosition='start'/>
                     <Tab label="Individual Status" value="2" icon={<EmojiEventsIcon/>} iconPosition='start'/>
                 </TabList>
             </Box>
