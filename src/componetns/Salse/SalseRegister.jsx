@@ -23,6 +23,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Alert from '@mui/material/Alert';
 import config from '../../config/config';
 import MenuItem from '@mui/material/MenuItem';
+import { districtBranch } from './constant';
 
 import DownloadForOfflineOutlinedIcon from '@mui/icons-material/DownloadForOfflineOutlined';
 import * as XLSX from 'xlsx';
@@ -85,6 +86,8 @@ export default function SalseRegister() {
   const {detail , setDetail}=useStateContext()
   const detailData={userId:userIn.data.userId, date:today}
   const {open, setOpen}=useStateContext()
+  const [district, setDistrict]=useState("")
+  const [formactivator, setFormactivator]=useState(false)
 
   const [userDistrict, setUserDistrict]=useState(null)
   const [deleteRow, setDeleteRow]=useState({})
@@ -111,6 +114,8 @@ export default function SalseRegister() {
   }
   const handleRowClick = (rowData) => {
     setRowData(rowData)
+    setDistrict(rowData.district)
+    setFormactivator(true)
   }
 
   const updateData= async(data)=>{
@@ -181,6 +186,7 @@ export default function SalseRegister() {
 
   const handleUpdate=()=>{
     updateData(rowData)
+    setFormactivator(false)
     setOpen(false)
   }
 
@@ -206,6 +212,7 @@ export default function SalseRegister() {
             <TableRow style={styles}>
               <StyledTableCell style={styles} >Officer Name</StyledTableCell>
               <StyledTableCell align="left" style={styles}>District</StyledTableCell>
+              <StyledTableCell align="left" style={styles}>Branch</StyledTableCell>
               <StyledTableCell align='left' style={styles} >Number Of Account</StyledTableCell>
               <StyledTableCell align="left" style={styles} >Unique Customer</StyledTableCell>
               <StyledTableCell align="left" style={styles} >Total Disbursed</StyledTableCell>
@@ -229,6 +236,7 @@ export default function SalseRegister() {
                   {userIn.data.fullName}
                 </StyledTableCell>
                 <StyledTableCell align='left'>{row.district}</StyledTableCell>
+                <StyledTableCell align='left'>{row.branchName}</StyledTableCell>
                 <StyledTableCell align="left">{row.numberOfAccount}</StyledTableCell>
                 <StyledTableCell align="left">{row.uniqueCustomer}</StyledTableCell>
                 <StyledTableCell align="left">{row.disbursedAmount}</StyledTableCell>
@@ -292,6 +300,39 @@ export default function SalseRegister() {
                 </TextField>
 
                 </Box>
+
+                {formactivator  &&
+                
+
+                <Box
+                  component="form"
+                  sx={{
+                    '& .MuiTextField-root': { my:1 ,width: '100%' },
+                  }}
+                  noValidate
+                  autoComplete="off"
+                >
+                <TextField
+                  id="branchName"
+                  select
+                  name='branchName'
+                  label="Branch"
+                  value={rowData.branchName}
+                  placeholder='select district'
+                  onChange={(e) => setRowData({ ...rowData, branchName: e.target.value })}
+                >
+                  {districtBranch[rowData.district].map((option) => (
+                    <MenuItem key={option} value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </TextField>
+
+                </Box>
+
+                  }
+
+
                 
                 <TextField
                     margin="dense"
@@ -304,7 +345,10 @@ export default function SalseRegister() {
                     value={rowData.numberOfAccount}
                     onChange={(e) => setRowData({ ...rowData, numberOfAccount: e.target.value })}
                 />
-                <Box
+                
+            </div>
+            <div className='flex flex-col gap-2'>
+            <Box
                   component="form"
                   sx={{
                     '& .MuiTextField-root': { my:1 ,width: '100%' },
@@ -325,8 +369,6 @@ export default function SalseRegister() {
                     </TextField>
                   </div>
                 </Box>
-            </div>
-            <div className='flex flex-col gap-2'>
 
 
                 <Box

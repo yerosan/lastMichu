@@ -6,15 +6,12 @@ import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import AutoAwesomeMotionIcon from '@mui/icons-material/AutoAwesomeMotion';
 // import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
-// import RegisterForm from './Form';
-// import CollectionFrom from './CollectionFrom';
-// import CollectionFromExist from './ExistForm';
-// import CollectionDetail from './CollectionDetail';
-// import Individualcollection from './Individualcollection';
-// import DynamicFeedIcon from '@mui-ui/icons-material/DynamicFeed';
 import Salseform from './SalseForm';
 import SalseRegister from './SalseRegister';
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed'; 
+import SalesTarget from './SalesTarget';
+import CrisisAlertIcon from '@mui/icons-material/CrisisAlert'
+import TargetDetail from './TargetDetail';
 const SalseTab = () => {
     const [value, setValue]=useState("1")
     const handleTabChange=(event, newValue)=>{
@@ -31,17 +28,17 @@ const SalseTab = () => {
                     textColor='primary'
                 >
                     {/*  */}
-                    <Tab label="Add salse data" value="1" icon={<AutoAwesomeMotionIcon/>} iconPosition='start'/>
-                    <Tab label="Register detail" value="2" icon={<DynamicFeedIcon/>} iconPosition='start'/>  
+                    <Tab label="Add targeted data" value="1" icon={<CrisisAlertIcon/>} iconPosition='start'> </Tab>
+                    <Tab label="Register detail" value="2" icon={<DynamicFeedIcon/>} iconPosition='start'/> 
+                    <Tab label="Add salse data" value="3" icon={<AutoAwesomeMotionIcon/>} iconPosition='start'/> 
+                    <Tab label="Target Detail" value="4" icon={<DynamicFeedIcon/>} iconPosition='start'/>
                 </TabList>
-
             </Box>
-
-            <TabPanel value="1">
-                <Salseform/>
-            </TabPanel>
+            <TabPanel value="1"><SalesTarget/></TabPanel>
             <TabPanel value="2"><SalseRegister/></TabPanel>
-            
+            <TabPanel value="3"><Salseform/> </TabPanel>
+            <TabPanel value="4"><TargetDetail/> </TabPanel>
+           
         </TabContext>
     </div>
   )

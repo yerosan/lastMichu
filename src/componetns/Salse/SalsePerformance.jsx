@@ -13,6 +13,7 @@ import DistrictPerUser from './DistrictPerUser'
 import PerformanceDisplay from './PerformanceDisplay'
 import Districts from './District'
 import CrisisAlertIcon from '@mui/icons-material/CrisisAlert'
+import TargetDetail from "./TargetDetail"
 const SalsePerformance = () => {
     const [value, setValue]=useState("1")
     const handleChange=(event, newValue)=>{
@@ -25,20 +26,20 @@ const SalsePerformance = () => {
                 <TabList 
                  aria-label="Tabs example"
                  onChange={handleChange}
-
                  textColor='primary'
                  indicatorColor='primary'
 
-                >   <Tab label="Sales Target" value="1" icon={<CrisisAlertIcon/>} iconPosition='start'/>
-                    <Tab label="Salse Detail" value="2" icon={<AutoAwesomeMotionIcon/>} iconPosition='start'/>
-                    <Tab label="Individual Status" value="3" icon={<EmojiEventsIcon/>} iconPosition='start'/>
-                    <Tab label="District" value="4" icon={<Diversity2OutlinedIcon/>} iconPosition='start'/>
+                >
+                    <Tab label="Salse Detail" value="1" icon={<AutoAwesomeMotionIcon/>} iconPosition='start'/>
+                    <Tab label="Individual Status" value="2" icon={<EmojiEventsIcon/>} iconPosition='start'/>
+                    <Tab label="District" value="3" icon={<Diversity2OutlinedIcon/>} iconPosition='start'/>
+                    <Tab label="Salse Detail" value="4" icon={<AutoAwesomeMotionIcon/>} iconPosition='start'/>
                 </TabList>
             </Box>
-            <TabPanel value="1"><SalesTarget/></TabPanel>
-            <TabPanel value="2"><SalseDetail/></TabPanel>
-            <TabPanel value="3"><PerformanceDisplay/></TabPanel>
-            <TabPanel value="4"><DistrictPerUser/></TabPanel>
+            <TabPanel value="1"><SalseDetail/></TabPanel>
+            <TabPanel value="2"><PerformanceDisplay/></TabPanel>
+            <TabPanel value="3"><DistrictPerUser/></TabPanel>
+            <TabPanel value="4"><TargetDetail/></TabPanel>
         </TabContext>
     </Box>
   )

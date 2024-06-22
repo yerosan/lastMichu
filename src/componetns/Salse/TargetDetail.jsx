@@ -75,7 +75,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 
-export default function SalseDetail() {
+export default function TargetDetail() {
   const userIn=useSelector(state=>state.logins)
   const dispatch=useDispatch()
   const [salse,setSalse]=useState(null)
@@ -92,12 +92,12 @@ export default function SalseDetail() {
   const Download=[]
   const detailData=salseFilter
 
-  const VISIBLE_FIELDS= ["fullName","district","branchName","uniqueCustomer","numberOfAccount","disbursedAmount","income","date"]
+  const VISIBLE_FIELDS= ["districtName","branchName","uniqueCustomer","numberOfAccount","disbursedAmount","date"]
   
   const fetchAllSalse=async()=>{
     dispatch(allSalse({loading:true, error:"", data:null}))
     try{
-      let salses=await  axios.post(`${config.apiUrl}/salse/getData`, detailData)
+      let salses=await  axios.post(`${config.apiUrl}/salse/target`, detailData)
       if(salses.data.message=="succeed"){
          dispatch(allSalse({loading:false, error:"",data:salses.data.data}))
          setSalse(salses.data.data)

@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { collectionPerUser } from '../features/collection/individualSlice';
 import { intervalCollection } from '../features/collection/dashboardSlisce'
 import { useDispatch, useSelector } from 'react-redux';
+import { it } from '@faker-js/faker';
 
 const ContextState=createContext()
 
@@ -136,4 +137,5 @@ export const ContextProvider = ({children}) => {
 
 
 export const useStateContext=()=>useContext(ContextState)
+
 

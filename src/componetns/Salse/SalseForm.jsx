@@ -13,7 +13,8 @@ import config from "../../config/config"
 import FormHelperText from '@mui/material/FormHelperText';
 import LinearProgress from '@mui/material/LinearProgress';
 import { useStateContext } from '../../context/ContextProvider';
-  
+
+import { districtBranch } from './constant/index';
 
 const currentDate=new Date()
 const month = `0${currentDate.getMonth()+1}`.slice(-2);
@@ -26,6 +27,7 @@ const Salseform = () => {
               userName:userIn.data.userName,
               fullName:userIn.data.fullName,
               district:"",
+              branchName:"",
               uniqueCustomer:"",
               disbursedAmount:"",
               numberOfAccount:"",
@@ -50,6 +52,14 @@ const Salseform = () => {
     const handleForm=(e)=>{
         const values=e.target.value
         const namess=e.target.name
+        if(namess=='district' && values !=""){
+          setSalseData((prevState) => ({
+            ...prevState,
+            "branchName": "",
+          }));
+          setFormActivater(true)
+         }
+
 
         setSalseData((prevState) => ({
           ...prevState,
@@ -74,7 +84,6 @@ const Salseform = () => {
               )
             }
           }))
-         setUserDistrict
          setUserDistrict(usersDistrict.data.data)
          setUserDistrictss(Districtsss)
         }else{
@@ -103,6 +112,7 @@ const Salseform = () => {
     function handleSubmit(event) {
         event.preventDefault();
         addSalse()
+        setFormActivater(false)
         setSalseData(initialVaue) 
     }
 
@@ -178,6 +188,38 @@ const Salseform = () => {
                                 </TextField>
 
                               </Box>
+
+                              {formActivater && 
+                              <Box
+                              component="form"
+                              sx={{
+                                '& .MuiTextField-root': { my:1 ,width: '100%' },
+                              }}
+                              noValidate
+                              autoComplete="off"
+                            >
+                              <div>
+                                <TextField
+                                 select
+                                  type='text'
+                                  id="branch"
+                                  label="Select branch"
+                                  name='branchName'
+                                  value={salseData.branchName}
+                                  placeholder='Select branch'
+                                  onChange={handleForm}
+                                  required
+                                >
+                                    {districtBranch[salseData.district].map((option) => (
+                                      <MenuItem key={option} value={option}>
+                                        {option}
+                                      </MenuItem>
+                                    ))}
+                                </TextField>
+                              </div>
+                              </Box>
+                             }
+
                     
                               <Box
                                   component="form"
@@ -202,6 +244,9 @@ const Salseform = () => {
                                   </div>
                               </Box>
 
+                          </div>
+
+                          <div className='flex flex-col gap-2 w-full'>
                               <Box
                                   component="form"
                                   sx={{
@@ -227,9 +272,7 @@ const Salseform = () => {
                                 >
                                 </TextField> 
                               </Box>
-                          </div>
-
-                          <div className='flex flex-col gap-2 w-full'>
+                                
                               <Box
                                 component="form"
                                 sx={{
@@ -267,13 +310,10 @@ const Salseform = () => {
                                 />
                               <TextField
                                   type="date"
-                                  // inputProps={{ format: 'yyyy-MM-dd' }}
-                                  // defaultValue={salseData.date}
                                   variant='outlined'
                                   name="date"
                                   color='primary'
                                   onChange={handleForm}
-                                  // placeholder={salseData.date}
                                   value={salseData.date}
                                   fullWidth
                                   required
